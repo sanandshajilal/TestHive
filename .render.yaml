@@ -10,4 +10,6 @@ services:
     buildCommand: |
       composer install --no-dev --optimize-autoloader
     startCommand: |
-      php artisan migrate:fresh --force && php artisan serve --host=0.0.0.0 --port=10000
+      php artisan config:cache && \
+      php artisan migrate:fresh --drop-views --drop-types --force && \
+      php artisan serve --host=0.0.0.0 --port=10000
