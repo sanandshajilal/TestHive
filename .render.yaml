@@ -5,24 +5,9 @@ services:
     plan: free
     region: singapore
     branch: main
-    buildCommand: ""
-    startCommand: ""
-    envVars:
-      - key: APP_ENV
-        value: production
-      - key: APP_DEBUG
-        value: false
-      - key: APP_KEY
-        value: base64:RfEIIGml06wptWAnIIac+YSEwrGyltcX6ZyLUhmXtis=
-      - key: DB_CONNECTION
-        value: pgsql
-      - key: DB_HOST
-        value: ep-summer-glitter-a15t3t9m-pooler.ap-southeast-1.aws.neon.tech
-      - key: DB_PORT
-        value: 5432
-      - key: DB_DATABASE
-        value: neondb
-      - key: DB_USERNAME
-        value: neondb_owner
-      - key: DB_PASSWORD
-        value: npg_TvM9lD0zyiUC
+    dockerContext: .
+    dockerfilePath: ./Dockerfile
+    buildCommand: |
+      composer install --no-dev --optimize-autoloader
+    startCommand: |
+      php artisan migrate:fresh --force && php artisan serve --host=0.0.0.0 --port=10000
