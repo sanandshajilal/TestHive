@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('papers', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique(); // e.g., "FR"
+            $table->string('name');
             $table->string('description')->nullable(); // optional: "Financial Reporting"
             $table->timestamps();
         });
