@@ -10,6 +10,9 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+ /** ✅ Add this line to disable transaction for this migration */
+    public bool $withinTransaction = false;
+
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {

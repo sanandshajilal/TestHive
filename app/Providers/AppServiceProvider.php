@@ -5,7 +5,6 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Migrations\Migration;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,10 +24,7 @@ class AppServiceProvider extends ServiceProvider
         // Set default string length if needed (optional)
         Schema::defaultStringLength(191);
 
-        // ✅ Disable migration transactions to avoid Neon rollback issues
-        Migration::preventTransactions();
-
-        // ✅ Inject Neon endpoint as session variable
+        // Inject Neon endpoint via session variable if using Postgres
         if (config('database.default') === 'pgsql') {
             try {
                 $endpoint = env('DB_OPTIONS');
