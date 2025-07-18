@@ -66,20 +66,16 @@ return [
 
 'pgsql' => [
     'driver' => 'pgsql',
-    'host' => env('DB_HOST'),
-    'port' => env('DB_PORT'),
-    'database' => env('DB_DATABASE'),
-    'username' => env('DB_USERNAME'),
-    'password' => env('DB_PASSWORD'),
+    'host' => env('DB_HOST', '127.0.0.1'),
+    'port' => env('DB_PORT', '5432'),
+    'database' => env('DB_DATABASE', 'forge'),
+    'username' => env('DB_USERNAME', 'forge'),
+    'password' => env('DB_PASSWORD', ''),
     'charset' => 'utf8',
     'prefix' => '',
     'prefix_indexes' => true,
     'schema' => 'public',
-    'sslmode' => 'require',
-    'options' => extension_loaded('pdo_pgsql') ? [
-        // ✅ This line passes the --endpoint string as a raw options string
-        1002 => "--" . env('DB_OPTIONS'), // 1002 = PDO::ATTR_INIT_COMMAND (works as workaround)
-    ] : [],
+    'sslmode' => env('DB_SSLMODE', 'prefer'),
 ],
 
 
