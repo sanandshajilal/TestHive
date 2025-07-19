@@ -11,7 +11,7 @@ return new class extends Migration
      * Run the migrations.
      */
  /** ✅ Add this line to disable transaction for this migration */
-    public bool $withinTransaction = false;
+    public $withinTransaction = false;
 
     public function up(): void
     {
