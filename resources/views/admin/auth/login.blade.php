@@ -12,6 +12,7 @@
 
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <script src="{{ asset('js/app.js') }}"></script>
+
     <style>
     body {
         background: linear-gradient(135deg, #e0e7ff, rgb(252, 244, 215));
@@ -53,7 +54,7 @@
         border: 1px solid #cbd5e1;
         border-radius: 0.5rem;
         padding: 0.75rem;
-        width: 100%;
+        width: 90%;
         transition: border 0.2s, box-shadow 0.2s;
         margin-top: 0.4rem;
     }
@@ -115,10 +116,11 @@
 <body>
     <div class="auth-wrapper">
         <div class="auth-card">
-            <div class="mb-6 text-center">
-                <h2>Hi Maalasri,</h2>
+            <div class="text-center" style="margin-bottom: 1.25rem;">
+                <h2 style="margin-bottom: 0.25rem;">Hi Maalasri,</h2>
                 <p>welcome back to <strong>TestHive</strong> admin portal</p>
             </div>
+
 
             @if (session('status'))
                 <div class="mb-4 text-sm text-green-600">
