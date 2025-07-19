@@ -100,23 +100,6 @@ Route::post('admin/logout', [LoginController::class, 'logout'])->name('admin.log
 
 });
 
-use Illuminate\Support\Facades\Hash;
-use App\Models\Admin;
-
-Route::get('/create-admin', function () {
-    $admin = Admin::firstOrCreate(
-        ['email' => 'maalasri@testhive.com'],
-        [
-            'name' => 'Malasri',
-            'password' => Hash::make('masa#1907'),
-        ]
-    );
-
-    return "Admin created with ID: {$admin->id}";
-});
-
-
-
 
 
 
