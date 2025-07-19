@@ -54,7 +54,7 @@
         border: 1px solid #cbd5e1;
         border-radius: 0.5rem;
         padding: 0.75rem;
-        width: 90%;
+        width: 94%;
         transition: border 0.2s, box-shadow 0.2s;
         margin-top: 0.4rem;
     }
