@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // ✅ Required for Neon (disables transactional wrap)
+    public $withinTransaction = false;
+
     /**
      * Run the migrations.
      */
@@ -13,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('institutes', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name', 255)->unique(); // ✅ Set length explicitly
             $table->timestamps();
         });
     }

@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // Required for PostgreSQL on Render
+    public $withinTransaction = false;
+
     /**
      * Run the migrations.
      */
@@ -14,11 +17,14 @@ return new class extends Migration
         Schema::create('mock_tests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('paper_id')->constrained()->onDelete('cascade');
+
             $table->string('title');
             $table->dateTime('start_time');
             $table->dateTime('end_time')->nullable(); // optional expiry window
+
             $table->string('access_code')->unique();
             $table->integer('duration_minutes'); // ⏳ per-test timer
+
             $table->timestamps();
         });
     }

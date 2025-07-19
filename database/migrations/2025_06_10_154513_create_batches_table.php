@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // ✅ Required for Neon compatibility
+    public $withinTransaction = false;
+
     /**
      * Run the migrations.
      */
@@ -13,8 +16,12 @@ return new class extends Migration
     {
         Schema::create('batches', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('institute_id')->constrained()->onDelete('cascade');
-            $table->string('name');
+
+            // ✅ Explicit constraint naming avoids issues in Neon
+            $table->unsignedBigInteger('institute_id');
+            $table->foreign('institute_id')->references('id')->on('institutes')->onDelete('cascade');
+
+            $table->string('name', 255);
             $table->timestamps();
         });
     }

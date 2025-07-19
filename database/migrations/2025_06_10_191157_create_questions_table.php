@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // Required for PostgreSQL compatibility on Neon
+    public $withinTransaction = false;
+
     /**
      * Run the migrations.
      */
@@ -13,22 +16,30 @@ return new class extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
+
             $table->foreignId('paper_id')->constrained()->onDelete('cascade');
             $table->foreignId('topic_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('sub_topic_id')->nullable()->constrained()->onDelete('cascade');
-    
-            $table->enum('question_type', ['mcq', 'multiple_select', 'one_word', 'table_mcq']);
+
+            $table->enum('question_type', [
+                        'mcq',
+                        'multiple_select',
+                        'one_word',
+                        'table_mcq',
+                        'drag_and_drop',
+                        'dropdown'
+                    ]);
+
             $table->text('question_text');
-    
-            $table->json('options')->nullable();         // A/B/C/D options
-            $table->json('correct_answers')->nullable(); // stores either 1 or multiple correct answers
+
+            $table->json('options')->nullable();
+            $table->json('correct_answers')->nullable();
+
             $table->integer('marks')->default(2);
-    
+
             $table->timestamps();
         });
     }
-    
-    
 
     /**
      * Reverse the migrations.

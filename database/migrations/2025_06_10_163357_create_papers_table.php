@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // Required for Neon compatibility
+    public $withinTransaction = false;
+
     /**
      * Run the migrations.
      */
@@ -13,8 +16,8 @@ return new class extends Migration
     {
         Schema::create('papers', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique(); // e.g., "FR"
-            $table->string('description')->nullable(); // optional: "Financial Reporting"
+            $table->string('name', 255)->unique(); // e.g., "FR"
+            $table->string('description', 255)->nullable(); // optional: "Financial Reporting"
             $table->timestamps();
         });
     }

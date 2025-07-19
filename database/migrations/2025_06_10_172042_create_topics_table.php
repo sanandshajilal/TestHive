@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // Required for Neon compatibility
+    public $withinTransaction = false;
+
     /**
      * Run the migrations.
      */
@@ -14,7 +17,7 @@ return new class extends Migration
         Schema::create('topics', function (Blueprint $table) {
             $table->id();
             $table->foreignId('paper_id')->constrained()->onDelete('cascade');
-            $table->string('name');
+            $table->string('name', 255);
             $table->timestamps();
         });
     }

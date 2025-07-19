@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // Required for PostgreSQL environments like Neon
+    public $withinTransaction = false;
+
     /**
      * Run the migrations.
      */
@@ -13,8 +16,10 @@ return new class extends Migration
     {
         Schema::create('mock_test_batch', function (Blueprint $table) {
             $table->id();
+
             $table->foreignId('mock_test_id')->constrained()->onDelete('cascade');
             $table->foreignId('batch_id')->constrained()->onDelete('cascade');
+
             $table->timestamps();
         });
     }

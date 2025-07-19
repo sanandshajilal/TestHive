@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    // ✅ Required for PostgreSQL/Neon compatibility
+    public $withinTransaction = false;
+
     /**
      * Run the migrations.
      */
@@ -13,8 +16,8 @@ return new class extends Migration
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->string('name', 255);
+            $table->string('email', 255)->unique();
             $table->string('password');
             $table->timestamps();
         });

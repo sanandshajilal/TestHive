@@ -6,24 +6,20 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-        
-        public function up()
-        {
-            Schema::table('questions', function (Blueprint $table) {
-                $table->string('table_mcq_labels')->nullable()->after('correct_answers');
-            });
-        }
+    // Required for PostgreSQL/Neon
+    public $withinTransaction = false;
 
-        public function down()
-        {
-            Schema::table('questions', function (Blueprint $table) {
-                $table->dropColumn('table_mcq_labels');
-            });
-        }
+    public function up()
+    {
+        Schema::table('questions', function (Blueprint $table) {
+            $table->string('table_mcq_labels')->nullable()->after('correct_answers');
+        });
+    }
 
-
-
+    public function down()
+    {
+        Schema::table('questions', function (Blueprint $table) {
+            $table->dropColumn('table_mcq_labels');
+        });
+    }
 };
