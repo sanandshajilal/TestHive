@@ -36,5 +36,9 @@ class AppServiceProvider extends ServiceProvider
                 // \Log::warning('Failed to set Neon endpoint: ' . $e->getMessage());
             }
         }
+
+         if (env('APP_ENV') === 'production') {
+        URL::forceScheme('https');
+    }
     }
 }
