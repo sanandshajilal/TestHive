@@ -178,64 +178,71 @@
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-3 py-2">
-    <div class="container-fluid d-flex justify-content-between align-items-center">
-        <!-- Left: Test Name -->
-        <div class="d-none d-md-block fw-bold">
-            {{ $mockTest->title }}
-        </div>
-
-        <!-- Center: Progress Dropdown -->
-        <div class="dropdown">
-            <button class="btn btn-outline-primary dropdown-toggle d-flex align-items-center" type="button" id="progressDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-list-task"></i>
-                <span class="ms-1 d-none d-md-inline">Progress</span>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="progressDropdown" style="min-width: 250px;">
-                <div class="d-none d-md-flex justify-content-between mb-2">
-                    <span class="badge bg-success">Answered</span>
-                    <span class="badge bg-warning text-dark">Flagged</span>
-                    <span class="badge bg-danger">Unanswered</span>
+        <nav class="navbar navbar-expand-lg navbar-custom fixed-top py-2">
+        <div class="container-fluid px-3">
+            <div class="d-flex justify-content-between align-items-center w-100 flex-wrap">
+            <!-- Brand -->
+            <a class="navbar-brand brand-logo d-flex flex-column align-items-start text-decoration-none" href="#">
+                <div class="d-flex align-items-center header-right fw-bold">
+                <i class="bi bi-lightning-charge-fill text-warning me-1"></i>
+                TestHive
                 </div>
-                <div class="d-flex flex-wrap gap-2">
-                    @foreach ($questions as $q)
-                        @php
-                            $status = isset($responses[$q->id]) ? 'answered' : 'unanswered';
-                            if (isset($flags[$q->id])) {
-                                $status = 'flagged';
-                            }
-                        @endphp
-                        <a href="{{ route('student.test.question', [$test->id, $q->id]) }}"
-                            class="btn btn-sm
-                                {{ $status == 'answered' ? 'btn-success' : ($status == 'flagged' ? 'btn-warning' : 'btn-danger') }}
-                                {{ $q->id == $currentQuestion->id ? 'border border-dark' : '' }}">
-                            Q{{ $loop->iteration }}
-                        </a>
-                    @endforeach
+                <div class="brand-subtext">by <strong>MALASRI</strong></div>
+            </a>
+
+            <!-- Timer + Progress + Help + Exit -->
+            <div class="d-flex flex-wrap justify-content-end align-items-center gap-2 mt-2 mt-lg-0" style="flex: 1 1 auto;">
+                <!-- Timer -->
+                <div class="d-flex align-items-center text-primary fw-semibold">
+                <i class="bi bi-clock me-1"></i>
+                <span id="countdown">Loading...</span>
                 </div>
-            </ul>
-        </div>
 
-        <!-- Right: Help & Exit -->
-        <div class="d-flex align-items-center gap-2">
-            <!-- Help Button -->
-            <button class="btn btn-outline-secondary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#helpModal">
-                <i class="bi bi-question-circle"></i>
-                <span class="ms-1 d-none d-md-inline">Help</span>
-            </button>
-
-            <!-- Exit Button -->
-            <form action="{{ route('student.logout') }}" method="POST">
-                @csrf
-                <button type="submit" class="btn btn-outline-danger d-flex align-items-center">
-                    <i class="bi bi-door-closed"></i>
-                    <span class="ms-1 d-none d-md-inline">Exit</span>
+                <!-- Progress Dropdown -->
+                <div class="dropdown">
+                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="progressDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-bar-chart-fill me-1"></i> Progress
                 </button>
-            </form>
-        </div>
-    </div>
-</nav>
+                <ul class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="progressDropdown" style="min-width: 100%; max-width: 410px; width: auto;">
+                    <li class="mb-2 text-muted" style="font-size: 0.85rem;">
+                    <span class="me-3"><span class="badge rounded-pill bg-success">&nbsp;</span> Answered</span>
+                    <span class="me-3"><span class="badge rounded-pill bg-secondary">&nbsp;</span> Not Answered</span>
+                    <span class="me-3"><span class="badge rounded-pill bg-primary">&nbsp;</span> Current</span>
+                    <span><i class="bi bi-flag-fill text-danger"></i> Flagged</span>
+                    </li>
+                    <hr class="my-2">
+                    <li>
+                    <div id="statusContainer" class="d-grid gap-2" style="grid-template-columns: repeat(auto-fit, minmax(30px, 1fr)); max-height: 250px; overflow-y: auto;">
+                        <!-- Status Buttons Injected Here -->
+                    </div>
+                    </li>
+                </ul>
+                </div>
 
+                <!-- Help Button -->
+                <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#helpModal">
+                <i class="bi bi-question-circle me-1"></i>Help
+                </button>
+
+                <!-- Divider -->
+                <div style="width: 1px; height: 24px; background-color: #ccc;"></div>
+
+                <!-- Test Title -->
+                <span class="test-name-label">
+                <i class="bi bi-journal-text me-1 text-muted"></i>{{ $mockTest->title }}
+                </span>
+
+                <!-- Exit Button -->
+                <form action="{{ route('student.logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="exit-button">
+                    <i class="bi bi-door-closed me-1"></i>Exit
+                </button>
+                </form>
+            </div>
+            </div>
+        </div>
+        </nav>
 
     <div class="container">
         <div class="test-container">
