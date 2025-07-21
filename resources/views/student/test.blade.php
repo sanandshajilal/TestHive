@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ $mockTest->title }} | TestHive</title>
+    <title>TestHive by Malasri</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     {{-- Bootstrap CSS --}}
@@ -161,67 +161,107 @@
                 margin-left: 1.7rem;
             }
 
+            .navbar-custom {
+                    padding: 0.5rem 1rem;
+                    font-size: 0.95rem;
+                }
+
+                .nav-scroll {
+                    overflow-x: auto;
+                    white-space: nowrap;
+                    scrollbar-width: thin;
+                }
+
+                .nav-scroll::-webkit-scrollbar {
+                    height: 4px;
+                }
+                .nav-scroll::-webkit-scrollbar-thumb {
+                    background-color: #ddd;
+                    border-radius: 5px;
+                }
+
+                @media (max-width: 576px) {
+                    .brand-subtext {
+                        display: none;
+                    }
+
+                    #statusContainer {
+                        grid-template-columns: repeat(5, 1fr) !important;
+                    }
+
+                    .exit-button {
+                        font-size: 0.8rem;
+                        padding: 4px 8px;
+                    }
+
+                    .dropdown-menu {
+                        max-width: 90vw;
+                        overflow-x: auto;
+                    }
+                }
+
+
         
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-custom fixed-top py-2">
-        <div class="container-fluid px-4 d-flex justify-content-between align-items-center">
-           <a class="navbar-brand brand-logo d-flex flex-column align-items-start text-decoration-none" href="#">
-                <div class="d-flex align-items-center header-right fw-bold">
-                    <i class="bi bi-lightning-charge-fill text-warning me-1"></i>
-                    TestHive
-                </div>
-                <div class="brand-subtext">by <trong>MALASRI</strong></div>
-            </a>
-
-            <div class="d-flex align-items-center gap-3 flex-wrap">
-                <div class="d-flex align-items-center text-primary fw-semibold me-2">
-                    <i class="bi bi-clock me-1"></i>
-                    <span id="countdown">Loading...</span>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm px-3 py-2 sticky-top navbar-custom">
+            <div class="container-fluid justify-content-between align-items-center">
+                
+                <!-- Brand -->
+                <div class="brand-logo d-flex flex-column">
+                    <div class="d-flex align-items-center fw-bold">
+                        <i class="bi bi-lightning-charge-fill text-warning me-1"></i>
+                        <span class="text-dark">TestHive</span>
+                    </div>
+                    <div class="brand-subtext text-muted small">by <strong>MALASRI</strong></div>
                 </div>
 
-                <div class="dropdown">
-                    <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="progressDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-bar-chart-fill me-1"></i> Progress
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="progressDropdown" style="min-width: 410px;">
-                        <li class="mb-2 text-muted" style="font-size: 0.85rem;">
-                            <span class="me-3"><span class="badge rounded-pill bg-success">&nbsp;</span> Answered</span>
-                            <span class="me-3"><span class="badge rounded-pill bg-secondary">&nbsp;</span> Not Answered</span>
-                            <span class="me-3"><span class="badge rounded-pill bg-primary">&nbsp;</span> Current</span>
-                            <span><i class="bi bi-flag-fill text-danger"></i> Flagged</span>
-                        </li>
-                        <hr class="my-2">
-                        <li>
-                            <div id="statusContainer"
-                                class="d-grid gap-2"
-                                style="grid-template-columns: repeat(10, 1fr); max-height: 250px; overflow-y: auto;">
-                                <!-- Status Buttons Will Be Injected Here by JS -->
+                <!-- Right Side Actions -->
+                <div class="d-flex align-items-center gap-2 flex-nowrap overflow-auto nav-scroll">
+                    
+                    <!-- Timer -->
+                    <div class="badge bg-light border text-dark px-3 py-2 rounded shadow-sm">
+                        <i class="bi bi-clock"></i> <span id="timer">01:30:00</span>
+                    </div>
+
+                    <!-- Test Name -->
+                    <div class="fw-semibold text-dark small">
+                        <i class="bi bi-bookmark-check-fill"></i>
+                        <span class="d-none d-sm-inline">FM – Mock Test</span>
+                    </div>
+
+                    <!-- Progress Button -->
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary btn-sm" type="button" id="progressDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bar-chart-fill"></i>
+                            <span class="d-none d-sm-inline"> Progress</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end p-2 shadow" aria-labelledby="progressDropdown" style="min-width: 200px;">
+                            <div id="statusContainer" class="d-grid gap-2" style="grid-template-columns: repeat(6, 1fr);">
+                                <!-- Question status buttons will go here -->
                             </div>
-                        </li>
-                    </ul>
-                </div>
+                        </ul>
+                    </div>
 
-                <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#helpModal">
-                    <i class="bi bi-question-circle me-1"></i>Help
-                </button>
-
-                <div style="width: 1px; height: 24px; background-color: #ccc; margin: 0 10px;"></div>
-
-                <span class="test-name-label">
-                    <i class="bi bi-journal-text me-1 text-muted"></i>{{ $mockTest->title }}
-                </span>
-
-                <form action="{{ route('student.logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="exit-button">
-                        <i class="bi bi-door-closed me-1"></i>Exit
+                    <!-- Help Button -->
+                    <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#helpModal">
+                        <i class="bi bi-question-circle"></i>
+                        <span class="d-none d-sm-inline"> Help</span>
                     </button>
-                </form>
+
+                    <!-- Exit Button -->
+                    <form action="{{ route('student.exitTest') }}" method="POST" class="m-0">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-danger btn-sm exit-button d-flex align-items-center gap-1">
+                            <i class="bi bi-door-closed"></i>
+                            <span class="d-none d-sm-inline">Exit</span>
+                        </button>
+                    </form>
+
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
     <div class="container">
         <div class="test-container">
