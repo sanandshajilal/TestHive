@@ -251,7 +251,7 @@
                     </button>
 
                     <!-- Exit Button -->
-                    <form action="{{ route('student.exitTest') }}" method="POST" class="m-0">
+                    <form action="{{ route('student.logout') }}" method="POST" class="m-0">
                         @csrf
                         <button type="submit" class="btn btn-outline-danger btn-sm exit-button d-flex align-items-center gap-1">
                             <i class="bi bi-door-closed"></i>
