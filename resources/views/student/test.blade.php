@@ -178,12 +178,41 @@
                     }
                 }
 
-              @media (max-width: 768px) {
-                #progressDropdownMenu {
-                    min-width: 100% !important;
-                    max-width: 100vw;
-                }
-                }
+             /* Default: Large screens (desktop) */
+.progress-dropdown {
+    width: 100%;
+    max-width: 500px;
+}
+
+.progress-dropdown .legend-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+}
+
+.progress-dropdown .legend-row span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Small screens: hide legend, reduce width */
+@media (max-width: 576px) {
+    .progress-dropdown {
+        width: 240px !important;
+    }
+
+    .progress-dropdown .legend-row {
+        display: none;
+    }
+
+    #statusContainer {
+        --bs-columns: 5;
+    }
+}
+
 
 
                         
@@ -216,8 +245,8 @@
                     <i class="bi bi-bar-chart-fill me-1"></i> Progress
                 </button>
                 
-                <ul class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="progressDropdown" style="width: 100%; max-width: 410px;">
-                    <li class="mb-2 text-muted" style="font-size: 0.85rem;">
+                <ul class="dropdown-menu dropdown-menu-end p-3 progress-dropdown" aria-labelledby="progressDropdown">
+                  <li class="legend-row text-muted">
                         <span class="me-3"><span class="badge rounded-pill bg-success">&nbsp;</span> Answered</span>
                         <span class="me-3"><span class="badge rounded-pill bg-secondary">&nbsp;</span> Not Answered</span>
                         <span class="me-3"><span class="badge rounded-pill bg-primary">&nbsp;</span> Current</span>
