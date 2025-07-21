@@ -182,7 +182,7 @@
     <div class="container-fluid d-flex justify-content-between align-items-center">
         <!-- Left: Test Name -->
         <div class="d-none d-md-block fw-bold">
-            {{ $test->name }}
+            {{ $mockTest->title }}
         </div>
 
         <!-- Center: Progress Dropdown -->
