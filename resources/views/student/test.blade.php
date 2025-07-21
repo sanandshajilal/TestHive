@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TestHive by Malasri</title>
+    <title>TestHive by Mala</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     {{-- Bootstrap CSS --}}
@@ -160,91 +160,89 @@
                 color: rgba(169, 169, 169, 0.86);
                 margin-left: 1.7rem;
             }
-
+            @media (max-width: 768px) {
+                .dropdown-menu {
+                right: auto !important;
+                left: 0 !important;
+                }
+                .navbar .test-name-label {
+                font-size: 0.8rem;
+                margin-top: 0.5rem;
+                }
+                .navbar .exit-button {
+                font-size: 0.75rem;
+                padding: 4px 10px;
+                }
+            }
         
     </style>
 </head>
 <body>
         <nav class="navbar navbar-expand-lg navbar-custom fixed-top py-2">
-        <div class="container-fluid px-3 px-md-4">
+        <div class="container-fluid px-3">
+            <div class="d-flex justify-content-between align-items-center w-100 flex-wrap">
             <!-- Brand -->
             <a class="navbar-brand brand-logo d-flex flex-column align-items-start text-decoration-none" href="#">
                 <div class="d-flex align-items-center header-right fw-bold">
-                    <i class="bi bi-lightning-charge-fill text-warning me-1"></i>
-                    TestHive
+                <i class="bi bi-lightning-charge-fill text-warning me-1"></i>
+                TestHive
                 </div>
                 <div class="brand-subtext">by <strong>MALASRI</strong></div>
             </a>
 
-            <!-- Mobile toggle -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarItems"
-                aria-controls="navbarItems" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <!-- Items -->
-            <div class="collapse navbar-collapse justify-content-end" id="navbarItems">
-                <div class="d-flex align-items-center flex-wrap gap-2 mt-2 mt-lg-0">
-
-                    <!-- Timer -->
-                    <div class="d-flex align-items-center text-primary fw-semibold me-lg-2">
-                        <i class="bi bi-clock me-1"></i>
-                        <span id="countdown">Loading...</span>
-                    </div>
-
-                    <!-- Progress Dropdown -->
-                    <div class="dropdown">
-                        <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button"
-                            id="progressDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-bar-chart-fill me-1"></i> Progress
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="progressDropdown"
-                            style="min-width: 310px; max-width: 90vw;">
-                            <li class="mb-2 text-muted" style="font-size: 0.85rem;">
-                                <span class="me-3"><span class="badge rounded-pill bg-success">&nbsp;</span> Answered</span>
-                                <span class="me-3"><span class="badge rounded-pill bg-secondary">&nbsp;</span> Not Answered</span>
-                                <span class="me-3"><span class="badge rounded-pill bg-primary">&nbsp;</span> Current</span>
-                                <span><i class="bi bi-flag-fill text-danger"></i> Flagged</span>
-                            </li>
-                            <hr class="my-2">
-                            <li>
-                                <div id="statusContainer"
-                                    class="d-grid gap-2"
-                                    style="grid-template-columns: repeat(10, 1fr); max-height: 250px; overflow-y: auto;">
-                                    <!-- Status Buttons Will Be Injected Here by JS -->
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <!-- Help Button -->
-                    <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#helpModal"
-                        title="Help">
-                        <i class="bi bi-question-circle"></i>
-                        <span class="d-none d-md-inline ms-1">Help</span>
-                    </button>
-
-                    <!-- Divider -->
-                    <div class="d-none d-md-block" style="width: 1px; height: 24px; background-color: #ccc; margin: 0 10px;"></div>
-
-                    <!-- Test Name -->
-                    <span class="test-name-label">
-                        <i class="bi bi-journal-text me-1 text-muted"></i>{{ $mockTest->title }}
-                    </span>
-
-                    <!-- Exit -->
-                    <form action="{{ route('student.logout') }}" method="POST">
-                        @csrf
-                        <button type="submit" class="exit-button" title="Exit">
-                            <i class="bi bi-door-closed"></i>
-                            <span class="d-none d-md-inline ms-1">Exit</span>
-                        </button>
-                    </form>
+            <!-- Timer + Progress + Help + Exit -->
+            <div class="d-flex flex-wrap justify-content-end align-items-center gap-2 mt-2 mt-lg-0" style="flex: 1 1 auto;">
+                <!-- Timer -->
+                <div class="d-flex align-items-center text-primary fw-semibold">
+                <i class="bi bi-clock me-1"></i>
+                <span id="countdown">Loading...</span>
                 </div>
+
+                <!-- Progress Dropdown -->
+                <div class="dropdown">
+                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="progressDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-bar-chart-fill me-1"></i> Progress
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="progressDropdown" style="min-width: 100%; max-width: 410px; width: auto;">
+                    <li class="mb-2 text-muted" style="font-size: 0.85rem;">
+                    <span class="me-3"><span class="badge rounded-pill bg-success">&nbsp;</span> Answered</span>
+                    <span class="me-3"><span class="badge rounded-pill bg-secondary">&nbsp;</span> Not Answered</span>
+                    <span class="me-3"><span class="badge rounded-pill bg-primary">&nbsp;</span> Current</span>
+                    <span><i class="bi bi-flag-fill text-danger"></i> Flagged</span>
+                    </li>
+                    <hr class="my-2">
+                    <li>
+                    <div id="statusContainer" class="d-grid gap-2" style="grid-template-columns: repeat(auto-fit, minmax(30px, 1fr)); max-height: 250px; overflow-y: auto;">
+                        <!-- Status Buttons Injected Here -->
+                    </div>
+                    </li>
+                </ul>
+                </div>
+
+                <!-- Help Button -->
+                <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#helpModal">
+                <i class="bi bi-question-circle me-1"></i>Help
+                </button>
+
+                <!-- Divider -->
+                <div style="width: 1px; height: 24px; background-color: #ccc;"></div>
+
+                <!-- Test Title -->
+                <span class="test-name-label">
+                <i class="bi bi-journal-text me-1 text-muted"></i>{{ $mockTest->title }}
+                </span>
+
+                <!-- Exit Button -->
+                <form action="{{ route('student.logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="exit-button">
+                    <i class="bi bi-door-closed me-1"></i>Exit
+                </button>
+                </form>
+            </div>
             </div>
         </div>
-    </nav>
-
+        </nav>
 
     <div class="container">
         <div class="test-container">
