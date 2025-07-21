@@ -161,23 +161,23 @@
                 margin-left: 1.7rem;
             }
                @media (max-width: 767.98px) {
-        .progress-label,
-        .help-label,
-        .exit-label {
-            display: none !important;
-        }
+                    .progress-label,
+                    .help-label,
+                    .exit-label {
+                        display: none !important;
+                    }
 
-        .progress-button i,
-        .help-button i,
-        .exit-button i {
-            margin-right: 0 !important;
-        }
+                    .progress-button i,
+                    .help-button i,
+                    .exit-button i {
+                        margin-right: 0 !important;
+                    }
 
-        .test-name-label {
-            display: none !important;
-        }
-    }
-        
+                    .test-name-label {
+                        display: none !important;
+                    }
+                }
+                        
     </style>
 </head>
 <body>
@@ -201,20 +201,35 @@
                     <span id="countdown">Loading...</span>
                 </div>
 
-                <!-- Progress Dropdown -->
-                <div class="dropdown">
-                    <button class="btn btn-outline-primary btn-sm dropdown-toggle progress-button" type="button" id="progressDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-bar-chart-fill me-1"></i>
-                        <span class="progress-label">Progress</span>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="progressDropdown" style="min-width: 100%; max-width: 410px; width: auto;">
-                        <li>
-                            <div id="statusContainer" class="d-grid gap-2" style="grid-template-columns: repeat(auto-fit, minmax(30px, 1fr)); max-height: 250px; overflow-y: auto;">
-                                <!-- Status Buttons Injected Here -->
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+               <!-- Progress Dropdown -->
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="progressDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-bar-chart-fill me-1"></i>
+                            <span class="d-none d-lg-inline">Progress</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="progressDropdown" style="min-width: 100%; max-width: 410px; width: auto;">
+                            
+                            <!-- Show badges only on larger screens -->
+                            <li class="mb-2 text-muted d-none d-lg-block" style="font-size: 0.85rem;">
+                                <span class="me-3"><span class="badge rounded-pill bg-success">&nbsp;</span> Answered</span>
+                                <span class="me-3"><span class="badge rounded-pill bg-secondary">&nbsp;</span> Not Answered</span>
+                                <span class="me-3"><span class="badge rounded-pill bg-primary">&nbsp;</span> Current</span>
+                                <span><i class="bi bi-flag-fill text-danger"></i> Flagged</span>
+                            </li>
+
+                            <hr class="my-2 d-none d-lg-block">
+
+                            <li>
+                                <div id="statusContainer"
+                                    class="d-grid gap-2"
+                                    style="grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); max-height: 250px; overflow-y: auto;">
+                                    <!-- Status Buttons Injected Here -->
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+
 
                 <!-- Help Button -->
                 <button class="btn btn-outline-secondary btn-sm help-button" data-bs-toggle="modal" data-bs-target="#helpModal">
