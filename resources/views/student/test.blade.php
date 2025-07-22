@@ -270,7 +270,8 @@
                <!-- Progress Dropdown -->
                <div class="dropdown">
                 <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="progressDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-bar-chart-fill me-1"></i> Progress
+                    <i class="bi bi-bar-chart-fill me-1"></i> 
+                    <span class="progress-label">Progress </span>
                 </button>
                 
                 <ul id="progressDropdownMenu" class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="progressDropdown">
