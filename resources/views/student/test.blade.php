@@ -178,69 +178,60 @@
                     }
                 }
 
-          /* Progress dropdown layout – default (large screen) */
-.progress-dropdown {
-    width: 100%;
-    max-width: 640px; /* wider dropdown */
-}
+                /* Force dropdown to a larger width using an id or !important */
+                #progressDropdownMenu.dropdown-menu {
+                    min-width: 640px !important;
+                    max-width: 90vw;
+                }
 
-/* Ensure legend is a single row with wrapping fallback */
-.progress-dropdown .legend-row {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    font-size: 0.85rem;
-    margin-bottom: 8px;
-    gap: 16px;
-    flex-wrap: wrap;
-}
+                .dropdown {
+                    position: relative;
+                }
 
-.progress-dropdown .legend-row span {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    white-space: nowrap;
-}
+                /* Flex layout for legend row */
+                .legend-row {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    flex-wrap: nowrap;
+                    gap: 16px;
+                    font-size: 0.85rem;
+                    margin-bottom: 8px;
+                }
 
-/* Style question numbers for proper spacing */
-#statusContainer > .col {
-    padding-left: 4px;
-    padding-right: 4px;
-}
+                .legend-row span {
+                    display: flex;
+                    align-items: center;
+                    gap: 6px;
+                    white-space: nowrap;
+                }
 
-#statusContainer button {
-    min-width: 36px;
-    padding: 0.25rem 0.5rem;
-}
+                /* Question number button spacing */
+                #statusContainer .col {
+                    padding-left: 4px;
+                    padding-right: 4px;
+                }
+                #statusContainer button {
+                    min-width: 36px;
+                    padding: 0.25rem 0.5rem;
+                }
 
-/* Mobile: narrower dropdown + 6 cols + wrapped legend */
-@media (max-width: 576px) {
-    .progress-dropdown {
-        max-width: 280px !important;
-    }
+                /* Responsive behavior for smaller screens */
+                @media (max-width: 576px) {
+                    #progressDropdownMenu {
+                        width: 240px !important;
+                    }
 
-    .progress-dropdown .legend-row {
-        display: flex;
-        flex-wrap: wrap;
-        font-size: 0.75rem;
-        margin-bottom: 10px;
-        gap: 10px;
-    }
+                    .legend-row {
+                        flex-wrap: wrap;
+                        gap: 10px;
+                        font-size: 0.75rem;
+                    }
 
-    #statusContainer {
-        --bs-columns: 6;
-    }
-}
-
-/* Large screens: enforce 10 question buttons per row */
-@media (min-width: 992px) {
-    #statusContainer {
-        --bs-columns: 10;
-    }
-}
-
-
-
+                    #statusContainer {
+                        --bs-columns: 5;
+                    }
+                }
 
                         
     </style>
@@ -272,22 +263,21 @@
                     <i class="bi bi-bar-chart-fill me-1"></i> Progress
                 </button>
                 
-                <ul class="dropdown-menu dropdown-menu-end p-3 progress-dropdown" aria-labelledby="progressDropdown">
-                  <li class="legend-row text-muted">
-                        <span class="me-3"><span class="badge rounded-pill bg-success">&nbsp;</span> Answered</span>
-                        <span class="me-3"><span class="badge rounded-pill bg-secondary">&nbsp;</span> Not Answered</span>
-                        <span class="me-3"><span class="badge rounded-pill bg-primary">&nbsp;</span> Current</span>
+                <ul id="progressDropdownMenu" class="dropdown-menu dropdown-menu-end p-3" aria-labelledby="progressDropdown">
+                    <li class="legend-row text-muted">
+                        <span><span class="badge rounded-pill bg-success">&nbsp;</span> Answered</span>
+                        <span><span class="badge rounded-pill bg-secondary">&nbsp;</span> Not Answered</span>
+                        <span><span class="badge rounded-pill bg-primary">&nbsp;</span> Current</span>
                         <span><i class="bi bi-flag-fill text-danger"></i> Flagged</span>
                     </li>
                     <hr class="my-2">
                     <li>
                         <div id="statusContainer" class="row row-cols-5 row-cols-sm-6 row-cols-md-8 row-cols-lg-10 g-2" style="max-height: 250px; overflow-y: auto;">
-                            <!-- Status buttons go inside here as:
-                            <div class="col"><button class="btn btn-outline-primary btn-sm w-100">1</button></div>
-                            -->
+                            <!-- Status buttons go inside here -->
                         </div>
                     </li>
                 </ul>
+
             </div>
 
 
