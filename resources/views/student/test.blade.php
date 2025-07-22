@@ -178,20 +178,21 @@
                     }
                 }
 
-            /* Default: Large screens (desktop) */
+          /* Progress dropdown layout – default (large screen) */
 .progress-dropdown {
     width: 100%;
-    max-width: 620px;
+    max-width: 640px; /* wider dropdown */
 }
 
+/* Ensure legend is a single row with wrapping fallback */
 .progress-dropdown .legend-row {
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
     font-size: 0.85rem;
     margin-bottom: 8px;
+    gap: 16px;
     flex-wrap: wrap;
-    gap: 10px;
 }
 
 .progress-dropdown .legend-row span {
@@ -201,20 +202,29 @@
     white-space: nowrap;
 }
 
-/* Mobile screens */
+/* Style question numbers for proper spacing */
+#statusContainer > .col {
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+#statusContainer button {
+    min-width: 36px;
+    padding: 0.25rem 0.5rem;
+}
+
+/* Mobile: narrower dropdown + 6 cols + wrapped legend */
 @media (max-width: 576px) {
     .progress-dropdown {
-        width: 100%;
         max-width: 280px !important;
     }
 
     .progress-dropdown .legend-row {
         display: flex;
         flex-wrap: wrap;
-        justify-content: start;
-        gap: 10px;
         font-size: 0.75rem;
         margin-bottom: 10px;
+        gap: 10px;
     }
 
     #statusContainer {
@@ -222,12 +232,13 @@
     }
 }
 
-/* Force 10 questions per row on large screens */
+/* Large screens: enforce 10 question buttons per row */
 @media (min-width: 992px) {
     #statusContainer {
         --bs-columns: 10;
     }
 }
+
 
 
 
