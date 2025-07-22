@@ -180,7 +180,7 @@
 
                 /* Force dropdown to a larger width using an id or !important */
                 #progressDropdownMenu.dropdown-menu {
-                    min-width: 640px !important;
+                    min-width: 300px !important;
                     max-width: 90vw;
                 }
 
@@ -194,7 +194,7 @@
                     justify-content: space-between;
                     align-items: center;
                     flex-wrap: nowrap;
-                    gap: 16px;
+                    gap: 3px;
                     font-size: 0.85rem;
                     margin-bottom: 8px;
                 }
