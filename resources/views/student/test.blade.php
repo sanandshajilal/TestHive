@@ -211,18 +211,19 @@
                     padding-left: 4px;
                     padding-right: 4px;
                 }
-               #statusContainer button {
-                    padding: 0.3rem 0.6rem;
-                    border-radius: 999px; /* full pill */
+            #statusContainer button {
+                    padding: 0.4rem 0.6rem;
+                    border-radius: 999px;
                     font-size: 0.75rem;
-                    line-height: 1;
-                    min-width: auto; /* reset */
-                    width: auto;     /* let content size it */
-                    height: auto;
+                    border: none;
+                    min-width: unset;
+                    background-color: #6c757d; /* fallback color */
+                    color: white;
                     display: inline-flex;
                     align-items: center;
                     justify-content: center;
                 }
+
 
 
                 /* Responsive behavior for smaller screens */
@@ -281,7 +282,7 @@
                     </li>
                     <hr class="my-2">
                     <li>
-                        <div id="statusContainer" class="row row-cols-5 row-cols-sm-6 row-cols-md-8 row-cols-lg-10 g-2" style="max-height: 250px; overflow-y: auto;">
+                        <div id="statusContainer" class="d-grid gap-2" style="grid-template-columns: repeat(auto-fit, minmax(36px, 1fr)); max-height: 250px; overflow-y: auto;">
                             <!-- Status buttons go inside here -->
                         </div>
                     </li>
