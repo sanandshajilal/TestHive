@@ -34,10 +34,13 @@
         min-width: 0 !important;
         
     }
-    .back-label {
+    
+}
+ @media (max-width: 767.98px) {
+                    .back-label {
                         display: none !important;
                     }
-}
+                }
 
 </style>
 @endsection
