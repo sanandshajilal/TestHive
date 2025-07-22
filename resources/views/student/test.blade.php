@@ -212,7 +212,7 @@
                     padding-right: 4px;
                 }
                 #statusContainer button {
-                    min-width: 18px;
+                    min-width: 4px;
                     padding: 0.25rem 0.5rem;
                 }
 
