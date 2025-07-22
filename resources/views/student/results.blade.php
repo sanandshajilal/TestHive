@@ -32,7 +32,11 @@
     @media (min-width: 768px) {
     .min-w-md-0 {
         min-width: 0 !important;
+        
     }
+    .back-label {
+                        display: none !important;
+                    }
 }
 
 </style>
@@ -64,7 +68,8 @@
     <div class="header-box mb-4 d-flex justify-content-between align-items-center">
         <h4 class="fw-semibold text-dark mb-0">📄 TEST RESULTS</h4>
         <a href="{{ route('student.index') }}" class="btn btn-secondary rounded-pill">
-            <i class="bi bi-arrow-left me-1"></i> Back to Home
+            <i class="bi bi-arrow-left me-1"></i> 
+            <span class="back-label">Back to Home </span>
         </a>
 
 </div>

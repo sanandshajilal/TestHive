@@ -309,7 +309,7 @@
                 </span>
 
                 <!-- Exit Button -->
-                <form action="{{ route('student.logout') }}" method="POST">
+                <form id="exitForm" action="{{ route('student.logout') }}" method="POST">
                     @csrf
                     <button type="submit" class="exit-button btn btn-outline-danger btn-sm d-flex align-items-center">
                         <i class="bi bi-door-closed me-1"></i>
@@ -1015,6 +1015,13 @@ document.addEventListener('DOMContentLoaded', () => {
         text.textContent = 'Flag';
     }
 });
+
+    document.getElementById('exitForm').addEventListener('submit', function(event) {
+        const confirmExit = confirm("Are you sure you want to exit the test?\nYour progress will be saved.");
+        if (!confirmExit) {
+            event.preventDefault(); // Stop form from submitting
+        }
+    });
 
 </script>
 
