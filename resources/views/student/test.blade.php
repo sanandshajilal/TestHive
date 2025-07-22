@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TestHive by Mala</title>
+    <title>TestHive by Malasri</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     {{-- Bootstrap CSS --}}
@@ -178,38 +178,54 @@
                     }
                 }
 
-             /* Default: Large screens (desktop) */
+            /* Default: Large screens (desktop) */
 .progress-dropdown {
     width: 100%;
-    max-width: 500px;
+    max-width: 620px;
 }
 
 .progress-dropdown .legend-row {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    flex-wrap: nowrap;
+    justify-content: space-between;
     font-size: 0.85rem;
     margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .progress-dropdown .legend-row span {
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
+    white-space: nowrap;
 }
 
-/* Small screens: hide legend, reduce width */
+/* Mobile screens */
 @media (max-width: 576px) {
     .progress-dropdown {
-        width: 240px !important;
+        width: 100%;
+        max-width: 280px !important;
     }
 
     .progress-dropdown .legend-row {
-        display: none;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: start;
+        gap: 10px;
+        font-size: 0.75rem;
+        margin-bottom: 10px;
     }
 
     #statusContainer {
-        --bs-columns: 5;
+        --bs-columns: 6;
+    }
+}
+
+/* Force 10 questions per row on large screens */
+@media (min-width: 992px) {
+    #statusContainer {
+        --bs-columns: 10;
     }
 }
 
