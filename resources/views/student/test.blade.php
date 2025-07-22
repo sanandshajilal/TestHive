@@ -211,10 +211,19 @@
                     padding-left: 4px;
                     padding-right: 4px;
                 }
-                #statusContainer button {
-                    min-width: 4px;
-                    padding: 0.25rem 0.5rem;
+               #statusContainer button {
+                    padding: 0.3rem 0.6rem;
+                    border-radius: 999px; /* full pill */
+                    font-size: 0.75rem;
+                    line-height: 1;
+                    min-width: auto; /* reset */
+                    width: auto;     /* let content size it */
+                    height: auto;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
                 }
+
 
                 /* Responsive behavior for smaller screens */
                 @media (max-width: 576px) {
