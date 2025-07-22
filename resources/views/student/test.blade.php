@@ -194,7 +194,7 @@
                     justify-content: space-between;
                     align-items: center;
                     flex-wrap: nowrap;
-                    gap: 3px;
+                    gap: 6px;
                     font-size: 0.85rem;
                     margin-bottom: 8px;
                 }
@@ -212,7 +212,7 @@
                     padding-right: 4px;
                 }
                 #statusContainer button {
-                    min-width: 36px;
+                    min-width: 18px;
                     padding: 0.25rem 0.5rem;
                 }
 
@@ -224,7 +224,7 @@
 
                     .legend-row {
                         flex-wrap: wrap;
-                        gap: 10px;
+                        gap: 6px;
                         font-size: 0.75rem;
                     }
 
