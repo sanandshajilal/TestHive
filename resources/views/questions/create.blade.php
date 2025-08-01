@@ -126,9 +126,10 @@
 <script>
     tinymce.init({
         selector: 'textarea[name=question_text]',
-        plugins: 'lists paste',
-        toolbar: 'bold italic underline | bullist numlist',
-        menubar: true,
+        plugins: 'lists paste image table',
+        toolbar: 'undo redo | bold italic underline | bullist numlist | image table',
+        menubar: 'insert table format',
+        paste_data_images: true,  // enables image paste directly into editor
         paste_as_text: true,
         elementpath: false,
         setup: function (editor) {
@@ -138,6 +139,7 @@
         }
     });
 </script>
+
 
 <script src="{{ asset('js/question_form.js') }}"></script>
 @endsection
