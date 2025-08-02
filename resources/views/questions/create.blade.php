@@ -129,16 +129,35 @@
         plugins: 'lists paste image table',
         toolbar: 'undo redo | bold italic underline | bullist numlist | image table',
         menubar: 'insert table format',
-        paste_data_images: true,  // enables image paste directly into editor
-        paste_as_text: true,
-        elementpath: false,
+        paste_data_images: true,   // Enables image paste directly into editor
+        paste_as_text: false,      // Keep formatting (important for table classes)
+        table_class_list: [
+            {title: 'Bootstrap Table', value: 'table table-bordered table-striped table-sm'}
+        ],
+        table_default_attributes: {
+            border: '0'
+        },
+        table_default_styles: {
+            width: '100%',
+            borderCollapse: 'collapse'
+        },
         setup: function (editor) {
+            // On table insert, automatically add bootstrap classes
+            editor.on('ExecCommand', function (e) {
+                if (e.command === 'mceInsertTable') {
+                    setTimeout(() => {
+                        editor.dom.addClass(editor.dom.select('table'), 'table table-bordered table-striped table-sm');
+                    }, 10);
+                }
+            });
+
             editor.on('change', function () {
                 tinymce.triggerSave();
             });
         }
     });
 </script>
+
 
 
 <script src="{{ asset('js/question_form.js') }}"></script>
