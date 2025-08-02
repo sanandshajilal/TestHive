@@ -124,11 +124,13 @@
 <script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
 <script>
     tinymce.init({
-        selector: 'textarea[name="question_text"]',
-        plugins: 'lists paste',
-        toolbar: 'bold italic underline | bullist numlist',
-        menubar: false,
+        selector: 'textarea[name=question_text]',
+        plugins: 'lists paste image table',
+        toolbar: 'undo redo | bold italic underline | bullist numlist | image table',
+        menubar: 'insert table format',
+        paste_data_images: true,  // enables image paste directly into editor
         paste_as_text: true,
+        elementpath: false,
         setup: function (editor) {
             editor.on('change', function () {
                 tinymce.triggerSave();
