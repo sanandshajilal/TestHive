@@ -106,6 +106,28 @@
             border: none;
         }
 
+            .question-col table {
+                border-collapse: collapse;
+                border: 1px solid #ccc;
+                width: auto;
+                margin-top: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .question-col th,
+            .question-col td {
+                border: 1px solid #ccc;
+                padding: 6px 10px;
+                font-size: 0.9rem;
+                text-align: left;
+            }
+
+            .question-col th {
+                background-color: #f8f9fa;
+                font-weight: 600;
+            }
+
+
 
         @media screen and (max-width: 768px) {
             .dataTables_wrapper .dataTables_filter {
