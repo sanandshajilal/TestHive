@@ -132,7 +132,7 @@
         paste_data_images: true,   // Enables image paste directly into editor
         paste_as_text: false,      // Keep formatting (important for table classes)
         table_class_list: [
-            {title: 'Bootstrap Table', value: 'table table-bordered table-striped table-sm'}
+            {title: 'Bootstrap Table', value: 'table table-bordered table-sm'}
         ],
         table_default_attributes: {
             border: '0'
@@ -146,7 +146,7 @@
             editor.on('ExecCommand', function (e) {
                 if (e.command === 'mceInsertTable') {
                     setTimeout(() => {
-                        editor.dom.addClass(editor.dom.select('table'), 'table table-bordered table-striped table-sm');
+                        editor.dom.addClass(editor.dom.select('table'), 'table table-bordered table-sm');
                     }, 10);
                 }
             });
