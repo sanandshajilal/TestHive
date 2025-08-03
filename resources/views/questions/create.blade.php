@@ -132,7 +132,7 @@
         paste_data_images: true,   // Enables image paste directly into editor
         paste_as_text: false,      // Keep formatting (important for table classes)
         table_class_list: [
-            {title: 'Bootstrap Table', value: 'table table-bordered table-sm'}
+            { title: 'Bootstrap Table', value: 'table table-bordered table-sm' }
         ],
         table_default_attributes: {
             border: '0'
@@ -142,7 +142,7 @@
             borderCollapse: 'collapse'
         },
         setup: function (editor) {
-            // On table insert, automatically add bootstrap classes
+            // Add Bootstrap table classes on insert
             editor.on('ExecCommand', function (e) {
                 if (e.command === 'mceInsertTable') {
                     setTimeout(() => {
@@ -151,12 +151,24 @@
                 }
             });
 
+            // Make pasted images responsive
+            editor.on('PastePostProcess', function (e) {
+                const imgs = e.node.querySelectorAll('img');
+                imgs.forEach(img => {
+                    img.removeAttribute('width');
+                    img.removeAttribute('height');
+                    img.style.maxWidth = '100%';
+                    img.style.height = 'auto';
+                });
+            });
+
             editor.on('change', function () {
                 tinymce.triggerSave();
             });
         }
     });
 </script>
+
 
 
 
