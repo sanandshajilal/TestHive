@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Session\TokenMismatchException;
 
 class Handler extends ExceptionHandler
 {
@@ -26,5 +27,22 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+
+    public function render($request, Throwable $exception)
+    {
+        // Handle CSRF Token mismatch (session expired)
+        if ($exception instanceof TokenMismatchException) {
+            if ($request->is('admin/*')) {
+                return redirect()->route('admin.login')
+                    ->with('message', 'Session expired. Please login again.');
+            } else {
+                return redirect()->route('home')
+                    ->with('message', 'Session expired. Please login again.');
+            }
+        }
+
+        // Default Laravel handling
+        return parent::render($request, $exception);
     }
 }
