@@ -224,6 +224,34 @@
                     justify-content: center;
                 }
 
+                .table-mcq-container {
+                        width: 100%;
+                        overflow: hidden;
+                        position: relative;
+                    }
+
+                    .table-mcq-scroll {
+                        overflow-x: auto;
+                        -webkit-overflow-scrolling: touch;
+                    }
+
+                    /* Sticky first column */
+                    .table-mcq-table .sticky-col {
+                        position: sticky;
+                        left: 0;
+                        background: #fff;
+                        z-index: 2;
+                        min-width: 140px; /* adjust based on text */
+                        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+                    }
+
+                    /* Reduce radio button size */
+                    .small-radio {
+                        transform: scale(0.8);
+                        margin: 0;
+                    }
+
+
 
 
                 /* Responsive behavior for smaller screens */
@@ -412,33 +440,39 @@
 
                 {{-- Table MCQ with dynamic labels --}}
                 @elseif($question->question_type === 'table_mcq' && is_array($statements) && is_array($labels))
-                    <table class="table-mcq-table table table-bordered align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Statement</th>
-                                @foreach($labels as $label)
-                                    <th class="text-center">{{ ucfirst($label) }}</th>
-                                @endforeach
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($statements as $index => $statement)
-                                <tr>
-                                    <td>{{ $statement }}</td>
-                                    @foreach($labels as $label)
-                                        <td class="text-center">
-                                            <input
-                                                type="radio"
-                                                name="answer[{{ $index }}]"
-                                                value="{{ strtolower($label) }}"
-                                                @if(isset($selectedOption[$index]) && $selectedOption[$index] === strtolower($label)) checked @endif
-                                            >
-                                        </td>
+                    <div class="table-mcq-container">
+                        <div class="table-mcq-scroll">
+                            <table class="table table-bordered table-mcq-table align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="sticky-col">Statement</th>
+                                        @foreach($labels as $label)
+                                            <th class="text-center">{{ ucfirst($label) }}</th>
+                                        @endforeach
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($statements as $index => $statement)
+                                        <tr>
+                                            <td class="sticky-col">{{ $statement }}</td>
+                                            @foreach($labels as $label)
+                                                <td class="text-center">
+                                                    <input
+                                                        type="radio"
+                                                        name="answer[{{ $index }}]"
+                                                        value="{{ strtolower($label) }}"
+                                                        class="small-radio"
+                                                        @if(isset($selectedOption[$index]) && $selectedOption[$index] === strtolower($label)) checked @endif
+                                                    >
+                                                </td>
+                                            @endforeach
+                                        </tr>
                                     @endforeach
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
 
                    {{-- DRAG AND DROP Question --}}
                     @elseif($question->question_type === 'drag_and_drop')
