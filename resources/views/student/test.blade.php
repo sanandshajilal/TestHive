@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TestHive by Malasri</title>
+    <title>ACCAPrep with Malasri</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     {{-- Bootstrap CSS --}}
@@ -14,6 +14,9 @@
     <style>
         body {
             background-color: #f7f8fa;
+            background-image:
+            radial-gradient(#e9ecef 1px, transparent 1px);
+            background-size: 24px 24px;
             font-family: 'Segoe UI', sans-serif;
         }
 
@@ -281,10 +284,10 @@
             <!-- Brand -->
             <a class="navbar-brand brand-logo d-flex flex-column align-items-start text-decoration-none" href="#">
                 <div class="d-flex align-items-center header-right fw-bold">
-                    <i class="bi bi-lightning-charge-fill text-warning me-1"></i>
-                    TestHive
+                    <i class="bi bi-mortarboard-fill text-warning me-1"></i>
+                    ACCAPrep
                 </div>
-                <div class="brand-subtext">by <strong>MALASRI</strong></div>
+                <div class="brand-subtext">with <strong>MALASRI</strong></div>
             </a>
 
             <!-- Timer + Progress + Help + Exit -->
@@ -483,7 +486,9 @@
                         $bLabel = $question->options['column_b_label'] ?? 'Column B';
 
                         // Previously selected option: [aIndex => bIndex]
-                        $selectedMap = $selectedOption ?? [];
+                        $selectedMap = is_array($selectedOption)
+                        ? $selectedOption
+                        : [];
 
                         // Invert to [bIndex => aIndex] for rendering
                         $bToA = [];
@@ -531,23 +536,46 @@
                             </table>
                         </div>
 
-                        <div class="mt-4">
-                            <h6 class="mb-2">Draggable Options ({{ $aLabel }})</h6>
-                            <div class="d-flex flex-wrap gap-2" id="drag-options">
-                                @foreach($colA as $index => $item)
-                                    @if(!in_array($index, $bToA))
-                                        <div class="draggable bg-primary text-white rounded px-3 py-2"
-                                            draggable="true"
-                                            ondragstart="drag(event)"
-                                            id="drag-{{ $index }}"
-                                            data-value="{{ $index }}">
-                                            {{ $item }}
-                                        </div>
-                                    @endif
-                                @endforeach
+                  @php
+                    $availableOptions = [];
+
+                    foreach ($colA as $index => $item) {
+                        if (!in_array($index, $bToA)) {
+                            $availableOptions[] = [
+                                'index' => $index,
+                                'text' => $item,
+                            ];
+                        }
+                    }
+
+                    shuffle($availableOptions);
+                @endphp
+
+                <div class="mt-4">
+                    <h6 class="mb-2">Draggable Options ({{ $aLabel }})</h6>
+
+                    <div class="d-flex flex-wrap gap-2 border rounded p-3 bg-light"
+                        id="drag-options"
+                        ondrop="dropToBank(event)"
+                        ondragover="allowDrop(event)">
+
+                        @foreach($availableOptions as $option)
+
+                            <div class="draggable bg-primary text-white rounded px-3 py-2"
+                                draggable="true"
+                                ondragstart="drag(event)"
+                                id="drag-{{ $option['index'] }}"
+                                data-value="{{ $option['index'] }}">
+
+                                {{ $option['text'] }}
+
                             </div>
-                        </div>
+
+                        @endforeach
+
                     </div>
+                </div>
+                                    </div>
 
                     <script>
                         function allowDrop(ev) {
@@ -558,26 +586,102 @@
                             ev.dataTransfer.setData("text", ev.target.id);
                         }
 
-                        function drop(ev, dropIndex) {
-                            ev.preventDefault();
-                            const draggedId = ev.dataTransfer.getData("text");
-                            const draggedEl = document.getElementById(draggedId);
-                            const dropZone = document.getElementById("drop-" + dropIndex);
-                            const inputField = document.getElementById("drop-input-" + dropIndex);
+                     function drop(ev, dropIndex) {
 
-                            // Clear old dropzone (if dragged item is already dropped elsewhere)
+                            ev.preventDefault();
+
+                            const draggedId =
+                                ev.dataTransfer.getData("text");
+
+                            const draggedEl =
+                                document.getElementById(draggedId);
+
+                            const dropZone =
+                                document.getElementById("drop-" + dropIndex);
+
+                            const inputField =
+                                document.getElementById("drop-input-" + dropIndex);
+
+                            const dragBank =
+                                document.getElementById("drag-options");
+
+                            // If target already contains an item,
+                            // move it back to options bank
+
+                            const existingItem =
+                                dropZone.querySelector('.draggable');
+
+                            if (existingItem && existingItem !== draggedEl) {
+
+                                dragBank.appendChild(existingItem);
+
+                                const zoneIndex =
+                                    dropZone.id.split('-')[1];
+
+                                document.getElementById(
+                                    'drop-input-' + zoneIndex
+                                ).value = '';
+                            }
+
+                            // Remove dragged item from previous dropzone
+
                             document.querySelectorAll('.dropzone').forEach(zone => {
+
                                 if (zone.contains(draggedEl)) {
-                                    const zoneIndex = zone.id.split('-')[1];
+
+                                    const zoneIndex =
+                                        zone.id.split('-')[1];
+
                                     zone.innerHTML = 'Drop here';
-                                    document.getElementById("drop-input-" + zoneIndex).value = '';
+
+                                    document.getElementById(
+                                        "drop-input-" + zoneIndex
+                                    ).value = '';
                                 }
                             });
 
-                            // Move dragged item to new drop zone
-                            dropZone.textContent = '';
+                            // Place item in new dropzone
+
+                            dropZone.innerHTML = '';
+
                             dropZone.appendChild(draggedEl);
-                            inputField.value = draggedEl.dataset.value;
+
+                            inputField.value =
+                                draggedEl.dataset.value;
+                        }
+
+                        function dropToBank(ev) {
+
+                            ev.preventDefault();
+
+                            const draggedId =
+                                ev.dataTransfer.getData("text");
+
+                            const draggedEl =
+                                document.getElementById(draggedId);
+
+                            const dragBank =
+                                document.getElementById("drag-options");
+
+                            // Clear hidden answer if item came from dropzone
+
+                            document.querySelectorAll('.dropzone').forEach(zone => {
+
+                                if(zone.contains(draggedEl)) {
+
+                                    const zoneIndex =
+                                        zone.id.split('-')[1];
+
+                                    zone.innerHTML = 'Drop here';
+
+                                    document.getElementById(
+                                        'drop-input-' + zoneIndex
+                                    ).value = '';
+                                }
+
+                            });
+
+                            dragBank.appendChild(draggedEl);
                         }
                     </script>
 
@@ -586,7 +690,9 @@
                     @php
                         $sentence = $question->question_text; // e.g., "Captain of [blank] is MS Dhoni in [blank]."
                         $dropdowns = is_array($question->options) ? $question->options : json_decode($question->options, true);
-                        $selected = is_array($selectedOption) ? $selectedOption : [];
+                        $selected = is_array($selectedOption)
+                        ? $selectedOption
+                        : json_decode($selectedOption, true);
                     @endphp
 
                     <p><strong>Fill in the blanks:</strong></p>
@@ -1056,6 +1162,37 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault(); // Stop form from submitting
         }
     });
+
+  
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const oneWordInput =
+                document.getElementById('oneWordAnswer');
+
+            if (!oneWordInput) return;
+
+            // Prevent paste
+            oneWordInput.addEventListener('paste', function(e){
+                e.preventDefault();
+            });
+
+            // Prevent drag-drop text
+            oneWordInput.addEventListener('drop', function(e){
+                e.preventDefault();
+            });
+
+            // Prevent right-click menu
+            oneWordInput.addEventListener('contextmenu', function(e){
+                e.preventDefault();
+            });
+
+            oneWordInput.addEventListener('paste', function(e){
+                e.preventDefault();
+                alert('Paste is not allowed for One Word questions.');
+            });
+
+        });
+
 
 </script>
 

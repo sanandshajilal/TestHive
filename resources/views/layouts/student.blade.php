@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Student Access | ACCA Mock Tests</title>
+    <title>ACCAPrep with Malasri</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     {{-- Bootstrap CSS --}}
@@ -74,10 +74,10 @@
         <div class="container">
             <a class="navbar-brand brand-logo d-flex flex-column align-items-start text-decoration-none" href="#">
                 <div class="d-flex align-items-center header-right fw-bold">
-                    <i class="bi bi-lightning-charge-fill text-warning me-1"></i>
-                    TestHive
+                    <i class="bi bi-mortarboard-fill text-warning me-1"></i>
+                    ACCAPrep
                 </div>
-                <div class="brand-subtext">by <trong>MALASRI</strong></div>
+                <div class="brand-subtext">with <trong>MALASRI</strong></div>
             </a>
 
 

@@ -15,15 +15,58 @@ class DashboardController extends Controller
 {
     public function index()
     {
-    return view('admin.dashboard', [
+        // Active Mock Tests
+        $activeMockTests = MockTest::count();
+
+        // Completed Attempts
+        $completedAttempts = StudentTestAttempt::where('status', 'completed')
+            ->count();
+
+        // Average Score %
+        $attempts = StudentTestAttempt::with('mockTest.questions')
+            ->where('status', 'completed')
+            ->get();
+
+        $averagePercentage = 0;
+
+        if ($attempts->count()) {
+
+            $averagePercentage = round(
+                $attempts->avg(function ($attempt) {
+
+                    $totalPossible = $attempt->mockTest
+                        ? $attempt->mockTest->questions->sum('marks')
+                        : 0;
+
+                    return $totalPossible > 0
+                        ? ($attempt->total_marks / $totalPossible) * 100
+                        : 0;
+                }),
+                1
+            );
+        }
+
+        return view('admin.dashboard', [
             'instituteCount' => Institute::count(),
             'batchCount' => Batch::count(),
             'paperCount' => Paper::count(),
             'questionCount' => Question::count(),
             'mockTestCount' => MockTest::count(),
             'responseCount' => StudentTestAttempt::count(),
-            'recentMockTests' => MockTest::latest()->take(5)->with('paper')->get(),
-            'recentResponses' => StudentTestAttempt::latest()->take(5)->with(['mockTest.paper'])->get(),
+
+            'activeMockTests' => $activeMockTests,
+            'completedAttempts' => $completedAttempts,
+            'averagePercentage' => $averagePercentage,
+
+            'recentMockTests' => MockTest::latest()
+                ->take(5)
+                ->with('paper')
+                ->get(),
+
+            'recentResponses' => StudentTestAttempt::latest()
+                ->take(5)
+                ->with(['mockTest.paper'])
+                ->get(),
         ]);
     }
 }

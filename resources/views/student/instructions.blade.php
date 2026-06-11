@@ -5,6 +5,9 @@
 <style>
     body {
         background-color: #f8f9fc;
+            background-image:
+        radial-gradient(#e9ecef 1px, transparent 1px);
+        background-size: 24px 24px;
         font-family: 'Poppins', sans-serif;
     }
 

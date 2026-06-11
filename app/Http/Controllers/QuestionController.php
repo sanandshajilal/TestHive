@@ -156,29 +156,53 @@ class QuestionController extends Controller
 
 
             case 'drag_and_drop':
-                $question->question_text = $request->question_text;
 
-                $dragData = [
-                    'column_a_label' => $request->input('column_a_label', 'Column A'),
-                    'column_b_label' => $request->input('column_b_label', 'Column B'),
-                    'column_a' => array_values(array_filter($request->input('column_a', []))),
-                    'column_b' => array_values(array_filter($request->input('column_b', []))),
-                ];
+                    $question->question_text = $request->question_text;
 
-                $question->options = $dragData;
+                    $columnA = array_values(array_filter(
+                        $request->input('column_a', []),
+                        fn($v) => trim($v) !== ''
+                    ));
 
-                // ✅ Correct format: [A_index => B_index]
-                $matches = [];
-                $from = $request->input('matching_from', []);
-                $to = $request->input('matching_to', []);
-                for ($i = 0; $i < count($from); $i++) {
-                    if (isset($from[$i], $to[$i]) && is_numeric($from[$i]) && is_numeric($to[$i])) {
-                        $matches[(int)$from[$i]] = (int)$to[$i];
+                    $columnB = array_values(array_filter(
+                        $request->input('column_b', []),
+                        fn($v) => trim($v) !== ''
+                    ));
+
+                    if (empty($columnA)) {
+                        return back()->withInput()->withErrors([
+                            'column_a' => 'Please enter at least one Column A item.'
+                        ]);
                     }
-                }
 
-                $question->correct_answers = json_encode($matches); // ✅ Store as JSON map
-                break;
+                    if (empty($columnB)) {
+                        return back()->withInput()->withErrors([
+                            'column_b' => 'Please enter at least one Column B item.'
+                        ]);
+                    }
+
+                    if (count($columnA) !== count($columnB)) {
+                        return back()->withInput()->withErrors([
+                            'column_b' => 'Column A and Column B must contain the same number of items.'
+                        ]);
+                    }
+
+                    $question->options = [
+                        'column_a_label' => $request->input('column_a_label', 'Column A'),
+                        'column_b_label' => $request->input('column_b_label', 'Column B'),
+                        'column_a' => $columnA,
+                        'column_b' => $columnB,
+                    ];
+
+                    $matches = [];
+
+                    for ($i = 0; $i < count($columnA); $i++) {
+                        $matches[$i] = $i;
+                    }
+
+                    $question->correct_answers = json_encode($matches);
+
+                    break;
 
 
             case 'dropdown':
@@ -236,9 +260,17 @@ class QuestionController extends Controller
 
         }
 
-        $question->save();
+      $question->save();
 
-        return redirect()->route('questions.index')->with('success', 'Question created successfully.');
+        return redirect()
+            ->route('questions.create')
+            ->with('success', 'Question created successfully.')
+            ->withInput([
+                'paper_id' => $request->paper_id,
+                'topic_id' => $request->topic_id,
+                'sub_topic_id' => $request->sub_topic_id,
+                'question_type' => $request->question_type,
+            ]);
     }
 
         public function edit(Question $question)
@@ -261,16 +293,21 @@ class QuestionController extends Controller
                     break;
 
                 case 'drag_and_drop':
-                    $options = is_array($question->options) ? $question->options : json_decode($question->options, true);
-                    $question->column_a_label = $options['column_a_label'] ?? 'Column A';
-                    $question->column_b_label = $options['column_b_label'] ?? 'Column B';
-                    $question->column_a = $options['column_a'] ?? [];
-                    $question->column_b = $options['column_b'] ?? [];
+                    $options = is_array($question->options)
+                        ? $question->options
+                        : json_decode($question->options, true);
 
-                    $correct = is_array($question->correct_answers) ? $question->correct_answers : json_decode($question->correct_answers, true) ?? [];
+                    $question->column_a_label =
+                        $options['column_a_label'] ?? 'Column A';
 
-                    $question->matching_from = array_keys($correct);
-                    $question->matching_to = array_values($correct);
+                    $question->column_b_label =
+                        $options['column_b_label'] ?? 'Column B';
+
+                    $question->column_a =
+                        $options['column_a'] ?? [];
+
+                    $question->column_b =
+                        $options['column_b'] ?? [];
                     break;
 
             case 'dropdown':
@@ -424,67 +461,37 @@ class QuestionController extends Controller
 
 
                case 'drag_and_drop':
+
                     $question->question_text = $request->question_text;
 
-                    // 1. Validate question text
-                    if (trim(strip_tags($request->question_text)) === '') {
-                        return back()->withInput()->withErrors([
-                            'question_text' => 'Question text must not be empty.'
-                        ]);
-                    }
+                    $columnA = array_values(array_filter(
+                        $request->input('column_a', []),
+                        fn($v) => trim($v) !== ''
+                    ));
 
-                    // 2. Validate columns
-                    $columnA = array_values(array_filter($request->input('column_a', [])));
-                    $columnB = array_values(array_filter($request->input('column_b', [])));
+                    $columnB = array_values(array_filter(
+                        $request->input('column_b', []),
+                        fn($v) => trim($v) !== ''
+                    ));
 
                     if (empty($columnA)) {
                         return back()->withInput()->withErrors([
-                            'column_a' => 'Please provide at least one item in Column A.'
+                            'column_a' => 'Please enter at least one Column A item.'
                         ]);
                     }
 
                     if (empty($columnB)) {
                         return back()->withInput()->withErrors([
-                            'column_b' => 'Please provide at least one item in Column B.'
+                            'column_b' => 'Please enter at least one Column B item.'
                         ]);
                     }
 
-                    // 3. Validate matching pairs
-                    $from = $request->input('matching_from', []);
-                    $to = $request->input('matching_to', []);
-                    $matches = [];
-
-                    foreach ($from as $i => $fromIndex) {
-                        $toIndex = $to[$i] ?? null;
-
-                        if ($fromIndex === '' || $toIndex === '' || !is_numeric($fromIndex) || !is_numeric($toIndex)) {
-                            return back()->withInput()->withErrors([
-                                "matching.$i" => "Invalid match in row " . ($i + 1) . "."
-                            ]);
-                        }
-
-                        if (!isset($columnA[$fromIndex])) {
-                            return back()->withInput()->withErrors([
-                                "matching.$i" => "Invalid Column A index in match row " . ($i + 1) . "."
-                            ]);
-                        }
-
-                        if (!isset($columnB[$toIndex])) {
-                            return back()->withInput()->withErrors([
-                                "matching.$i" => "Invalid Column B index in match row " . ($i + 1) . "."
-                            ]);
-                        }
-
-                        $matches[(int)$fromIndex] = (int)$toIndex;
-                    }
-
-                    if (empty($matches)) {
+                    if (count($columnA) !== count($columnB)) {
                         return back()->withInput()->withErrors([
-                            'matching' => 'At least one valid match is required.'
+                            'column_b' => 'Column A and Column B must contain the same number of items.'
                         ]);
                     }
 
-                    // Save data
                     $question->options = [
                         'column_a_label' => $request->input('column_a_label', 'Column A'),
                         'column_b_label' => $request->input('column_b_label', 'Column B'),
@@ -492,7 +499,14 @@ class QuestionController extends Controller
                         'column_b' => $columnB,
                     ];
 
+                    $matches = [];
+
+                    for ($i = 0; $i < count($columnA); $i++) {
+                        $matches[$i] = $i;
+                    }
+
                     $question->correct_answers = json_encode($matches);
+
                     break;
 
 

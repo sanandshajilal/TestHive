@@ -6,13 +6,21 @@
         background-color: #f9fafb;
     }
 
+    .card {
+        box-shadow:
+            0 0 0 1px rgba(0,0,0,.03),
+            0 10px 25px rgba(78,115,223,.08) !important;
+    }
+
     .quick-action-card {
         transition: 0.2s;
+        border: 1px solid rgba(78,115,223,.08) !important;
     }
 
     .quick-action-card:hover {
         box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
         transform: translateY(-2px);
+        border-color: rgba(78,115,223,.25) !important;
     }
 
     .quick-action-card .card-body {
@@ -20,13 +28,16 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 100px;
+        height: 80px;
     }
 
     .quick-action-icon {
         font-size: 1.5rem;
         margin-bottom: 0.5rem;
         color: #0d6efd;
+    }
+    .quick-action-card:hover .quick-action-icon {
+        color: #4e73df;
     }
 
     .stat-icon {
@@ -38,6 +49,11 @@
         cursor: pointer;
     }
 
+    .card-header {
+    font-size: 1rem;
+    font-weight: 700;
+}
+
     .clickable-row td {
         transition: background-color 0.2s ease-in-out;
     }
@@ -45,10 +61,67 @@
     .clickable-row:hover td {
         background-color: #e9f2ff !important; /* soft blue */
     }
+
+    
+
+    
 </style>
 
 <div class="container py-4">
-    <h3 class="mb-4 fw-semibold text-dark">Dashboard</h3>
+<div class="card border-0 rounded-4 shadow-sm mb-4">
+    <div class="card-body d-flex justify-content-between align-items-center">
+        
+        <div>
+            <h3 class="mb-1 fw-bold">
+                Welcome back, {{ auth()->user()->name }} 👋
+            </h3>
+            <p class="text-muted mb-0">
+                Manage mock tests, question banks, student responses, etc.
+            </p>
+        </div>
+
+       <div class="text-end d-none d-md-block">
+            <div class="small text-muted">
+                <i class="bi bi-clock-history me-1"></i>
+                Last login
+            </div>
+            <div style="font-size: 0.85rem; color:#6c757d;">
+                Today, 11:11 AM
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body">
+                    <small class="text-muted">Active Mock Tests</small>
+                    <h4 class="mb-0">{{ $activeMockTests }}</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body">
+                    <small class="text-muted">Total Attempts</small>
+                    <h4 class="mb-0">{{ $completedAttempts }}</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body">
+                    <small class="text-muted">Average Score</small>
+                    <h4 class="mb-0">{{ $averagePercentage }}%</h4>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {{-- Quick Stats --}}
     <div class="row g-4 mb-4">
@@ -80,7 +153,10 @@
 
     {{-- Quick Actions (Card-based) --}}
     <div class="mb-5">
-        <h6 class="mb-3 fw-semibold text-dark">Quick Actions</h6>
+        <div class="d-flex align-items-center mb-3">
+            <i class="bi bi-lightning-charge-fill text-warning me-2"></i>
+            <h5 class="fw-semibold mb-0">Quick Actions</h5>
+        </div>
         <div class="row g-3">
             <div class="col-md-4">
                 <a href="/admin/mock-tests/create" class="text-decoration-none">
@@ -125,7 +201,10 @@
     <div class="row g-4">
         <div class="col-md-6">
             <div class="card shadow-sm border-0 rounded-4 bg-white">
-                <div class="card-header bg-white fw-semibold border-bottom">Recent Mock Tests</div>
+                <div class="card-header bg-white fw-semibold border-bottom">
+                    <i class="bi bi-clipboard-check text-success me-2"></i>
+                    Recent Mock Tests
+                </div>
                 <div class="card-body p-0">
                     <table class="table mb-0">
                         <thead class="table-light small text-muted">
@@ -157,7 +236,10 @@
 
         <div class="col-md-6">
             <div class="card shadow-sm border-0 rounded-4 bg-white">
-                <div class="card-header bg-white fw-semibold border-bottom">Recent Student Responses</div>
+                <div class="card-header bg-white fw-semibold border-bottom">
+                    <i class="bi bi-chat-square-text text-success me-2"></i>
+                    Recent Student Responses
+                </div>
                 <div class="card-body p-0">
                     <table class="table mb-0">
                         <thead class="table-light small text-muted">
@@ -190,6 +272,12 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="border-top pt-2 mt-4">
+    <div class="text-center text-muted small">
+        ACCAPrep with Malasri v1.0 · Developed & Maintained by Sanand S
     </div>
 </div>
 @endsection

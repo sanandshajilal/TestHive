@@ -6,6 +6,7 @@
 <style>
     body {
         background-color: #f9fafb;
+        
     }
 
     .header-box {

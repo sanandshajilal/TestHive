@@ -174,15 +174,25 @@ class StudentController extends Controller
             ->where('question_id', $question->id)
             ->first();
 
-        $selectedOption = null;
+       $selectedOption = null;
 
-        if ($savedAnswer) {
-            if (in_array($question->question_type, ['multiple_select', 'table_mcq'])) {
-                $selectedOption = json_decode($savedAnswer->selected_option, true);
-            } else {
-                $selectedOption = $savedAnswer->selected_option;
+            if ($savedAnswer) {
+
+                if (
+                    in_array(
+                        $question->question_type,
+                        ['multiple_select', 'table_mcq', 'drag_and_drop', 'dropdown']
+                    )
+                ) {
+                    $selectedOption = json_decode(
+                        $savedAnswer->selected_option,
+                        true
+                    );
+                } else {
+                    $selectedOption = $savedAnswer->selected_option;
+                }
+
             }
-        }
 
             // ✅ ✅ ✅  Save current question number
                 if ($attempt) {

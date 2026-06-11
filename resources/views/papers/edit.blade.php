@@ -54,6 +54,12 @@
         @if(session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
+        
+        @if($errors->has('topic_delete'))
+            <div class="alert alert-danger">
+                {{ $errors->first('topic_delete') }}
+            </div>
+        @endif
 
         <form action="{{ route('papers.update', $paper->id) }}" method="POST">
             @csrf
@@ -78,6 +84,9 @@
                     <div class="card mb-3 topic-block p-3 shadow-sm">
                         <div class="mb-2">
                             <label class="form-label">Topic</label>
+                            <input type="hidden"
+                            name="topics[{{ $topicIndex }}][id]"
+                            value="{{ $topic->id }}">
                             <input type="text" name="topics[{{ $topicIndex }}][name]" class="form-control" value="{{ $topic->name }}" required>
                         </div>
 
@@ -85,6 +94,9 @@
                             @foreach($topic->subTopics as $subIndex => $subTopic)
                                 <div class="mb-2">
                                     <label class="form-label">Sub Topic</label>
+                                    <input type="hidden"
+                                    name="topics[{{ $topicIndex }}][subtopic_ids][]"
+                                    value="{{ $subTopic->id }}">
                                     <input type="text" name="topics[{{ $topicIndex }}][sub_topics][]" class="form-control mb-1" value="{{ $subTopic->name }}">
                                 </div>
                             @endforeach

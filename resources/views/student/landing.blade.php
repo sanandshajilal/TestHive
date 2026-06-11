@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>TestHive by Malasri</title>
+<title>ACCAPrep with Malasri</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!-- Bootstrap CSS & Icons -->
@@ -12,7 +12,9 @@
 <style>
 body {
     background-color: #f7f8fa;
-    font-family: 'Segoe UI', sans-serif;
+    background-image:
+        radial-gradient(#e9ecef 1px, transparent 1px);
+    background-size: 24px 24px;
 }
 .login-container {
     max-width: 560px;
@@ -35,7 +37,7 @@ body {
     padding: 1.2rem 1.5rem 0 1.5rem;
 }
 .header-left {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
     font-weight: bold;
     color: #343a40;
     letter-spacing: 0.5px;
@@ -100,6 +102,7 @@ body {
 
 .brand-logo {
     line-height: 1.1;
+    margin-bottom: 10px;
 }
 .brand-subtext {
     font-size: 0.6rem;
@@ -116,18 +119,17 @@ body {
     <div class="login-container">
         <div class="top-bar"></div>
         <div class="header-row">
-            <div class="header-left">WELCOME</div>
+            <div class="header-left">MOCK TEST PORTAL</div>
            <div class="brand-logo d-flex flex-column">
                 <div class="d-flex align-items-center header-right fw-bold">
-                    <i class="bi bi-lightning-charge-fill text-warning me-1"></i>
-                    TestHive
+                    <i class="bi bi-mortarboard-fill text-warning me-1"></i>
+                    ACCAPrep
                 </div>
-                <div class="brand-subtext">by <strong>MALASRI </strong></div>
+                <div class="brand-subtext">with <strong>MALASRI </strong></div>
             </div>
-
         </div>
         <div class="divider"></div>
-        <div class="title-highlight text-uppercase">Provide Your Details to Begin the Test</div>
+        <div class="title-highlight text-uppercase">Enter your details to access the test</div>
 
         <div class="form-section">
             @if(session('error'))
@@ -183,12 +185,20 @@ body {
                     </div>
                 </div>
 
-                <!-- Access Code -->
+               <!-- Access Code -->
                 <div class="mb-3">
                     <label class="form-label">Access Code</label>
                     <input type="text" name="access_code" class="form-control" value="{{ old('access_code') }}" required>
+
+                    <div class="form-text">
+                        <i class="bi bi-info-circle me-1"></i>
+                        Use the access code provided. Access is available only for active tests.
+                    </div>
+
                     @error('access_code')
-                        <div class="text-danger small"><i class="bi bi-exclamation-circle-fill me-1"></i>{{ $message }}</div>
+                        <div class="text-danger small">
+                            <i class="bi bi-exclamation-circle-fill me-1"></i>{{ $message }}
+                        </div>
                     @enderror
                 </div>
 
@@ -199,7 +209,8 @@ body {
 </div>
 
 <div class="disclaimer">
-    Note: You will only be able to access the test if the access code matches a currently live test.
+    <div>© {{ date('Y') }} S. Malasri. All rights reserved.</div>
+    
 </div>
 
 <!-- Batch Dropdown Script -->

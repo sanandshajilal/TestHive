@@ -1,112 +1,300 @@
-<div id="drag-drop-section" class="mb-3 {{ old('question_type', $question->question_type ?? '') !== 'drag_and_drop' ? 'd-none' : '' }}">
+<div id="drag-drop-section"
+     class="mb-3 {{ old('question_type', $question->question_type ?? '') !== 'drag_and_drop' ? 'd-none' : '' }}">
+
+    @if ($errors->any())
+        <div class="alert alert-warning">
+            @foreach ($errors->all() as $error)
+                <div>{{ $error }}</div>
+            @endforeach
+        </div>
+    @endif
+
     <div class="row mb-3">
-        @if ($errors->any())
-            <div class="alert alert-warning">
-                <i class="bi bi-exclamation-triangle-fill text-warning me-2"></i>
-                @foreach ($errors->all() as $error)
-                    <div>{{ $error }}</div>
-                @endforeach
-            </div>
-        @endif
 
         <div class="col-md-6">
             <label class="form-label">Column A Label</label>
-            <input type="text" name="column_a_label" class="form-control" placeholder="e.g. Statements"
-                   value="{{ old('column_a_label', $question->column_a_label ?? '') }}">
+            <input type="text"
+                   id="column_a_label"
+                   name="column_a_label"
+                   class="form-control"
+                   placeholder="e.g. Statement"
+                   value="{{ old('column_a_label', $question->column_a_label ?? 'Column A') }}">
         </div>
+
         <div class="col-md-6">
             <label class="form-label">Column B Label</label>
-            <input type="text" name="column_b_label" class="form-control" placeholder="e.g. Budgeting Approach"
-                   value="{{ old('column_b_label', $question->column_b_label ?? '') }}">
+            <input type="text"
+                   id="column_b_label"
+                   name="column_b_label"
+                   class="form-control"
+                   placeholder="e.g. Classification"
+                   value="{{ old('column_b_label', $question->column_b_label ?? 'Column B') }}">
         </div>
+
     </div>
 
-    <hr>
+    <div class="table-responsive">
 
-    <label class="form-label">Column A Items (Draggable)</label>
-    <div id="column-a-list">
-        @php
-            $columnA = old('column_a', $question->column_a ?? []);
-        @endphp
+        <table class="table table-bordered align-middle">
 
-        @if (!empty($columnA))
-            @foreach ($columnA as $item)
-                <div class="input-group mb-2 column-a-item">
-                    <input type="text" name="column_a[]" class="form-control" placeholder="Enter Column A Item" value="{{ $item }}">
-                    <button type="button" class="btn btn-outline-danger remove-a-item">X</button>
-                </div>
-            @endforeach
-        @else
-            <div class="input-group mb-2 column-a-item">
-                <input type="text" name="column_a[]" class="form-control" placeholder="Enter Column A Item">
-                <button type="button" class="btn btn-outline-danger remove-a-item">X</button>
-            </div>
-        @endif
+            <thead class="table-light">
+                <tr>
+                    <th id="column-a-header">
+                        {{ old('column_a_label', $question->column_a_label ?? 'Column A') }}
+                    </th>
+
+                    <th id="column-b-header">
+                        {{ old('column_b_label', $question->column_b_label ?? 'Column B') }}
+                    </th>
+
+                    <th width="80">Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="drag-drop-rows">
+
+                @php
+                    $columnA = old('column_a', $question->column_a ?? []);
+                    $columnB = old('column_b', $question->column_b ?? []);
+                    $maxRows = max(count($columnA), count($columnB), 1);
+                @endphp
+
+                @for($i = 0; $i < $maxRows; $i++)
+
+                    <tr class="drag-row">
+
+                        <td>
+                            <input type="text"
+                                   name="column_a[]"
+                                   class="form-control column-a-input"
+                                   value="{{ $columnA[$i] ?? '' }}"
+                                   placeholder="Enter Column A Item">
+                        </td>
+
+                        <td>
+                            <input type="text"
+                                   name="column_b[]"
+                                   class="form-control column-b-input"
+                                   value="{{ $columnB[$i] ?? '' }}"
+                                   placeholder="Enter Column B Item">
+                        </td>
+
+                        <td class="text-center">
+                            <button type="button"
+                                    class="btn btn-sm btn-danger remove-drag-row">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+
+                    </tr>
+
+                @endfor
+
+            </tbody>
+
+        </table>
+
     </div>
-    <button type="button" class="btn btn-sm btn-outline-primary" id="addColumnA">+ Add Column A</button>
 
-    <hr class="my-4">
+    <button type="button"
+            class="btn btn-sm btn-light border"
+            id="addDragRow">
+        <i class="bi bi-plus-circle me-1"></i>
+        Add Row
+    </button>
 
-    <label class="form-label">Column B Items (Drop Zones)</label>
-    <div id="column-b-list">
-        @php
-            $columnB = old('column_b', $question->column_b ?? []);
-        @endphp
-
-        @if (!empty($columnB))
-            @foreach ($columnB as $item)
-                <div class="input-group mb-2 column-b-item">
-                    <input type="text" name="column_b[]" class="form-control" placeholder="Enter Column B Item" value="{{ $item }}">
-                    <button type="button" class="btn btn-outline-danger remove-b-item">X</button>
-                </div>
-            @endforeach
-        @else
-            <div class="input-group mb-2 column-b-item">
-                <input type="text" name="column_b[]" class="form-control" placeholder="Enter Column B Item">
-                <button type="button" class="btn btn-outline-danger remove-b-item">X</button>
-            </div>
-        @endif
-    </div>
-    <button type="button" class="btn btn-sm btn-outline-primary" id="addColumnB">+ Add Column B</button>
-
-    <hr class="my-4">
-
-    <label class="form-label">Correct Matching (Column A ➝ Column B by Index)</label>
-    <div id="match-list">
-        @php
-            $matchingFrom = old('matching_from', $question->matching_from ?? []);
-            $matchingTo = old('matching_to', $question->matching_to ?? []);
-        @endphp
-
-        @if (!empty($matchingFrom))
-            @foreach ($matchingFrom as $i => $from)
-                <div class="row g-2 align-items-center match-pair mb-2">
-                    <div class="col-5">
-                        <input type="number" name="matching_from[]" class="form-control"
-                               value="{{ $from }}" placeholder="A Index (e.g. 0)">
-                    </div>
-                    <div class="col-5">
-                        <input type="number" name="matching_to[]" class="form-control"
-                               value="{{ $matchingTo[$i] ?? '' }}" placeholder="B Index (e.g. 2)">
-                    </div>
-                    <div class="col-2">
-                        <button type="button" class="btn btn-outline-danger remove-match">X</button>
-                    </div>
-                </div>
-            @endforeach
-        @else
-            <div class="row g-2 align-items-center match-pair mb-2">
-                <div class="col-5">
-                    <input type="number" name="matching_from[]" class="form-control" placeholder="A Index (e.g. 0)">
-                </div>
-                <div class="col-5">
-                    <input type="number" name="matching_to[]" class="form-control" placeholder="B Index (e.g. 2)">
-                </div>
-                <div class="col-2">
-                    <button type="button" class="btn btn-outline-danger remove-match">X</button>
-                </div>
-            </div>
-        @endif
-    </div>
-    <button type="button" class="btn btn-sm btn-outline-primary" id="addMatch">+ Add Match</button>
 </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const rowsContainer =
+            document.getElementById('drag-drop-rows');
+
+        const columnALabel =
+            document.getElementById('column_a_label');
+
+        const columnBLabel =
+            document.getElementById('column_b_label');
+
+        const columnAHeader =
+            document.getElementById('column-a-header');
+
+        const columnBHeader =
+            document.getElementById('column-b-header');
+
+        function updateHeaders() {
+
+            columnAHeader.textContent =
+                columnALabel.value || 'Column A';
+
+            columnBHeader.textContent =
+                columnBLabel.value || 'Column B';
+        }
+
+        columnALabel?.addEventListener('input', updateHeaders);
+        columnBLabel?.addEventListener('input', updateHeaders);
+
+        function addRow() {
+
+            const html = `
+                <tr class="drag-row">
+
+                    <td>
+                        <input type="text"
+                            name="column_a[]"
+                            class="form-control column-a-input"
+                            placeholder="Enter Column A Item">
+                    </td>
+
+                    <td>
+                        <input type="text"
+                            name="column_b[]"
+                            class="form-control column-b-input"
+                            placeholder="Enter Column B Item">
+                    </td>
+
+                    <td class="text-center">
+                        <button type="button"
+                                class="btn btn-sm btn-danger remove-drag-row">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+
+                </tr>
+            `;
+
+            rowsContainer.insertAdjacentHTML('beforeend', html);
+
+            bindPasteHandlers();
+        }
+
+        document.getElementById('addDragRow')
+            ?.addEventListener('click', addRow);
+
+        document.addEventListener('click', function(e){
+
+            if(e.target.closest('.remove-drag-row')){
+
+                const rows =
+                    document.querySelectorAll('.drag-row');
+
+                if(rows.length > 1){
+                    e.target.closest('.drag-row').remove();
+                }
+            }
+
+        });
+
+        function bindPasteHandlers() {
+
+            /*
+            |--------------------------------------------------------------------------
+            | COLUMN A BULK PASTE
+            |--------------------------------------------------------------------------
+            */
+            document.querySelectorAll('.column-a-input')
+                .forEach(input => {
+
+                if(input.dataset.boundA) return;
+
+                input.dataset.boundA = true;
+
+                input.addEventListener('paste', function(e){
+
+                    const text =
+                        (e.clipboardData || window.clipboardData)
+                        .getData('text');
+
+                    const lines = text
+                        .split(/\r?\n/)
+                        .map(x => x.trim())
+                        .filter(x => x !== '');
+
+                    if(lines.length <= 1) return;
+
+                    e.preventDefault();
+
+                    let rows =
+                        document.querySelectorAll('.drag-row');
+
+                    while(rows.length < lines.length){
+
+                        addRow();
+
+                        rows =
+                            document.querySelectorAll('.drag-row');
+                    }
+
+                    rows.forEach((row, index) => {
+
+                        if(lines[index] !== undefined){
+
+                            row.querySelector('.column-a-input')
+                                .value = lines[index];
+                        }
+
+                    });
+
+                });
+
+            });
+
+            /*
+            |--------------------------------------------------------------------------
+            | COLUMN B BULK PASTE
+            |--------------------------------------------------------------------------
+            */
+            document.querySelectorAll('.column-b-input')
+                .forEach(input => {
+
+                if(input.dataset.boundB) return;
+
+                input.dataset.boundB = true;
+
+                input.addEventListener('paste', function(e){
+
+                    const text =
+                        (e.clipboardData || window.clipboardData)
+                        .getData('text');
+
+                    const lines = text
+                        .split(/\r?\n/)
+                        .map(x => x.trim())
+                        .filter(x => x !== '');
+
+                    if(lines.length <= 1) return;
+
+                    e.preventDefault();
+
+                    let rows =
+                        document.querySelectorAll('.drag-row');
+
+                    while(rows.length < lines.length){
+
+                        addRow();
+
+                        rows =
+                            document.querySelectorAll('.drag-row');
+                    }
+
+                    rows.forEach((row, index) => {
+
+                        if(lines[index] !== undefined){
+
+                            row.querySelector('.column-b-input')
+                                .value = lines[index];
+                        }
+
+                    });
+
+                });
+
+            });
+        }
+
+        bindPasteHandlers();
+        updateHeaders();
+
+    });
+    </script>

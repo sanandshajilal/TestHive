@@ -23,11 +23,49 @@
         color: #ffc107 !important;
     }
 
+    .admin-logo {
+            position: relative;
+            display: inline-block;
+            color: #fff !important;
+            font-weight: 700;
+            line-height: 1;
+            padding-bottom: 10px;
+        }
+
+        .logo-text {
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .logo-tagline {
+            position: absolute;
+            left: 30px;      /* adjust based on icon width */
+            top: 100%;       /* place directly below ACCAPrep */
+            margin-top: -9px;
+            font-size: 8px;
+            line-height: 1;
+            color: rgba(255,255,255,.65);
+            white-space: nowrap;
+        }
+        .bi-mortarboard-fill {
+                position: relative;
+                top: 2px;
+            }
+
+
+
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-<a class="navbar-brand fw-bold text-warning" href="/admin/dashboard">TestHive</a>
+       <a href="/admin/dashboard" class="navbar-brand admin-logo text-decoration-none">
+            <i class="bi bi-mortarboard-fill text-warning me-1"></i>
+            <span class="logo-text">ACCAPrep</span>
+
+            <span class="logo-tagline">
+                with <strong>MALASRI</strong>
+            </span>
+        </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar">
             <span class="navbar-toggler-icon"></span>

@@ -6,6 +6,7 @@ use App\Models\Paper;
 use App\Models\Topic;
 use App\Models\SubTopic;
 use Illuminate\Http\Request;
+use App\Models\Question;
 
 class PaperController extends Controller
 {
@@ -65,21 +66,131 @@ class PaperController extends Controller
         return view('papers.edit', compact('paper'));
     }
 
-    public function update(Request $request, Paper $paper)
+public function update(Request $request, Paper $paper)
     {
         $request->validate([
             'name' => 'required|unique:papers,name,' . $paper->id,
             'description' => 'nullable',
         ]);
 
-        $paper->update($request->all());
+        $paper->update([
+            'name' => $request->name,
+            'description' => $request->description,
+        ]);
 
-        return redirect()->route('papers.index')->with('success', 'Paper updated successfully.');
+                    // Topics removed from the form
+            $submittedTopicIds = collect($request->topics ?? [])
+                ->pluck('id')
+                ->filter()
+                ->toArray();
+
+            $deletedTopics = $paper->topics()
+                ->whereNotIn('id', $submittedTopicIds)
+                ->get();
+
+            // Check if deleted topics have linked questions
+            foreach ($deletedTopics as $topic) {
+
+                $questionCount = Question::where('topic_id', $topic->id)->count();
+
+                if ($questionCount > 0) {
+
+                    return back()
+                        ->withInput()
+                        ->withErrors([
+                            'topic_delete' => "Cannot delete topic '{$topic->name}' because questions are linked to it."
+                        ]);
+                }
+            }
+
+            // Safe deletion
+            foreach ($deletedTopics as $topic) {
+
+                $topic->subTopics()->delete();
+                $topic->delete();
+            }
+
+        foreach ($request->topics ?? [] as $topicData) {
+
+            // Existing Topic
+            if (!empty($topicData['id'])) {
+
+                $topic = Topic::find($topicData['id']);
+
+                if ($topic) {
+
+                    $topic->update([
+                        'name' => $topicData['name']
+                    ]);
+
+                    foreach ($topicData['sub_topics'] ?? [] as $index => $subName) {
+
+                        $subTopicId =
+                            $topicData['subtopic_ids'][$index] ?? null;
+
+                        if ($subTopicId) {
+
+                            $subTopic = SubTopic::find($subTopicId);
+
+                            if ($subTopic) {
+                                $subTopic->update([
+                                    'name' => $subName
+                                ]);
+                            }
+
+                        } elseif (trim($subName) !== '') {
+
+                            SubTopic::create([
+                                'name' => $subName,
+                                'topic_id' => $topic->id
+                            ]);
+                        }
+                    }
+                }
+
+            }
+            // New Topic
+            else {
+
+                $topic = Topic::create([
+                    'name' => $topicData['name'],
+                    'paper_id' => $paper->id
+                ]);
+
+                foreach ($topicData['sub_topics'] ?? [] as $subName) {
+
+                    if (trim($subName) !== '') {
+
+                        SubTopic::create([
+                            'name' => $subName,
+                            'topic_id' => $topic->id
+                        ]);
+                    }
+                }
+            }
+        }
+
+        return redirect()
+            ->route('papers.index')
+            ->with('success', 'Paper updated successfully.');
     }
 
     public function destroy(Paper $paper)
-    {
-        $paper->delete();
-        return redirect()->route('papers.index')->with('success', 'Paper deleted.');
-    }
+        {
+            $questionCount = Question::where('paper_id', $paper->id)->count();
+
+            if ($questionCount > 0) {
+
+                return redirect()
+                    ->route('papers.index')
+                    ->with('error',
+                        "Cannot delete paper '{$paper->name}' because questions are linked to it.");
+            }
+
+            $paper->delete();
+
+            return redirect()
+                ->route('papers.index')
+                ->with('success', 'Paper deleted successfully.');
+        }
 }

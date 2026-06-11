@@ -219,24 +219,90 @@
                     <div class="mb-2"><strong>Your Answer:</strong> {{ $studentAnsDisplay ?: '—' }}</div>
                     <div class="mb-2"><strong>Correct Answer:</strong> {{ $correctAnsDisplay }}</div>
                 @elseif($question->question_type === 'table_mcq')
+
+                    @php
+                        $labels = array_map(
+                            'trim',
+                            explode(',', $question->table_mcq_labels ?? 'True,False')
+                        );
+
+                        $correctAnswers = is_array($question->correct_answers)
+                            ? $question->correct_answers
+                            : json_decode($question->correct_answers, true);
+
+                 $tableStudentAnswers = is_array($studentAns)
+                    ? $studentAns
+                    : [];
+                    @endphp
+
                     <div class="table-responsive mb-2">
-                        <table class="table table-bordered table-sm">
-                            <thead>
+                        <table class="table table-bordered align-middle">
+                            <thead class="table-light">
                                 <tr>
-                                    <th>#</th>
+                                    <th width="50">#</th>
                                     <th>Statement</th>
                                     <th>Your Answer</th>
                                     <th>Correct Answer</th>
+                                    <th width="90">Result</th>
                                 </tr>
                             </thead>
+
                             <tbody>
                                 @foreach($question->options as $i => $stmt)
+
+                                    @php
+                                        $studentValue = $tableStudentAnswers[$i] ?? null;
+                                        $correctValue = $correctAnswers[$i] ?? null;
+
+                                        $rowCorrect =
+                                            !is_null($studentValue)
+                                            && strtolower((string)$studentValue) === strtolower((string)$correctValue);
+                                    @endphp
+
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $stmt }}</td>
-                                        <td>{{ $studentAns[$i] ?? '—' }}</td>
-                                        <td>{{ $question->correct_answers[$i] ?? '—' }}</td>
+
+                                        <td>
+                                            {{ $stmt }}
+                                        </td>
+
+                                        <td>
+                                            @if($studentValue)
+                                                {{ ucfirst((string)$studentValue) }}
+                                            @else
+                                                <span class="text-muted">—</span>
+                                            @endif
+                                        </td>
+
+                                        <td>
+                                            {{ ucfirst((string)$correctValue) }}
+                                        </td>
+
+                                        <td class="text-center">
+
+                                            @if(!$studentValue)
+
+                                                <span class="badge bg-secondary">
+                                                    —
+                                                </span>
+
+                                            @elseif($rowCorrect)
+
+                                                <span class="badge bg-success">
+                                                    ✓
+                                                </span>
+
+                                            @else
+
+                                                <span class="badge bg-danger">
+                                                    ✕
+                                                </span>
+
+                                            @endif
+
+                                        </td>
                                     </tr>
+
                                 @endforeach
                             </tbody>
                         </table>

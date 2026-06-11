@@ -38,64 +38,320 @@
         </div>
     @endif
 
-    <label class="form-label">Statements (One per row)</label>
-    <div id="table-mcq-rows">
-        @forelse ($statements as $statement)
-            <div class="input-group mb-2 table-mcq-row">
-                <input type="text" name="table_mcq_statements[]" class="form-control" value="{{ $statement }}" placeholder="Enter statement" required>
-                <button type="button" class="btn btn-danger remove-row">X</button>
-            </div>
-        @empty
-            <div class="input-group mb-2 table-mcq-row">
-                <input type="text" name="table_mcq_statements[]" class="form-control" placeholder="Enter statement" required>
-                <button type="button" class="btn btn-danger remove-row">X</button>
-            </div>
-        @endforelse
-    </div>
+        <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Label 1</label>
+            <input type="text"
+                id="label1"
+                class="form-control"
+                value="{{ !empty(explode(',', $labels)[0]) ? explode(',', $labels)[0] : 'Debit' }}">
+        </div>
 
-    <button type="button" class="btn btn-sm btn-secondary mt-2" id="addRow">+ Add Row</button>
-
-    <div class="mt-3">
-        <label class="form-label">Answer Labels</label>
-        <input type="text" name="table_mcq_labels" class="form-control mb-2"
-               placeholder="Comma-separated (e.g., debit,credit)" value="{{ $labels }}" required>
-
-        <label class="form-label mt-3">Correct Answers</label>
-        <p class="text-muted">Provide answers for each statement in order, matching one of the labels.</p>
-
-        <div id="table-mcq-answers">
-            @forelse ($answers as $answer)
-                <input type="text" name="table_mcq_answers[]" class="form-control mb-2" value="{{ $answer }}" placeholder="Answer (match label)" required>
-            @empty
-                <input type="text" name="table_mcq_answers[]" class="form-control mb-2" placeholder="Answer for Row 1 (match label)" required>
-            @endforelse
+        <div class="col-md-6">
+            <label class="form-label">Label 2</label>
+          <input type="text"
+                id="label2"
+                class="form-control"
+                value="{{ !empty(explode(',', $labels)[1]) ? explode(',', $labels)[1] : 'Credit' }}">
         </div>
     </div>
+
+    <input type="hidden"
+        name="table_mcq_labels"
+        id="table_mcq_labels"
+        value="{{ $labels }}">
+
+        <div class="table-responsive">
+        <table class="table table-bordered align-middle" id="tableMcqTable">
+
+            <thead class="table-light">
+                <tr>
+                    <th style="width:70%">Statement</th>
+
+                    <th class="text-center label1-header">
+                        {{ !empty(explode(',', $labels)[0]) ? explode(',', $labels)[0] : 'Debit' }}
+                    </th>
+
+                    <th class="text-center label2-header">
+                        {{ !empty(explode(',', $labels)[1]) ? explode(',', $labels)[1] : 'Credit' }}
+                    </th>
+
+                    <th width="80">Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="table-mcq-rows">
+
+                @forelse ($statements as $index => $statement)
+
+                    <tr class="table-mcq-row">
+
+                        <td>
+                            <input type="text"
+                                name="table_mcq_statements[]"
+                                class="form-control table-mcq-statement"
+                                value="{{ $statement }}"
+                                placeholder="Enter statement"
+                                required>
+                        </td>
+
+                        <td class="text-center">
+                            <input type="radio"
+                                name="row_answer_{{ $index }}"
+                                value="{{ !empty(explode(',', $labels)[0]) ? explode(',', $labels)[0] : 'Debit' }}"
+                                {{ ($answers[$index] ?? '') == (!empty(explode(',', $labels)[0]) ? explode(',', $labels)[0] : 'Debit') ? 'checked' : '' }}>
+                        </td>
+
+                        <td class="text-center">
+                            <input type="radio"
+                                name="row_answer_{{ $index }}"
+                                value="{{ !empty(explode(',', $labels)[1]) ? explode(',', $labels)[1] : 'Credit' }}"
+                                {{ ($answers[$index] ?? '') == (!empty(explode(',', $labels)[1]) ? explode(',', $labels)[1] : 'Credit') ? 'checked' : '' }}>
+                        </td>
+
+                        <td class="text-center">
+
+                            <button type="button"
+                                    class="btn btn-sm btn-danger remove-row">
+                                <i class="bi bi-trash"></i>
+                            </button>
+
+                            <input type="hidden"
+                                name="table_mcq_answers[]"
+                                value="{{ $answers[$index] ?? '' }}"
+                                class="hidden-answer">
+
+                        </td>
+
+                    </tr>
+
+                @empty
+
+                    <tr class="table-mcq-row">
+
+                        <td>
+                            <input type="text"
+                                name="table_mcq_statements[]"
+                                class="form-control table-mcq-statement"
+                                placeholder="Enter statement"
+                                required>
+                        </td>
+
+                        <td class="text-center">
+                            <input type="radio"
+                                name="row_answer_0"
+                                value="Debit">
+                        </td>
+
+                        <td class="text-center">
+                            <input type="radio"
+                                name="row_answer_0"
+                                value="Credit">
+                        </td>
+
+                        <td class="text-center">
+
+                            <button type="button"
+                                    class="btn btn-sm btn-danger remove-row">
+                                <i class="bi bi-trash"></i>
+                            </button>
+
+                            <input type="hidden"
+                                name="table_mcq_answers[]"
+                                class="hidden-answer">
+
+                        </td>
+
+                    </tr>
+
+                @endforelse
+
+            </tbody>
+
+        </table>
+    </div>
+
+    <button type="button"
+            class="btn btn-sm btn-light border"
+            id="addRow">
+        <i class="bi bi-plus-circle me-1"></i>
+        Add Statement
+    </button>
 </div>
 
-@push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.getElementById('addRow').addEventListener('click', function () {
-            const rowHTML = `
-                <div class="input-group mb-2 table-mcq-row">
-                    <input type="text" name="table_mcq_statements[]" class="form-control" placeholder="Enter statement" required>
-                    <button type="button" class="btn btn-danger remove-row">X</button>
-                </div>`;
-            document.getElementById('table-mcq-rows').insertAdjacentHTML('beforeend', rowHTML);
-            document.getElementById('table-mcq-answers').insertAdjacentHTML('beforeend',
-                `<input type="text" name="table_mcq_answers[]" class="form-control mb-2" placeholder="Answer for Row" required>`);
-        });
+document.addEventListener('DOMContentLoaded', function () {
 
-        document.addEventListener('click', function (e) {
-            if (e.target && e.target.classList.contains('remove-row')) {
-                const row = e.target.closest('.table-mcq-row');
-                const index = Array.from(row.parentNode.children).indexOf(row);
-                row.remove();
-                const answerInputs = document.querySelectorAll('#table-mcq-answers input');
-                if (answerInputs[index]) answerInputs[index].remove();
+    let rowCounter =
+        document.querySelectorAll('.table-mcq-row').length;
+
+    function updateLabels() {
+
+        const label1 =
+            document.getElementById('label1').value || 'Debit';
+
+        const label2 =
+            document.getElementById('label2').value || 'Credit';
+
+        document.getElementById('table_mcq_labels').value =
+            label1 + ',' + label2;
+
+        document.querySelector('.label1-header').textContent =
+            label1;
+
+        document.querySelector('.label2-header').textContent =
+            label2;
+
+        document.querySelectorAll('.table-mcq-row').forEach(row => {
+
+            const radios =
+                row.querySelectorAll('input[type=radio]');
+
+            if (radios.length === 2) {
+
+                radios[0].value = label1;
+                radios[1].value = label2;
+
             }
+
         });
+    }
+
+    document.getElementById('label1')
+        .addEventListener('input', updateLabels);
+
+    document.getElementById('label2')
+        .addEventListener('input', updateLabels);
+
+    document.getElementById('addRow')
+        .addEventListener('click', function () {
+
+        const label1 =
+            document.getElementById('label1').value || 'Debit';
+
+        const label2 =
+            document.getElementById('label2').value || 'Credit';
+
+        const rowHtml = `
+            <tr class="table-mcq-row">
+
+                <td>
+                    <input type="text"
+                           name="table_mcq_statements[]"
+                           class="form-control table-mcq-statement"
+                           placeholder="Enter statement"
+                           required>
+                </td>
+
+                <td class="text-center">
+                    <input type="radio"
+                           name="row_answer_${rowCounter}"
+                           value="${label1}">
+                </td>
+
+                <td class="text-center">
+                    <input type="radio"
+                           name="row_answer_${rowCounter}"
+                           value="${label2}">
+                </td>
+
+                <td class="text-center">
+
+                <button type="button"
+                        class="btn btn-sm btn-danger remove-row">
+                    <i class="bi bi-trash"></i>
+                </button>
+
+                <input type="hidden"
+                    name="table_mcq_answers[]"
+                    class="hidden-answer">
+
+            </td>
+
+            </tr>
+        `;
+
+        document.getElementById('table-mcq-rows')
+            .insertAdjacentHTML('beforeend', rowHtml);
+
+        rowCounter++;
+
+        bindPasteHandlers();
     });
+
+    document.addEventListener('change', function(e){
+
+        if(e.target.type === 'radio'){
+
+            const row =
+                e.target.closest('.table-mcq-row');
+
+            row.querySelector('.hidden-answer').value =
+                e.target.value;
+        }
+    });
+
+    document.addEventListener('click', function(e){
+
+        if(e.target.closest('.remove-row')){
+
+            e.target.closest('.table-mcq-row').remove();
+        }
+    });
+
+    function bindPasteHandlers() {
+
+        document.querySelectorAll('.table-mcq-statement')
+            .forEach(input => {
+
+            if(input.dataset.bound) return;
+
+            input.dataset.bound = true;
+
+            input.addEventListener('paste', function(e){
+
+                const pastedText =
+                    (e.clipboardData || window.clipboardData)
+                    .getData('text');
+
+                const lines = pastedText
+                    .split(/\r?\n/)
+                    .map(x => x.trim())
+                    .filter(x => x !== '')
+                    .map(x =>
+                        x.replace(/^\d+\.\s*/, '')
+                         .replace(/^\d+\)\s*/, '')
+                         .trim()
+                    );
+
+                if(lines.length <= 1) return;
+
+                e.preventDefault();
+
+                this.value = lines[0];
+
+                for(let i=1;i<lines.length;i++){
+
+                    document.getElementById('addRow').click();
+
+                    const rows =
+                        document.querySelectorAll('.table-mcq-row');
+
+                    const lastRow =
+                        rows[rows.length - 1];
+
+                    lastRow.querySelector(
+                        '.table-mcq-statement'
+                    ).value = lines[i];
+                }
+            });
+        });
+    }
+
+    bindPasteHandlers();
+
+    updateLabels();
+
+});
 </script>
-@endpush
+

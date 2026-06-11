@@ -86,39 +86,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }, 50);
 
-    // ➕ Table MCQ: Add Row
-    const tableMcqRows = document.getElementById('table-mcq-rows');
-    const tableMcqAnswers = document.getElementById('table-mcq-answers');
-
-    document.getElementById('addRow')?.addEventListener('click', () => {
-        const newRow = document.createElement('div');
-        newRow.className = 'input-group mb-2 table-mcq-row';
-        newRow.innerHTML = `
-            <input type="text" name="table_mcq_statements[]" class="form-control" placeholder="Enter statement" required>
-            <button type="button" class="btn btn-danger remove-row">X</button>
-        `;
-        tableMcqRows.appendChild(newRow);
-
-        const newAnswer = document.createElement('input');
-        newAnswer.type = 'text';
-        newAnswer.name = 'table_mcq_answers[]';
-        newAnswer.className = 'form-control mb-2';
-        newAnswer.placeholder = `Answer for Row ${tableMcqAnswers.children.length + 1}`;
-        newAnswer.required = true;
-        tableMcqAnswers.appendChild(newAnswer);
-    });
-
     // ❌ Remove row/option/blank
     document.addEventListener('click', function (e) {
-        if (e.target?.classList.contains('remove-row')) {
-            const row = e.target.closest('.table-mcq-row');
-            const index = [...tableMcqRows.children].indexOf(row);
-            tableMcqRows.removeChild(row);
-            tableMcqAnswers.removeChild(tableMcqAnswers.children[index]);
-        } else if (e.target?.classList.contains('remove-option')) {
+        if  (e.target?.classList.contains('remove-option')) {
             e.target.closest('.drag-drop-option')?.remove();
-        } else if (e.target?.classList.contains('remove-blank')) {
-            e.target.closest('.dropdown-blank-set')?.remove();
         } else if (e.target?.classList.contains('remove-a-item')) {
             e.target.closest('.column-a-item')?.remove();
         } else if (e.target?.classList.contains('remove-b-item')) {
@@ -163,19 +134,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('match-list').insertAdjacentHTML('beforeend', html);
     });
 
-    // ➕ Dropdown blank
-    document.getElementById('addDropdownBlank')?.addEventListener('click', () => {
-        const blank = `
-            <div class="mb-3 dropdown-blank-set">
-                <div class="mb-1">
-                    <input type="text" name="dropdown_blank_labels[]" class="form-control mb-1" placeholder="Label for this blank (e.g., Country)">
-                </div>
-                <input type="text" name="dropdown_blank_options[]" class="form-control mb-1" placeholder="Options comma-separated (e.g., India,USA,UK)">
-                <input type="text" name="dropdown_blank_answers[]" class="form-control" placeholder="Correct Answer">
-                <button type="button" class="btn btn-sm btn-danger mt-1 remove-blank">Remove</button>
-            </div>`;
-        document.getElementById('dropdown-blanks').insertAdjacentHTML('beforeend', blank);
-    });
+  
 
     // ✅ Ensure TinyMCE saves content
     document.querySelector('form')?.addEventListener('submit', function () {
