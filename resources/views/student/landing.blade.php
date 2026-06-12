@@ -3,6 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <title>ACCAPrep with Malasri</title>
+<meta name="description" content="ACCA Mock Test Portal by S. Malasri">
+
+<meta property="og:title" content="ACCAPrep with Malasri">
+<meta property="og:description" content="Access ACCA mock tests, practice exams and assessments.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://testhive-fm8r.onrender.com/">
+
+<meta property="og:image" content="https://testhive-fm8r.onrender.com/images/accaprep-preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ACCAPrep with Malasri">
+<meta name="twitter:description" content="Professional ACCA Mock Test Portal">
+<meta name="twitter:image" content="https://testhive-fm8r.onrender.com/images/accaprep-preview.png">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!-- Bootstrap CSS & Icons -->
