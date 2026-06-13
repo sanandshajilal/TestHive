@@ -29,6 +29,8 @@ class DashboardController extends Controller
 
         $averagePercentage = 0;
 
+       
+
         if ($attempts->count()) {
 
             $averagePercentage = round(
@@ -46,6 +48,61 @@ class DashboardController extends Controller
             );
         }
 
+        $latestMockTest = MockTest::where('start_time', '<=', now())
+            ->latest('start_time')
+            ->with(['questions', 'paper'])
+            ->first();
+
+            $latestAttempts = 0;
+            $latestAverageScore = 0;
+            $latestHighestScore = 0;
+
+            if ($latestMockTest) {
+
+                $latestResponses = StudentTestAttempt::where(
+                    'mock_test_id',
+                    $latestMockTest->id
+                )
+                ->where('status', 'completed')
+                ->get();
+
+                $latestAttempts = $latestResponses->count();
+
+                $latestAverageScore = round(
+                    $latestResponses->avg(function ($attempt) use ($latestMockTest) {
+
+                        $totalPossible = $latestMockTest->questions->sum('marks');
+
+                        return $totalPossible > 0
+                            ? ($attempt->total_marks / $totalPossible) * 100
+                            : 0;
+                    }) ?? 0,
+                    1
+                );
+
+                $latestHighestScore = round(
+                    $latestResponses->max(function ($attempt) use ($latestMockTest) {
+
+                        $totalPossible = $latestMockTest->questions->sum('marks');
+
+                        return $totalPossible > 0
+                            ? ($attempt->total_marks / $totalPossible) * 100
+                            : 0;
+                    }) ?? 0,
+                    1
+                );
+            }
+
+$upcomingTests = MockTest::where('start_time', '>', now())
+    ->orderBy('start_time')
+    ->with([
+        'paper',
+        'batches.institute'
+    ])
+    ->take(2)
+    ->get();
+        
+
         return view('admin.dashboard', [
             'instituteCount' => Institute::count(),
             'batchCount' => Batch::count(),
@@ -58,15 +115,22 @@ class DashboardController extends Controller
             'completedAttempts' => $completedAttempts,
             'averagePercentage' => $averagePercentage,
 
-            'recentMockTests' => MockTest::latest()
-                ->take(5)
-                ->with('paper')
-                ->get(),
+            'recentMockTests' => MockTest::where('start_time', '<=', now())
+                    ->with('paper')
+                    ->orderByDesc('start_time')
+                    ->take(5)
+                    ->get(),
 
             'recentResponses' => StudentTestAttempt::latest()
                 ->take(5)
                 ->with(['mockTest.paper'])
                 ->get(),
+
+                'latestMockTest' => $latestMockTest,
+                'latestAttempts' => $latestAttempts,
+                'latestAverageScore' => $latestAverageScore,
+                'latestHighestScore' => $latestHighestScore,
+                'upcomingTests' => $upcomingTests,
         ]);
     }
 }

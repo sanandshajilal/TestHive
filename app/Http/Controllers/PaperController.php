@@ -10,11 +10,14 @@ use App\Models\Question;
 
 class PaperController extends Controller
 {
-    public function index()
-    {
-        $papers = Paper::all();
-        return view('papers.index', compact('papers'));
-    }
+        public function index()
+        {
+            $papers = Paper::withCount(['topics', 'questions'])
+                ->orderBy('name')
+                ->get();
+
+            return view('papers.index', compact('papers'));
+        }
 
     public function create()
     {

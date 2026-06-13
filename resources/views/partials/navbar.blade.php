@@ -52,11 +52,19 @@
                 top: 2px;
             }
 
+            .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1030;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 12px rgba(0,0,0,.08);
+        }
+
 
 
 </style>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
     <div class="container-fluid">
        <a href="/admin/dashboard" class="navbar-brand admin-logo text-decoration-none">
             <i class="bi bi-mortarboard-fill text-warning me-1"></i>

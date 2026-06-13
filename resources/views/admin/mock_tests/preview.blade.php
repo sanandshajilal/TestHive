@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Mock Test Preview')
+@section('title', 'Test Preview')
 
 @section('styles')
 <style>
@@ -57,6 +57,15 @@
     .question-content {
         word-break: break-word;
     }
+
+    .question-card {
+    transition: all .2s ease;
+}
+
+.question-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,.06);
+}
+
 </style>
 @endsection
 
@@ -64,9 +73,18 @@
 <div class="container py-4">
     <!-- Header -->
     <div class="header-box mb-4 d-flex justify-content-between align-items-center">
-        <h5 class="mb-0 text-dark fw-semibold">Mock Test Preview</h5>
+        <div>
+            <h5 class="mb-0 text-dark fw-semibold">
+                <i class="bi bi-file-earmark-text text-primary me-2"></i>
+                Test Preview
+            </h5>
+
+            <small class="text-muted">
+                Review test details and all included questions.
+            </small>
+        </div>
         <a href="{{ route('mock-tests.index') }}" class="btn btn-secondary rounded-pill">
-            <i class="bi bi-arrow-left me-1"></i> Back to Mock Tests
+            <i class="bi bi-arrow-left me-1"></i> Back to All Tests
         </a>
     </div>
 
@@ -98,7 +116,16 @@
 
     <!-- Questions -->
     <div class="card-style">
-        <h5 class="mb-3">Total Questions: {{ count($mockTest->questions) }}</h5>
+        <div class="border-bottom pb-2 mb-4">
+            <h5 class="fw-semibold mb-1">
+                <i class="bi bi-journal-check me-2"></i>
+                Question Bank
+            </h5>
+
+            <small class="text-muted">
+                Total Questions: {{ count($mockTest->questions) }}
+            </small>
+        </div>
 
         @forelse($mockTest->questions as $index => $question)
             <div class="question-card position-relative">
@@ -108,7 +135,7 @@
                 </a>
 
                 <!-- Question Heading -->
-                <h6 class="fw-semibold text-dark mb-2">Q{{ $index + 1 }}:</h6>
+                <h6 class="fw-semibold text-dark mb-2">Question {{ $index + 1 }}:</h6>
 
                 <!-- Question Content -->
                 <div class="question-content mb-3">
@@ -208,7 +235,7 @@
 
                 <!-- Meta Line -->
                 <div class="question-meta">
-                    {{ $question->topic->name ?? 'Topic N/A' }} -> {{ $question->subTopic->name ?? 'Subtopic N/A' }} | {{ ucfirst(str_replace('_', ' ', $question->question_type)) }}
+                    {{ $question->topic->name ?? 'Topic N/A' }} <i class="bi bi-arrow-right-short"></i>{{ $question->subTopic->name ?? 'Subtopic N/A' }} | {{ ucfirst(str_replace('_', ' ', $question->question_type)) }}
                 </div>
             </div>
         @empty

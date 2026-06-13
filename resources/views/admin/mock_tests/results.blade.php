@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Mock Test Results')
+@section('title', 'Test Results')
 
 @section('styles')
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
@@ -62,9 +62,17 @@
 <div class="container py-4">
     <!-- Header Box: Title + Back Button -->
     <div class="header-box mb-4 d-flex justify-content-between align-items-center">
-        <h5 class="fw-semibold text-dark mb-0">📝 Test Summary</h5>
+        <div>
+            <h5 class="fw-semibold text-dark mb-0">
+                <i class="bi bi-clipboard-data text-primary me-2"></i>
+                Test Results
+            </h5>
+            <small class="text-muted">
+                View student performance and response statistics.
+            </small>
+        </div>
         <a href="{{ route('mock-tests.index') }}" class="btn btn-secondary rounded-pill">
-            <i class="bi bi-arrow-left me-1"></i> Back to Mock Tests
+            <i class="bi bi-arrow-left me-1"></i> Back to All Tests
         </a>
     </div>
 
@@ -96,7 +104,15 @@
 
     <!-- Student Performance Table -->
     <div class="card-style">
-        <h5 class="fw-semibold mb-3 text-primary">📊 Student Performance</h5>
+        <div class="border-bottom pb-2 mb-3">
+            <h5 class="fw-semibold mb-1">
+                <i class="bi bi-bar-chart-line me-2"></i>
+                Student Performance
+            </h5>
+            <small class="text-muted">
+                Individual student scores and response sheets.
+            </small>
+        </div>
         <div class="table-responsive">
             <table id="resultsTable" class="table table-bordered table-striped align-middle">
                 <thead class="table-light">

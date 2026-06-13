@@ -87,6 +87,12 @@
         box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
     }
 
+    .test-name {
+    font-weight: 600;
+}
+
+
+
     @media screen and (max-width: 768px) {
         .dataTables_wrapper .dataTables_filter {
             float: none;
@@ -103,7 +109,10 @@
 <div class="container py-4">
 
     <div class="header-box mb-4 d-flex justify-content-between align-items-center">
-        <h4 class="fw-semibold text-dark mb-0">All Mock Tests</h4>
+        <h4 class="fw-semibold text-dark mb-0">
+            <i class="bi bi-clipboard-check text-primary me-2"></i>
+            All Tests
+        </h4>
         <a href="{{ route('mock-tests.create') }}" class="btn btn-primary rounded-pill">
             <i class="bi bi-plus-circle me-1"></i> Create New Test
         </a>
@@ -116,29 +125,82 @@
         </div>
     @endif
 
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body">
+                    <small class="text-muted">Total Tests</small>
+                    <h4 class="mb-0">{{ $mockTests->count() }}</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body">
+                    <small class="text-muted">Upcoming</small>
+                    <h4 class="mb-0">
+                        {{ $mockTests->where('status','Upcoming')->count() }}
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body">
+                    <small class="text-muted">Active</small>
+                    <h4 class="mb-0">
+                        {{ $mockTests->where('status','Active')->count() }}
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body">
+                    <small class="text-muted">Completed</small>
+                    <h4 class="mb-0">
+                        {{ $mockTests->where('status','Expired')->count() }}
+                    </h4>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
     <div class="card-style">
         <div class="table-responsive">
             <table class="table table-bordered align-middle" id="mockTestsTable">
                 <thead class="table-light">
                     <tr class="small text-muted">
-                        <th>#</th>
-                        <th>Test Name</th>
-                        <th>Paper</th>
-                        <th>Scheduled Time</th>
-                        <th>Status</th>
-                        <th>Access Code</th>
-                        <th>Results</th>
+                         <th class="text-center">#</th>
+                         <th class="text-center">Test Name</th>
+                         <th class="text-center">Batch</th>
+                         <th class="text-center">Scheduled Time</th>
+                         <th class="text-center">Status</th>
+                         <th class="text-center">Access Code</th>
+                         <th class="text-center">Results</th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($mockTests as $mockTest)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $mockTest->title ?? 'N/A' }}</td>
-                            <td>{{ $mockTest->paper->name ?? 'N/A' }}</td>
-                            <td>{{ \Carbon\Carbon::parse($mockTest->start_time)->format('d M Y, h:i A') }}</td>
+                             <td class="text-center">{{ $loop->iteration }}</td>
                             <td>
+                                <div class="test-name">{{ $mockTest->title }}</div>
+
+                                <div class="small text-muted">
+                                    {{ $mockTest->paper->name ?? 'N/A' }}
+                                </div>
+                            </td>
+                            <td>
+                                {{ optional($mockTest->batches->first())->name ?? '-' }}
+                            </td>
+                            <td>{{ \Carbon\Carbon::parse($mockTest->start_time)->format('d M Y, h:i A') }}</td>
+                             <td class="text-center">
                                 @if($now->between($mockTest->start_time, $mockTest->end_time))
                                     <span class="badge bg-success">Ongoing</span>
                                 @elseif(now()->lt($mockTest->start_time))
@@ -148,9 +210,11 @@
                                 @endif
                             </td>
                             <td>{{ $mockTest->access_code }}</td>
-                            <td>
-                                <a href="{{ route('mock-tests.results', $mockTest->id) }}" class="text-primary small text-decoration-none">
-                                    View
+                            <td class="text-center">
+                                <a href="{{ route('mock-tests.results', $mockTest->id) }}"
+                                class="btn btn-sm btn-soft-info"
+                                title="Results">
+                                    <i class="bi bi-bar-chart"></i>
                                 </a>
                             </td>
                             <td class="text-center action-buttons">

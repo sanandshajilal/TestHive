@@ -62,7 +62,133 @@
         background-color: #e9f2ff !important; /* soft blue */
     }
 
-    
+    .kpi-card {
+        border: none;
+        border-radius: 18px;
+        transition: .2s;
+        min-height: 120px;
+    }
+
+    .kpi-card:hover {
+        transform: translateY(-3px);
+    }
+
+    .kpi-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    .kpi-label {
+        color: #6c757d;
+        font-size: .9rem;
+    }
+
+    .dashboard-list-item {
+        border-bottom: 1px solid #eef2f7;
+        padding: 12px 0;
+    }
+
+    .dashboard-stat-card {
+    cursor: pointer;
+    transition: all .25s ease;
+}
+
+.dashboard-stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow:
+        0 10px 25px rgba(78,115,223,.12) !important;
+}
+
+.dashboard-stat-card:hover .card-arrow {
+    transform: translateX(4px);
+    color: #4e73df;
+}
+
+.dashboard-stat-card:hover .stat-icon {
+    color: #4e73df;
+}
+
+.card-arrow {
+    color: #adb5bd;
+    font-size: 1.1rem;
+    transition: all .25s ease;
+}
+
+.dashboard-stat-card:active {
+    transform: scale(0.98);
+}
+
+.dashboard-action-item {
+display: flex;
+align-items: center;
+padding: 1rem 1.25rem;
+color: #212529;
+border-bottom: 1px solid #f1f3f5;
+transition: all .2s ease;
+}
+
+.dashboard-action-item:last-child {
+border-bottom: none;
+}
+
+.dashboard-action-item:hover {
+background: #f8fafc;
+color: #4e73df;
+padding-left: 1.4rem;
+}
+
+.upcoming-test-item {
+padding: 1rem 1.25rem;
+border-bottom: 1px solid #f1f3f5;
+}
+
+.upcoming-test-item:last-child {
+border-bottom: none;
+}
+
+.upcoming-test-card {
+    display: flex;
+    align-items: center;
+    border: 1px solid #edf2f7;
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 12px;
+    transition: all .2s ease;
+}
+
+.upcoming-test-card:last-child {
+    margin-bottom: 0;
+}
+
+.upcoming-test-card:hover {
+    background: #fafcff;
+    border-color: #dbe7ff;
+}
+
+.date-card {
+    width: 72px;
+    min-width: 72px;
+    text-align: center;
+    border-radius: 14px;
+    background: #f8f5e9;
+    padding: 8px 0;
+}
+
+.date-day {
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #111827;
+}
+
+.date-month {
+    margin-top: 6px;
+    font-size: .75rem;
+    font-weight: 700;
+    color: #6b7280;
+    letter-spacing: .5px;
+}
 
     
 </style>
@@ -76,7 +202,7 @@
                 Welcome back, {{ auth()->user()->name }} 👋
             </h3>
             <p class="text-muted mb-0">
-                Manage mock tests, question banks, student responses, etc.
+               Monitor tests, manage content, and track student progress from your dashboard.
             </p>
         </div>
 
@@ -94,116 +220,306 @@
 
 </div>
 
-    <div class="row g-3 mb-4">
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-body">
-                    <small class="text-muted">Active Mock Tests</small>
-                    <h4 class="mb-0">{{ $activeMockTests }}</h4>
-                </div>
-            </div>
-        </div>
+<div class="row g-3 mb-4">
 
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-body">
-                    <small class="text-muted">Total Attempts</small>
-                    <h4 class="mb-0">{{ $completedAttempts }}</h4>
-                </div>
-            </div>
-        </div>
 
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm rounded-4">
-                <div class="card-body">
-                    <small class="text-muted">Average Score</small>
-                    <h4 class="mb-0">{{ $averagePercentage }}%</h4>
+<div class="col-md-3">
+    <div class="card border-0 rounded-4 kpi-card h-100">
+        <div class="card-body">
+            <small class="text-muted d-block mb-2">
+                Latest Test
+            </small>
+
+            <div
+                    class="kpi-value"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="bottom"
+                    title="{{ $latestMockTest?->title }}"
+                >
+                    {{ Str::limit($latestMockTest?->title, 12) }}
                 </div>
+
+            @if($latestMockTest)
+                <div class="small text-muted mt-1">
+                    {{ $latestMockTest->paper?->name }}
+                    •
+                    {{ $latestMockTest->duration_minutes }} mins
+                </div>
+            @endif
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3">
+    <div class="card border-0 rounded-4 kpi-card h-100">
+        <div class="card-body">
+            <small class="text-muted d-block mb-2">
+                Attempts
+            </small>
+
+            <div class="kpi-value">
+                {{ $latestAttempts }}
+            </div>
+
+            <div class="small text-muted">
+                Completed submissions
             </div>
         </div>
     </div>
+</div>
 
+<div class="col-md-3">
+    <div class="card border-0 rounded-4 kpi-card h-100">
+        <div class="card-body">
+            <small class="text-muted d-block mb-2">
+                Average Score
+            </small>
+
+            <div class="kpi-value">
+                {{ $latestAverageScore }}%
+            </div>
+
+            <div class="small text-muted">
+                Latest test average
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-3">
+    <div class="card border-0 rounded-4 kpi-card h-100">
+        <div class="card-body">
+            <small class="text-muted d-block mb-2">
+                Highest Score
+            </small>
+
+            <div class="kpi-value">
+                {{ $latestHighestScore }}%
+            </div>
+
+            <div class="small text-muted">
+                Best performer
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</div>
+
+
+        
     {{-- Quick Stats --}}
     <div class="row g-4 mb-4">
         @php
             $cards = [
-                ['title' => 'Institutes', 'count' => $instituteCount ?? 0, 'icon' => 'bi-building'],
-                ['title' => 'Batches', 'count' => $batchCount ?? 0, 'icon' => 'bi-people'],
-                ['title' => 'Papers', 'count' => $paperCount ?? 0, 'icon' => 'bi-journal-text'],
-                ['title' => 'Questions', 'count' => $questionCount ?? 0, 'icon' => 'bi-question-circle'],
-                ['title' => 'Mock Tests', 'count' => $mockTestCount ?? 0, 'icon' => 'bi-ui-checks-grid'],
-                ['title' => 'Student Responses', 'count' => $responseCount ?? 0, 'icon' => 'bi-bar-chart-line'],
+                ['title' => 'Institutes', 'count' => $instituteCount ?? 0, 'icon' => 'bi-building', 'url' => route('institutes.index')],
+                ['title' => 'Batches', 'count' => $batchCount ?? 0, 'icon' => 'bi-people', 'url' => route('batches.index')],
+                ['title' => 'Papers', 'count' => $paperCount ?? 0, 'icon' => 'bi-journal-text', 'url' => route('papers.index')],
+                ['title' => 'Questions', 'count' => $questionCount ?? 0, 'icon' => 'bi-question-circle', 'url' => route('questions.index')],
+                ['title' => 'Mock Tests', 'count' => $mockTestCount ?? 0, 'icon' => 'bi-ui-checks-grid', 'url' => route('mock-tests.index')],
+                ['title' => 'Responses', 'count' => $responseCount ?? 0, 'icon' => 'bi-bar-chart-line', 'url' => route('mock-tests.index')],
             ];
         @endphp
 
         @foreach ($cards as $card)
-            <div class="col-md-4">
-                <div class="card shadow-sm border-0 rounded-4 bg-white">
-                    <div class="card-body text-center">
-                        <div class="stat-icon">
-                            <i class="bi {{ $card['icon'] }}"></i>
+        <div class="col-lg-2 col-md-4 col-6">
+            <a href="{{ $card['url'] }}" class="text-decoration-none">
+                <div class="card dashboard-stat-card shadow-sm border-0 rounded-4 bg-white">
+
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <div class="d-flex align-items-center">
+
+                                <div class="stat-icon me-3">
+                                    <i class="bi {{ $card['icon'] }}"></i>
+                                </div>
+
+                                <div>
+                                    <div class="text-muted small">{{ $card['title'] }}</div>
+                                    <div class="fw-bold fs-5 text-dark">
+                                        {{ $card['count'] }}
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="card-arrow">
+                                <i class="bi bi-arrow-right-circle"></i>
+                            </div>
+
                         </div>
-                        <h6 class="text-muted mb-1">{{ $card['title'] }}</h6>
-                        <h4 class="fw-bold text-dark">{{ $card['count'] }}</h4>
+
                     </div>
+
                 </div>
-            </div>
+            </a>
+        </div>
         @endforeach
     </div>
 
-    {{-- Quick Actions (Card-based) --}}
-    <div class="mb-5">
-        <div class="d-flex align-items-center mb-3">
+    <div class="row g-4 mb-4">
+
+{{-- Quick Actions --}}
+<div class="col-lg-4">
+
+    <div class="card border-0 rounded-4 shadow-sm h-100">
+
+        <div class="card-header bg-white border-0 fw-semibold">
             <i class="bi bi-lightning-charge-fill text-warning me-2"></i>
-            <h5 class="fw-semibold mb-0">Quick Actions</h5>
+            Quick Actions
         </div>
-        <div class="row g-3">
-            <div class="col-md-4">
-                <a href="/admin/mock-tests/create" class="text-decoration-none">
-                    <div class="card quick-action-card border-0 rounded-4 shadow-sm bg-white">
-                        <div class="card-body">
-                            <div class="quick-action-icon">
-                                <i class="bi bi-plus-circle"></i>
-                            </div>
-                            <div class="fw-semibold text-dark">Create Mock Test</div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="/admin/questions/create" class="text-decoration-none">
-                    <div class="card quick-action-card border-0 rounded-4 shadow-sm bg-white">
-                        <div class="card-body">
-                            <div class="quick-action-icon">
-                                <i class="bi bi-plus-square"></i>
-                            </div>
-                            <div class="fw-semibold text-dark">Add New Question</div>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a href="{{ route('admin.reports.index') }}" class="text-decoration-none">
-                    <div class="card quick-action-card border-0 rounded-4 shadow-sm bg-white">
-                        <div class="card-body">
-                            <div class="quick-action-icon">
-                                <i class="bi bi-bar-chart-line"></i>
-                            </div>
-                            <div class="fw-semibold text-dark">View Reports</div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+
+        <div class="card-body p-0">
+
+            <a href="/admin/mock-tests/create"
+               class="dashboard-action-item text-decoration-none">
+                <i class="bi bi-plus-circle text-primary me-2"></i>
+                Create New Test
+                <i class="bi bi-chevron-right ms-auto text-muted"></i>
+            </a>
+
+            <a href="/admin/questions/create"
+               class="dashboard-action-item text-decoration-none">
+                <i class="bi bi-plus-square text-success me-2"></i>
+                Add New Question
+                <i class="bi bi-chevron-right ms-auto text-muted"></i>
+            </a>
+
+            <a href="/admin/questions"
+               class="dashboard-action-item text-decoration-none">
+                <i class="bi bi-journal-text text-warning me-2"></i>
+                View All Questions
+                <i class="bi bi-chevron-right ms-auto text-muted"></i>
+            </a>
+
+            <a href="{{ route('admin.reports.index') }}"
+               class="dashboard-action-item text-decoration-none">
+                <i class="bi bi-bar-chart-line text-info me-2"></i>
+                View Reports
+                <i class="bi bi-chevron-right ms-auto text-muted"></i>
+            </a>
+
         </div>
+
     </div>
+
+</div>
+
+{{-- Upcoming Tests --}}
+<div class="col-lg-8">
+
+    <div class="card border-0 rounded-4 shadow-sm h-100">
+
+        <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+
+            <div class="fw-semibold">
+                <i class="bi bi-calendar-event text-primary me-2"></i>
+                Upcoming Tests
+            </div>
+
+          <a href="{{ route('mock-tests.index') }}"
+            class="text-muted text-decoration-none">
+                <i class="bi bi-arrow-right"></i>
+            </a>
+
+        </div>
+
+        <div class="card-body pt-1">
+
+            @forelse($upcomingTests ?? [] as $test)
+
+                <div class="upcoming-test-card">
+
+                    {{-- Date Block --}}
+                    <div class="date-card">
+
+                        <div class="date-day">
+                            {{ \Carbon\Carbon::parse($test->start_time)->format('d') }}
+                        </div>
+
+                        <div class="date-month">
+                            {{ strtoupper(\Carbon\Carbon::parse($test->start_time)->format('M')) }}
+                        </div>
+
+                    </div>
+
+                    {{-- Test Details --}}
+                    <div class="flex-grow-1 ms-3">
+
+                        <div class="fw-semibold fs-6">
+                            {{ $test->title }}
+                        </div>
+
+                       <div class="small text-muted mt-1">
+                            {{ $test->paper?->name }}
+                            •
+                            {{ $test->duration_minutes }} mins
+                        </div>
+
+                        @if($test->batches->first())
+                            <div class="small text-muted">
+
+                                {{ $test->batches->first()->name }}
+
+                                @if($test->batches->first()->institute)
+                                    • {{ $test->batches->first()->institute->name }}
+                                @endif
+
+                            </div>
+                        @endif
+
+                    </div>
+
+                    {{-- Schedule --}}
+                    <div class="text-end">
+
+                        @php
+                            $testDate = \Carbon\Carbon::parse($test->start_time);
+                        @endphp
+
+                        <div class="fw-semibold small">
+                            @if($testDate->isTomorrow())
+                                Tomorrow
+                            @elseif($testDate->isToday())
+                                Today
+                            @else
+                                {{ $testDate->format('d M Y') }}
+                            @endif
+                        </div>
+
+                        <div class="small text-muted">
+                            {{ $testDate->format('h:i A') }}
+                        </div>
+
+                    </div>
+
+                </div>
+
+            @empty
+
+                <div class="text-center text-muted py-5">
+                    <i class="bi bi-calendar-x fs-2 d-block mb-2"></i>
+                    No upcoming tests scheduled.
+                </div>
+
+            @endforelse
+
+        </div>
+
+    </div>
+</div>
+</div>
 
     {{-- Recent Activity --}}
     <div class="row g-4">
-        <div class="col-md-6">
+        <div class="col-lg-6">
             <div class="card shadow-sm border-0 rounded-4 bg-white">
                 <div class="card-header bg-white fw-semibold border-bottom">
                     <i class="bi bi-clipboard-check text-success me-2"></i>
-                    Recent Mock Tests
+                    Recent Tests
                 </div>
                 <div class="card-body p-0">
                     <table class="table mb-0">
@@ -234,7 +550,7 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-lg-6">
             <div class="card shadow-sm border-0 rounded-4 bg-white">
                 <div class="card-header bg-white fw-semibold border-bottom">
                     <i class="bi bi-chat-square-text text-success me-2"></i>
@@ -277,7 +593,21 @@
 
 <div class="border-top pt-2 mt-4">
     <div class="text-center text-muted small">
-        ACCAPrep with Malasri v1.0 · Developed & Maintained by Sanand S
+        ACCAPrep with Malasri v1.1 · Developed & Maintained by Sanand S
     </div>
 </div>
 @endsection
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+
+    tooltipTriggerList.forEach(function (el) {
+        new bootstrap.Tooltip(el, {
+            container: 'body'
+        });
+    });
+
+});
+</script>

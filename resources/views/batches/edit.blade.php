@@ -19,16 +19,20 @@
         border-radius: 1rem;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         background-color: #fff;
-        padding: 1.5rem;
+        padding: 1.75rem;
     }
 
     .form-label {
         font-weight: 500;
     }
 
-    .btn-primary,
+    .btn-success,
     .btn-secondary {
         border-radius: 50px;
+    }
+
+    .alert {
+        border-radius: 0.75rem;
     }
 </style>
 @endsection
@@ -37,48 +41,104 @@
 <div class="container py-4">
 
     <div class="header-box mb-4 d-flex justify-content-between align-items-center">
-        <h5 class="mb-0 text-dark fw-semibold">Edit Batch</h5>
+
+        <div>
+            <h5 class="mb-0 text-dark fw-semibold">
+                <i class="bi bi-pencil-square me-2 text-warning"></i>
+                Edit Batch
+            </h5>
+
+            <small class="text-muted">
+                Update batch details and institute assignment.
+            </small>
+        </div>
+
         <a href="{{ route('batches.index') }}" class="btn btn-secondary rounded-pill">
-            <i class="bi bi-arrow-left me-1"></i> Back to Batches
+            <i class="bi bi-arrow-left me-1"></i>
+            Back to Batches
         </a>
+
     </div>
 
-    <div class="card-style">
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+    <div class="row justify-content-center">
 
-        <form action="{{ route('batches.update', $batch->id) }}" method="POST">
-            @csrf
-            @method('PUT')
+        <div class="col-lg-12">
 
-            <div class="mb-3">
-                <label for="institute_id" class="form-label">Institute</label>
-                <select name="institute_id" id="institute_id" class="form-select" required>
-                    @foreach ($institutes as $institute)
-                        <option value="{{ $institute->id }}" {{ $batch->institute_id == $institute->id ? 'selected' : '' }}>
-                            {{ $institute->name }}
-                        </option>
-                    @endforeach
-                </select>
+            <div class="card-style">
+
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <div class="fw-semibold mb-2">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            Please correct the following errors:
+                        </div>
+
+                        <ul class="mb-0">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form action="{{ route('batches.update', $batch->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="mb-3">
+                        <label for="institute_id" class="form-label">
+                            Institute
+                        </label>
+
+                        <select name="institute_id"
+                                id="institute_id"
+                                class="form-select"
+                                required>
+
+                            @foreach ($institutes as $institute)
+                                <option value="{{ $institute->id }}"
+                                    {{ old('institute_id', $batch->institute_id) == $institute->id ? 'selected' : '' }}>
+                                    {{ $institute->name }}
+                                </option>
+                            @endforeach
+
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="name" class="form-label">
+                            Batch Name
+                        </label>
+
+                        <input type="text"
+                               name="name"
+                               id="name"
+                               class="form-control"
+                               value="{{ old('name', $batch->name) }}"
+                               placeholder="Eg. Batch A, Weekend Batch, June 2026"
+                               required>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+
+                        <a href="{{ route('batches.index') }}"
+                           class="btn btn-secondary">
+                            Cancel
+                        </a>
+
+                        <button type="submit"
+                                class="btn btn-success">
+                            Update Batch
+                        </button>
+
+                    </div>
+
+                </form>
+
             </div>
 
-            <div class="mb-3">
-                <label for="name" class="form-label">Batch Name</label>
-                <input type="text" name="name" id="name" class="form-control" value="{{ $batch->name }}" required>
-            </div>
+        </div>
 
-            <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary me-2">Update Batch</button>
-                <a href="{{ route('batches.index') }}" class="btn btn-secondary">Cancel</a>
-            </div>
-        </form>
     </div>
 
 </div>

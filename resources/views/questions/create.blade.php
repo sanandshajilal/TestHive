@@ -24,16 +24,35 @@
         font-weight: 500;
     }
 
-    .btn-primary {
+    .btn-success {
         border-radius: 50px;
     }
+    .section-heading {
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.form-select,
+.form-control {
+    border-radius: 0.6rem;
+}
 </style>
 @endsection
 
 @section('content')
 <div class="container py-4">
     <div class="header-box mb-4 d-flex justify-content-between align-items-center">
-        <h5 class="mb-0 text-dark fw-semibold">Create Question</h5>
+        <div>
+            <h5 class="mb-0 text-dark fw-semibold">
+                <i class="bi bi-file-earmark-plus text-primary me-2"></i>
+                Create Question
+            </h5>
+
+            <small class="text-muted">
+                Create and organize questions for the question bank.
+            </small>
+        </div>
         <a href="{{ route('questions.index') }}" class="btn btn-secondary rounded-pill">
             <i class="bi bi-arrow-left me-1"></i> Back to Questions
         </a>
@@ -52,7 +71,12 @@
         @endif
         <form method="POST" action="{{ route('questions.store') }}">
             @csrf
-
+            <div class="border-bottom pb-2 mb-3">
+                <h6 class="fw-semibold mb-1">
+                    <i class="bi bi-sliders me-2"></i>
+                    Question Configuration
+                </h6>
+            </div>
             <div class="row g-3 mb-3">
                 <div class="col-md-6">
                     <label for="paper_id" class="form-label">Select Paper</label>
@@ -104,6 +128,12 @@
                 </div>
             </div>
 
+            <div class="border-bottom pb-2 mb-3 mt-4">
+                <h6 class="fw-semibold mb-1">
+                    <i class="bi bi-pencil-square me-2"></i>
+                    Question Content
+                </h6>
+            </div>
             <div class="mb-3">
                 <label class="form-label">Question</label>
                 <textarea class="form-control" name="question_text" id="question" required>{{ old('question_text') }}</textarea>
@@ -120,12 +150,19 @@
             @include('questions.partials.drag_and_drop')
             @include('questions.partials.dropdown')
 
+            <div class="border-bottom pb-2 mb-3 mt-4">
+                <h6 class="fw-semibold mb-1">
+                    <i class="bi bi-award me-2"></i>
+                    Scoring
+                </h6>
+            </div>
             <div class="mb-3">
                 <label class="form-label">Marks</label>
                 <input type="number" name="marks" class="form-control" value="{{ old('marks', 2) }}" min="1" required>
             </div>
-
-            <button type="submit" class="btn btn-primary">Save Question</button>
+            <div class="text-end">
+            <button type="submit" class="btn btn-success">Save Question</button>
+            </div>
         </form>
     </div>
 </div>

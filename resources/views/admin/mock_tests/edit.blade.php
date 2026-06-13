@@ -64,7 +64,16 @@
 @section('content')
 <div class="container py-4">
     <div class="header-box mb-4 d-flex justify-content-between align-items-center">
-        <h5 class="mb-0 text-dark fw-semibold">Edit Mock Test</h5>
+        <div>
+            <h5 class="mb-0 text-dark fw-semibold">
+                <i class="bi bi-pencil-square text-warning me-2"></i>
+                Edit Test
+            </h5>
+
+            <small class="text-muted">
+                Update test details and manage the selected question bank.
+            </small>
+        </div>
         <a href="{{ route('mock-tests.index') }}" class="btn btn-secondary rounded-pill">
             <i class="bi bi-arrow-left me-1"></i> Back to Tests
         </a>
@@ -74,6 +83,13 @@
         <form method="POST" action="{{ route('mock-tests.update', $mockTest->id) }}">
             @csrf
             @method('PUT')
+            <div class="border-bottom pb-2 mb-3">
+                <h6 class="fw-semibold mb-1">
+                    <i class="bi bi-gear me-2"></i>
+                    Test Configuration
+                </h6>
+            </div>
+
             <div class="row mb-4">
                 <div class="col-md-6">
                     <label class="form-label">Paper</label>
@@ -119,10 +135,15 @@
                 </div>
             </div>
 
-            <hr>
+
 
             <div class="mb-3">
-                <h6 class="fw-bold mb-2">Filter Questions</h6>
+                <div class="border-bottom pb-2 mb-3 mt-4">
+                    <h6 class="fw-semibold mb-1">
+                        <i class="bi bi-funnel me-2"></i>
+                        Question Filters
+                    </h6>
+                </div>
                 <div class="row g-2">
                     <div class="col-md-4">
                         <select name="topic_id" id="topic-select" class="form-select">
@@ -161,7 +182,12 @@
             </div>
 
             <div class="mb-4">
-                <h6 class="fw-bold mb-2">Question Bank</h6>
+                <div class="border-bottom pb-2 mb-3 mt-4">
+                    <h6 class="fw-semibold mb-1">
+                        <i class="bi bi-journal-check me-2"></i>
+                        Question Bank
+                    </h6>
+                </div>
                 <p class="text-muted">Select the required questions from the list below:</p>
                 <div id="question-list" class="border p-3 rounded bg-light" style="max-height: 400px; overflow-y: auto;"></div>
             </div>

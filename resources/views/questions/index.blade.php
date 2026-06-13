@@ -127,6 +127,34 @@
                 font-weight: 600;
             }
 
+            .summary-card {
+                background: #ffffff;
+                border: 1px solid #e9ecef;
+                border-radius: 0.75rem;
+                padding: 1rem 1.25rem;
+                height: 100%;
+                transition: all 0.2s ease;
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            }
+
+            .summary-card:hover {
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+                transform: translateY(-1px);
+            }
+
+            .summary-label {
+                font-size: 0.8rem;
+                color: #6c757d;
+                margin-bottom: 0.35rem;
+            }
+
+            .summary-value {
+                font-size: 1.4rem;
+                font-weight: 700;
+                color: #212529;
+                line-height: 1;
+            }
+
 
 
         @media screen and (max-width: 768px) {
@@ -145,14 +173,65 @@
 @section('content')
 <div class="container py-4">
     <div class="header-box mb-4 d-flex justify-content-between align-items-center">
-        <h4 class="fw-semibold text-dark mb-0">All Questions</h4>
+        <div>
+            <h4 class="fw-semibold text-dark mb-0">
+                <i class="bi bi-collection text-primary me-2"></i>
+                Question Bank
+            </h4>
+
+            <small class="text-muted">
+                Manage and organize questions across all papers and topics.
+            </small>
+        </div>
         <a href="{{ route('questions.create') }}" class="btn btn-primary rounded-pill">
             <i class="bi bi-plus-circle me-1"></i> Add Question
         </a>
     </div>
 
+        <div class="row g-3 mb-4">
+
+            <div class="col-md-3">
+                <div class="summary-card">
+                    <div class="summary-label">Total Questions</div>
+                    <div class="summary-value">{{ $questions->count() }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="summary-card">
+                    <div class="summary-label">Papers</div>
+                    <div class="summary-value">{{ $papers->count() }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="summary-card">
+                    <div class="summary-label">Topics</div>
+                    <div class="summary-value">{{ $topics->count() ?? '-' }}</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="summary-card">
+                    <div class="summary-label">Question Types</div>
+                    <div class="summary-value">6</div>
+                </div>
+            </div>
+
+        </div>
+
     <div class="card-style">
         <!-- Filters -->
+         <div class="border-bottom pb-2 mb-3">
+            <h6 class="fw-semibold mb-1">
+                <i class="bi bi-funnel me-2"></i>
+                Filters
+            </h6>
+
+            <small class="text-muted">
+                Narrow down questions by paper, topic, sub-topic and type.
+            </small>
+        </div>
         <div class="row mb-4">
             <div class="col-md-3">
                 <select id="paper_id" class="form-select">

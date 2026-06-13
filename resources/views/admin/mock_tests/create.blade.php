@@ -26,7 +26,7 @@
         font-weight: 500;
     }
 
-    .btn-primary {
+    .btn-success {
         border-radius: 50px;
     }
 
@@ -55,6 +55,8 @@
         color: #0d6efd; /* Bootstrap's primary */
         cursor: pointer;
     }
+
+    
 </style>
 @endsection
 
@@ -63,7 +65,16 @@
 
     {{-- Header --}}
     <div class="header-box mb-4 d-flex justify-content-between align-items-center">
-        <h5 class="mb-0 text-dark fw-semibold">Create Mock Test</h5>
+        <div>
+            <h5 class="mb-0 text-dark fw-semibold">
+                <i class="bi bi-ui-checks-grid text-primary me-2"></i>
+                Create Test
+            </h5>
+
+            <small class="text-muted">
+                Configure test details and select questions from the question bank.
+            </small>
+        </div>
         <a href="{{ route('mock-tests.index') }}" class="btn btn-secondary rounded-pill">
             <i class="bi bi-arrow-left me-1"></i> Back to Tests
         </a>
@@ -73,7 +84,12 @@
     <div class="card-style">
         <form method="POST" action="{{ route('mock-tests.store') }}" onsubmit="return redirectAfterSubmit()">
             @csrf
-
+            <div class="border-bottom pb-2 mb-3">
+                <h6 class="fw-semibold mb-1">
+                    <i class="bi bi-gear me-2"></i>
+                    Test Configuration
+                </h6>
+            </div>
             {{-- Paper and Title --}}
             <div class="row mb-4">
                 <div class="col-md-6">
@@ -121,11 +137,16 @@
                 </div>
             </div>
 
-            <hr>
+  
 
             {{-- Filters --}}
             <div class="mb-3">
-                <h6 class="fw-bold mb-2">Filter Questions</h6>
+                <div class="border-bottom pb-2 mb-3 mt-4">
+                    <h6 class="fw-semibold mb-1">
+                        <i class="bi bi-funnel me-2"></i>
+                        Question Filters
+                    </h6>
+                </div>
                 <div class="row g-2">
                     <div class="col-md-4">
                         <select id="filterTopic" class="form-select">
@@ -164,7 +185,12 @@
             {{-- Question Bank --}}
             <input type="hidden" name="question_ids_serialized" id="question_ids_serialized">
             <div class="mb-4">
-                <h6 class="fw-bold mb-2">Question Bank</h6>
+                <div class="border-bottom pb-2 mb-3 mt-4">
+                    <h6 class="fw-semibold mb-1">
+                        <i class="bi bi-journal-check me-2"></i>
+                        Question Bank
+                    </h6>
+                </div>
                 <p class="text-muted">Select the required questions from the list below:</p>
                 <div id="questionList" class="border p-3 rounded bg-light" style="max-height: 350px; overflow-y: auto;">
                     <p class="text-muted">Select a paper to load questions...</p>
@@ -173,7 +199,7 @@
 
             {{-- Submit --}}
             <div class="text-end">
-                <button type="submit" class="btn btn-primary px-4">Create Test</button>
+                <button type="submit" class="btn btn-success px-4">Create Test</button>
             </div>
         </form>
     </div>
