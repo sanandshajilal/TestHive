@@ -91,7 +91,7 @@
     <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
         <div class="container">
             <a class="navbar-brand text-decoration-none" href="#">
-                <img src="{{ asset('images/logo.png') }}"
+                <img src="{{ asset('images/Logo.png') }}"
                     alt="ACCAPrep with Malasri"
                     class="student-logo">
             </a>

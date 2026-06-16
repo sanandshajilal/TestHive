@@ -169,7 +169,7 @@ body {
             <div class="header-left">MOCK TEST PORTAL</div>
            <div class="brand-logo d-flex flex-column">
                 <div class="header-right">
-                    <img src="{{ asset('images/logo.png') }}"
+                    <img src="{{ asset('images/Logo.png') }}"
                         alt="ACCAPrep by Malasri"
                         height="55">
                 </div>

@@ -456,7 +456,7 @@
         <div class="d-flex justify-content-between align-items-center w-100 flex-wrap">
             <!-- Brand -->
             <a class="navbar-brand brand-logo d-flex flex-column align-items-start text-decoration-none" href="#">
-                <img src="{{ asset('images/logo.png') }}"
+                <img src="{{ asset('images/Logo.png') }}"
                     alt="ACCAPrep with Malasri"
                     class="student-logo">
             </a>
