@@ -12,57 +12,75 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
     {{-- Custom Styles --}}
-    <style>
-        body {
-            background-color: #f7f8fa;
-            font-family: 'Segoe UI', sans-serif;
-        }
+   <style>
+    body {
+        background-color: #f7f8fa;
+        font-family: 'Segoe UI', sans-serif;
+    }
 
-        .navbar-custom {
-            background-color: #ffffff;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-        }
+    .navbar-custom {
+        background-color: #ffffff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
 
-        .navbar-brand {
-            font-weight: 600;
-            color: #4e73df;
-            font-size: 1.25rem;
-        }
+    .student-logo {
+        height: 50px;
+        width: auto;
+        display: block;
+    }
 
-        .navbar-brand:hover {
-            color: #3756c0;
-        }
+    .content-wrapper {
+        padding-top: 80px;
+    }
 
-        .content-wrapper {
-            padding-top: 80px;
-        }
+    .exit-button {
+        border: 1px solid #e5d2c8;
+        background-color: #ffffff;
+        color: #832b00;
+        font-size: 0.9rem;
+        padding: 6px 14px;
+        border-radius: 20px;
+        transition: all 0.2s ease-in-out;
+    }
 
-        .exit-button {
-            border: 1px solid #dee2e6;
-            background-color: #ffffff;
-            color: #555;
-            font-size: 0.9rem;
-            padding: 6px 14px;
-            border-radius: 20px;
-            transition: all 0.2s ease-in-out;
-        }
+    .exit-button:hover {
+        background-color: #f7e3d8;
+        border-color: #b46e4c;
+        color: #832b00;
+    }
 
-        .exit-button:hover {
-            background-color: #f8d7da;
-            color: #842029;
-            border-color: #f5c2c7;
-        }
-        .brand-logo {
-        line-height: 1.1;
+    .exit-button:focus,
+    .exit-button:active {
+        background-color: #f7e3d8;
+        border-color: #b46e4c;
+        color: #832b00;
+        box-shadow: none;
+    }
+
+    
+
+    @media (max-width: 576px) {
+
+            .exit-text {
+                display: none;
             }
 
-            .brand-subtext {
-                font-size: 0.6rem;
-                color: rgba(169, 169, 169, 0.86);
-                margin-left: 1.7rem;
+            .exit-button {
+                width: 38px;
+                height: 38px;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
             }
 
-    </style>
+            .student-logo {
+                height: 40px;
+            }
+        }
+
+</style>
 
     @stack('styles')
        @yield('styles')
@@ -72,21 +90,20 @@
     {{-- Navbar --}}
     <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
         <div class="container">
-            <a class="navbar-brand brand-logo d-flex flex-column align-items-start text-decoration-none" href="#">
-                <div class="d-flex align-items-center header-right fw-bold">
-                    <i class="bi bi-mortarboard-fill text-warning me-1"></i>
-                    ACCAPrep
-                </div>
-                <div class="brand-subtext">with <trong>MALASRI</strong></div>
+            <a class="navbar-brand text-decoration-none" href="#">
+                <img src="{{ asset('images/logo.png') }}"
+                    alt="ACCAPrep with Malasri"
+                    class="student-logo">
             </a>
 
 
-            <div class="collapse navbar-collapse justify-content-end" id="studentNavbar">
+            <div class="d-flex justify-content-end">
                 {{-- Exit Button --}}
                 <form action="{{ route('student.logout') }}" method="POST" class="d-flex">
                     @csrf
                     <button type="submit" class="exit-button">
-                        <i class="bi bi-door-closed me-1"></i>Exit
+                        <i class="bi bi-door-closed"></i>
+                        <span class="exit-text ms-1">Exit</span>
                     </button>
                 </form>
             </div>

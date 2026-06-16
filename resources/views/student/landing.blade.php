@@ -44,7 +44,7 @@ body {
 }
 .top-bar {
     height: 6px;
-    background-color: #4e73df;
+    background-color: #832b00   ;
 }
 .header-row {
     display: flex;
@@ -61,12 +61,12 @@ body {
 .header-right {
     font-weight: bold;
     font-size: 1.2rem;
-    color: #4e73df;
+    color: #832b00;
     display: flex;
     align-items: center;
 }
 .header-right i {
-    font-size: 1.1rem;
+    font-size: 0.5rem;
     margin-right: 6px;
     color: #facc15;
 }
@@ -75,8 +75,8 @@ body {
     margin: 0 1.5rem 1rem 1.5rem;
 }
 .title-highlight {
-    background-color: #f1f5ff;
-    color: #4e73df;
+    background-color: #f7e3d8;
+    color: #9a5631;
     font-weight: 600;
     text-align: center;
     padding: 0.75rem 1rem;
@@ -93,14 +93,37 @@ body {
     font-weight: 500;
     color: #333;
 }
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #b46e4c;
+    box-shadow: 0 0 0 0.2rem rgba(180,110,76,0.15);
+}
+
 .btn-primary {
-    background-color: #4e73df;
-    border-color: #4e73df;
+    background-color: #b46e4c;
+    border-color: #b46e4c;
+    transition: all 0.2s ease;
 }
 .btn-primary:hover {
-    background-color: #3d5fc4;
-    border-color: #3d5fc4;
+    background-color: #832b00;
+    border-color: #832b00;
 }
+
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.btn-primary:focus-visible {
+    background-color: #832b00 !important;
+    border-color: #832b00 !important;
+    box-shadow: none !important;
+}
+
+.btn-primary:not(:disabled):not(.disabled):active {
+    background-color: #832b00 !important;
+    border-color: #832b00 !important;
+}
+
 .disclaimer {
     font-size: 0.85rem;
     color: #6c757d;
@@ -126,6 +149,14 @@ body {
     margin-left: 1.5rem;
 }
 
+.btn-primary:disabled,
+.btn-primary.disabled {
+    background-color: #b46e4c !important;
+    border-color: #b46e4c !important;
+    opacity: 0.85;
+}
+
+
 
 </style>
 </head>
@@ -137,11 +168,11 @@ body {
         <div class="header-row">
             <div class="header-left">MOCK TEST PORTAL</div>
            <div class="brand-logo d-flex flex-column">
-                <div class="d-flex align-items-center header-right fw-bold">
-                    <i class="bi bi-mortarboard-fill text-warning me-1"></i>
-                    ACCAPrep
+                <div class="header-right">
+                    <img src="{{ asset('images/logo.png') }}"
+                        alt="ACCAPrep by Malasri"
+                        height="55">
                 </div>
-                <div class="brand-subtext">with <strong>MALASRI </strong></div>
             </div>
         </div>
         <div class="divider"></div>
@@ -225,7 +256,7 @@ body {
 </div>
 
 <div class="disclaimer">
-    <div>© 2025 S. Malasri. All rights reserved.</div>
+    <div>© 2025 ACCAPrep with Malasri</div>
     
 </div>
 

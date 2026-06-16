@@ -5,44 +5,244 @@
 @section('title', 'Response Sheet')
 
 @section('styles')
-<style>
-    body {
-        background-color: #f9fafb;
-    }
-    .header-box {
-        background-color: #ffffff;
-        border-radius: 1rem;
-        padding: 1.25rem 1.5rem;
-        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
-    }
-    .card-style {
-        border-radius: 1rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        background-color: #fff;
-        padding: 1.5rem;
-    }
-    .summary-card {
-        height: 100%;
-        padding: 1rem 0.75rem;
-    }
-    .question-content p {
-        margin-bottom: 0.5rem;
-    }
+    <style>
+        :root {
+            --primary: #b46e4c;
+            --primary-dark: #832b00;
+            --primary-light: #f7e3d8;
 
-    @media (min-width: 768px) {
-    .min-w-md-0 {
-        min-width: 0 !important;
-        
-    }
-    
-}
- @media (max-width: 767.98px) {
-                    .back-label {
-                        display: none !important;
-                    }
-                }
+            --success: #198754;
+            --danger: #dc3545;
+            --secondary: #6c757d;
 
-</style>
+            --surface: #ffffff;
+            --border: #e5e7eb;
+        }
+
+        body {
+            background-color: #f7f8fa;
+            background-image:
+                radial-gradient(#e9ecef 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        /* ---------- HEADER ---------- */
+
+        .header-box {
+            background: #fff;
+            border-radius: 1rem;
+            padding: 1.25rem 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,.05);
+        }
+
+        .header-box h4 {
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
+        .btn-back {
+            border: 1px solid #e5d2c8;
+            background: #fff;
+            color: var(--primary-dark);
+            border-radius: 999px;
+        }
+
+        .btn-back:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary-dark);
+        }
+
+        /* ---------- SCORE BANNER ---------- */
+
+        .score-banner {
+            background: linear-gradient(
+                135deg,
+                var(--primary),
+                var(--primary-dark)
+            );
+            color: #fff;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,.08);
+        }
+
+        .score-value {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .score-label {
+            margin-top: .4rem;
+            opacity: .9;
+        }
+
+        /* ---------- CARDS ---------- */
+
+        .card-style {
+            border-radius: 1rem;
+            background: #fff;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,.05);
+        }
+
+        .question-card {
+            background: #fff;
+            border: 1px solid #edf0f2;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            transition: all .2s ease;
+        }
+
+        .question-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,.04);
+        }
+
+        /* ---------- STUDENT INFO ---------- */
+
+        .info-label {
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            color: #6b7280;
+            margin-bottom: .25rem;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: #111827;
+        }
+
+        /* ---------- SUMMARY ---------- */
+
+        .summary-card {
+            height: 100%;
+            padding: 1rem 0.75rem;
+        }
+
+        .summary-total {
+            color: var(--primary-dark);
+        }
+
+        .summary-marks {
+            color: var(--primary);
+        }
+
+        /* ---------- QUESTIONS ---------- */
+
+        .question-number {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: .85rem;
+            font-weight: 600;
+            margin-bottom: .75rem;
+        }
+
+        .question-content {
+            line-height: 1.7;
+        }
+
+        .question-content p {
+            margin-bottom: .5rem;
+        }
+
+        /* ---------- BADGES ---------- */
+
+        .badge-correct {
+            background: #e8f7ee;
+            color: var(--success);
+            border-radius: 999px;
+            padding: .45rem .8rem;
+            font-weight: 600;
+        }
+
+        .badge-wrong {
+            background: #fdecec;
+            color: var(--danger);
+            border-radius: 999px;
+            padding: .45rem .8rem;
+            font-weight: 600;
+        }
+
+        .badge-unattempted {
+            background: #f1f3f5;
+            color: var(--secondary);
+            border-radius: 999px;
+            padding: .45rem .8rem;
+            font-weight: 600;
+        }
+
+        /* ---------- TABLES ---------- */
+
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table thead {
+            background: var(--primary-light);
+        }
+
+        .table thead th {
+            color: var(--primary-dark);
+            font-weight: 600;
+            border-bottom: none;
+        }
+
+        .table-bordered {
+            border-color: #e5e7eb;
+        }
+
+        .table-light {
+            background: var(--primary-light) !important;
+        }
+
+        /* ---------- OPTION LIST ---------- */
+
+        .list-group-item {
+            border-color: #edf0f2;
+        }
+
+     
+
+        /* ---------- RESPONSE SHEET TITLE ---------- */
+
+        .response-title {
+            color: var(--primary-dark);
+            font-weight: 700;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: .75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ---------- RESPONSIVE ---------- */
+
+        @media (min-width: 768px) {
+            .min-w-md-0 {
+                min-width: 0 !important;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            .back-label {
+                display: none !important;
+            }
+
+            .score-value {
+                font-size: 1.6rem;
+            }
+
+            .question-card {
+                padding: 1rem;
+            }
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -69,8 +269,11 @@
 <div class="container py-4">
     <!-- Heading -->
     <div class="header-box mb-4 d-flex justify-content-between align-items-center">
-        <h4 class="fw-semibold text-dark mb-0">📄 TEST RESULTS</h4>
-        <a href="{{ route('student.index') }}" class="btn btn-secondary rounded-pill">
+        <h4 class="fw-bold mb-0">
+            <i class="bi bi-award me-2"></i>
+            Test Results
+        </h4>
+        <a href="{{ route('student.index') }}" class="btn btn-back">
             <i class="bi bi-arrow-left me-1"></i> 
             <span class="back-label">Back to Home </span>
         </a>
@@ -124,18 +327,26 @@
 <!-- Summary Bar Card -->
 <div class="card shadow-sm border-0 rounded-4 mb-4">
     <div class="card-body d-flex justify-content-around flex-wrap text-center gap-3">
-        @foreach([
-            ['label' => 'Total', 'value' => $totalQuestions, 'icon' => 'list-check', 'color' => 'primary'],
-            ['label' => 'Correct', 'value' => $correctCount, 'icon' => 'check-circle', 'color' => 'success'],
-            ['label' => 'Wrong', 'value' => $wrongCount, 'icon' => 'x-circle', 'color' => 'danger'],
-            ['label' => 'Not Attempted', 'value' => $unattemptedCount, 'icon' => 'dash-circle', 'color' => 'warning'],
-            ['label' => 'Marks', 'value' => "$totalMarks / $totalPossible", 'icon' => 'award', 'color' => 'info'],
+       @foreach([
+            ['label' => 'Total', 'value' => $totalQuestions, 'icon' => 'list-check', 'class' => 'summary-total'],
+            ['label' => 'Correct', 'value' => $correctCount, 'icon' => 'check-circle', 'class' => 'text-success'],
+            ['label' => 'Wrong', 'value' => $wrongCount, 'icon' => 'x-circle', 'class' => 'text-danger'],
+            ['label' => 'Not Attempted', 'value' => $unattemptedCount, 'icon' => 'dash-circle', 'class' => 'text-secondary'],
+            ['label' => 'Marks', 'value' => "$totalMarks / $totalPossible", 'icon' => 'award', 'class' => 'summary-marks'],
         ] as $stat)
+
             <div class="px-3 py-2 flex-fill text-center" style="min-width: 120px;">
-                <i class="bi bi-{{ $stat['icon'] }} text-{{ $stat['color'] }} fs-5"></i>
-                <div class="small text-muted mt-1">{{ $stat['label'] }}</div>
-                <div class="fw-bold text-{{ $stat['color'] }}">{{ $stat['value'] }}</div>
+                <i class="bi bi-{{ $stat['icon'] }} {{ $stat['class'] }} fs-5"></i>
+
+                <div class="small text-muted mt-1">
+                    {{ $stat['label'] }}
+                </div>
+
+                <div class="fw-bold {{ $stat['class'] }}">
+                    {{ $stat['value'] }}
+                </div>
             </div>
+
         @endforeach
     </div>
 </div>
@@ -143,7 +354,10 @@
 
      <!-- Questions with Student Response -->
     <div class="card-style">
-        <h5 class="mb-4">Response Sheet</h5>
+        <h5 class="response-title">
+            <i class="bi bi-journal-check me-2"></i>
+            Response Sheet
+        </h5>
 
         @forelse ($questions as $index => $question)
            @php
@@ -188,7 +402,7 @@
             @endphp
 
 
-            <div class="mb-4 pb-3 border-bottom">
+            <div class="question-card">
                 <h6 class="fw-semibold text-dark mb-2">Q{{ $index + 1 }}:</h6>
                 @php
                     $displayQuestion = $question->question_text;
@@ -202,14 +416,19 @@
                 @if(in_array($question->question_type, ['mcq', 'multiple_select']) && is_array($question->options))
                     <ul class="list-group mb-2">
                         @foreach($question->options as $key => $option)
-                            <li class="list-group-item d-flex justify-content-between align-items-center @if(in_array($key, (array) $studentAns)) bg-light @endif">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <span>{{ $key }}. {{ $option }}</span>
                                 <span>
                                     @if(in_array($key, (array) $question->correct_answers))
                                         <span class="badge bg-success">Correct</span>
                                     @endif
                                     @if(in_array($key, (array) $studentAns))
-                                        <span class="badge bg-primary ms-1">Selected</span>
+                                        <span class="badge ms-1 border"
+                                            style="background:#fdf6f2;
+                                                    color:#832b00;
+                                                    border-color:#e5d2c8 !important;">
+                                            Selected
+                                        </span>
                                     @endif
                                 </span>
                             </li>

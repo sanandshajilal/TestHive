@@ -5,8 +5,8 @@
 <style>
     body {
         background-color: #f8f9fc;
-            background-image:
-        radial-gradient(#e9ecef 1px, transparent 1px);
+        background-image:
+            radial-gradient(#e9ecef 1px, transparent 1px);
         background-size: 24px 24px;
         font-family: 'Poppins', sans-serif;
     }
@@ -18,7 +18,7 @@
         border-radius: 12px;
         padding: 30px 40px;
         box-shadow: 0 0 12px rgba(0,0,0,0.06);
-        border-top: 6px solid #4e73df;
+        border-top: 6px solid #832b00;
     }
 
     .brand-header {
@@ -29,7 +29,7 @@
     }
 
     .brand-header h4 {
-        color: #4e73df;
+        color: #832b00;
         font-weight: 700;
         margin: 0;
     }
@@ -39,11 +39,11 @@
         margin: 10px 0 20px;
     }
 
-    .step-indicator {
+   .step-indicator {
         text-align: center;
         font-weight: 500;
-        color: #6c757d;
-        background: #f1f3f7;
+        color: #832b00;
+        background: #f7e3d8;
         padding: 8px 0;
         border-radius: 6px;
         margin-bottom: 25px;
@@ -60,8 +60,8 @@
     .section-title {
         font-size: 1.25rem;
         font-weight: 600;
-        color: #4e73df;
-        border-left: 4px solid #4e73df;
+        color: #832b00;
+        border-left: 4px solid #b46e4c;
         padding-left: 12px;
         margin-bottom: 18px;
     }
@@ -93,12 +93,64 @@
         display: inline-block;
         margin-right: 6px;
     }
+
+    /* Brand Buttons */
+   .btn-primary {
+            background-color: #b46e4c;
+            border-color: #b46e4c;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #832b00;
+            border-color: #832b00;
+        }
+
+        .btn-primary:focus,
+        .btn-primary:focus-visible {
+            background-color: #b46e4c !important;
+            border-color: #b46e4c !important;
+            box-shadow: none !important;
+        }
+
+        .btn-primary:active,
+        .btn-primary.active,
+        .btn-primary:not(:disabled):not(.disabled):active {
+            background-color: #832b00 !important;
+            border-color: #832b00 !important;
+            box-shadow: none !important;
+        }
+
+    .btn-primary:not(:disabled):not(.disabled):active {
+        background-color: #832b00 !important;
+        border-color: #832b00 !important;
+    }
+
+    .btn-outline-secondary:hover {
+        box-shadow: none;
+    }
+
+    .btn-outline-secondary {
+            border-color: #e5d2c8;
+            color: #832b00;
+        }
+
+        .btn-outline-secondary:hover {
+            background: #f7e3d8;
+            border-color: #b46e4c;
+            color: #832b00;
+        }
+
 </style>
 
 <div class="instruction-wrapper">
     <div class="brand-header">
         <h4 class="text-uppercase">{{ $mockTest->title }}</h4>
-        <div><small class="text-muted">Practice Test</small></div>
+        <div>
+            <small style="color:#832b00;font-weight:500;">
+                Practice Test
+            </small>
+        </div>
     </div>
 
     <div class="divider"></div>
@@ -128,9 +180,9 @@
             <li>Click <i class="bi bi-flag-fill text-danger"></i> to flag a question. Click again to unflag.</li>
             <li>
                 Use the 
-                <span style="color: #0d6efd; font-weight: 500;">
+                <span style="color: #832b00; font-weight: 600;">
                     <i class="bi bi-bar-chart-fill me-1"></i>Progress
-                </span> 
+                </span>
                 dropdown to jump to any question.
             </li>
 
@@ -143,7 +195,12 @@
         <ul>
             <li><span class="badge bg-success">●</span> Answered</li>
             <li><span class="badge bg-secondary">●</span> Not Answered</li>
-            <li><span class="badge bg-primary">●</span> Current Question</li>
+            <li>
+                <span class="badge" style="background:#b46e4c;">
+                    ●
+                </span>
+                Current Question
+            </li>
             <li><i class="bi bi-flag-fill text-danger"></i> Flagged for Review</li>
             <li><strong>Note:</strong> Unanswered or flagged questions will be shown in the summary before submission.</li>
         </ul>
@@ -187,11 +244,13 @@
     document.getElementById('nextBtn').onclick = () => {
         if (current < total) current++;
         showSlide(current);
+        document.getElementById('nextBtn').blur();
     };
 
     document.getElementById('prevBtn').onclick = () => {
         if (current > 1) current--;
         showSlide(current);
+        document.getElementById('prevBtn').blur();
     };
 </script>
 

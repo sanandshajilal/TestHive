@@ -593,7 +593,7 @@ border-bottom: none;
 
 <div class="border-top pt-2 mt-4">
     <div class="text-center text-muted small">
-        ACCAPrep with Malasri v1.1 · Developed & Maintained by Sanand S
+        ACCAPrep with Malasri v1.2 · Developed & Maintained by Sanand S
     </div>
 </div>
 @endsection

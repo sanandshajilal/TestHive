@@ -11,14 +11,51 @@
     {{-- Bootstrap Icons --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-    <style>
+        <style>
+        :root {
+            --primary: #b46e4c;
+            --primary-dark: #832b00;
+            --primary-light: #f7e3d8;
+
+            --success: #198754;
+            --danger: #dc3545;
+            --secondary: #6c757d;
+
+            --surface: #ffffff;
+            --border: #e5e7eb;
+        }
+
+        .btn-progress {
+                border-color: var(--primary);
+                color: var(--primary-dark);
+                background-color: #fff;
+            }
+
+            .btn-progress:hover {
+                background-color: var(--primary-light);
+                border-color: var(--primary);
+                color: var(--primary-dark);
+            }
+
+             .btn-nav-action:focus,
+            .btn-nav-action:active,
+            .btn-nav-action.show,
+            .show > .btn-nav-action.dropdown-toggle {
+                background: var(--primary-light) !important;
+                border-color: var(--primary) !important;
+                color: var(--primary-dark) !important;
+                box-shadow: none !important;
+            }
+
         body {
             background-color: #f7f8fa;
             background-image:
-            radial-gradient(#e9ecef 1px, transparent 1px);
+                radial-gradient(#e9ecef 1px, transparent 1px);
             background-size: 24px 24px;
             font-family: 'Segoe UI', sans-serif;
         }
+
+        /* ---------- NAVBAR ---------- */
 
         .navbar-custom {
             background-color: #ffffff;
@@ -26,43 +63,15 @@
             z-index: 1000;
         }
 
-        .navbar-brand {
+        .student-logo {
+            height: 50px;
+            width: auto;
+            display: block;
+        }
+
+        .timer-display {
+            color: var(--primary-dark);
             font-weight: 600;
-            font-size: 1.25rem;
-            color: #4e73df;
-        }
-
-        .navbar-brand:hover {
-            color: #3756c0;
-        }
-
-        .exit-button {
-            border: 1px solid #dee2e6;
-            background-color: #ffffff;
-            color: #555;
-            font-size: 0.9rem;
-            padding: 6px 14px;
-            border-radius: 20px;
-            transition: all 0.2s ease-in-out;
-        }
-
-        .exit-button:hover {
-            background-color: #f8d7da;
-            color: #842029;
-            border-color: #f5c2c7;
-        }
-
-        .icon-btn {
-            background: none;
-            border: none;
-            color: #333;
-            padding: 6px 12px;
-            border-radius: 6px;
-            transition: background-color 0.2s ease;
-        }
-
-        .icon-btn:hover {
-            background-color: #f1f1f1;
         }
 
         .test-name-label {
@@ -73,14 +82,97 @@
             text-transform: uppercase;
         }
 
+        /* Radio Buttons */
+            input[type="radio"] {
+                accent-color: var(--primary);
+            }
+
+            /* Checkboxes (Multiple Select) */
+            input[type="checkbox"] {
+                accent-color: var(--primary);
+            }
+
+            .small-radio {
+                transform: scale(1.1);
+                accent-color: var(--primary);
+                cursor: pointer;
+            }
+
+        /* ---------- BUTTONS ---------- */
+
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+        }
+
+        .btn-primary:focus,
+        .btn-primary:active {
+            background-color: var(--primary-dark) !important;
+            border-color: var(--primary-dark) !important;
+            box-shadow: none !important;
+        }
+
+        .btn-progress {
+            border-color: var(--primary);
+            color: var(--primary-dark);
+        }
+
+        .btn-progress:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary-dark);
+        }
+
+        .help-button {
+            border-color: #e5d2c8;
+            color: var(--primary-dark);
+        }
+
+        .help-button:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary-dark);
+        }
+
+        .exit-button {
+            border: 1px solid #e5d2c8;
+            background-color: #ffffff;
+            color: var(--primary-dark);
+            font-size: 0.9rem;
+            padding: 6px 14px;
+            border-radius: 20px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .exit-button:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary-dark);
+        }
+
+        .exit-button:focus,
+        .exit-button:active {
+            background-color: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary-dark);
+            box-shadow: none;
+        }
+
+        /* ---------- TEST CONTAINER ---------- */
+
         .test-container {
             max-width: 900px;
             margin: 100px auto 40px;
             background: #fff;
-            border-top: 4px solid #0d6efd;
+            border-top: 4px solid var(--primary);
             padding: 30px;
-            border-radius: 6px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,.05);
         }
 
         .question-header {
@@ -95,33 +187,34 @@
             margin-bottom: 25px;
         }
 
+        /* ---------- OPTIONS ---------- */
+
         .option {
             display: flex;
             align-items: center;
             padding: 12px 16px;
             border: 1px solid #dee2e6;
-            border-radius: 6px;
+            border-radius: 10px;
             margin-bottom: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .option:hover {
-            background-color: #f5f9ff;
+            background-color: var(--primary-light);
         }
 
         .selected-option {
-            border-color: #0d6efd;
-            background-color: #e7f1ff;
+            border-color: var(--primary);
+            background-color: var(--primary-light);
         }
 
-        .option input[type="radio"], .option input[type="checkbox"] {
+        .option input[type="radio"],
+        .option input[type="checkbox"] {
             margin-right: 10px;
         }
 
-        .btn-nav {
-            min-width: 100px;
-        }
+        /* ---------- TOP BAR ---------- */
 
         .topbar {
             display: flex;
@@ -131,151 +224,231 @@
         }
 
         .question-count {
-            color: #6c757d;
+            color: #6b7280;
+            font-weight: 500;
         }
+
+        /* ---------- FLAG ---------- */
 
         .flag-btn {
             border: none;
             background: none;
-            color: #dc3545;
+            color: #9c3d16;
             cursor: pointer;
         }
+
+        .flagged {
+            color: #dc3545 !important;
+        }
+
+        /* ---------- TABLE MCQ ---------- */
 
         .table-mcq-table {
             width: 100%;
             border-collapse: collapse;
         }
 
-        .table-mcq-table th, .table-mcq-table td {
+        .table-mcq-table th,
+        .table-mcq-table td {
             padding: 10px;
             border: 1px solid #dee2e6;
             text-align: center;
         }
-        .flagged {
-            color: #dc3545 !important;
+
+        .table-mcq-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
         }
-        .brand-logo {
-        line-height: 1.1;
+
+        .table-mcq-scroll {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table-mcq-table .sticky-col {
+            position: sticky;
+            left: 0;
+            background: #fff;
+            z-index: 2;
+            min-width: 140px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+        }
+
+        .small-radio {
+            transform: scale(0.8);
+            margin: 0;
+        }
+
+        /* ---------- PROGRESS DROPDOWN ---------- */
+
+        #progressDropdownMenu.dropdown-menu {
+            min-width: 300px !important;
+            max-width: 90vw;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .legend-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: nowrap;
+            gap: 6px;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+
+        .legend-row span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+        }
+
+        #statusContainer .col {
+            padding-left: 4px;
+            padding-right: 4px;
+        }
+
+        #statusContainer button {
+            padding: 0.4rem 0.6rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            border: none;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bg-current {
+            background-color: var(--primary) !important;
+        }
+
+        /* ---------- MOBILE ---------- */
+
+        @media (max-width: 767.98px) {
+
+            .progress-label,
+            .help-label,
+            .exit-label {
+                display: none !important;
             }
 
-            .brand-subtext {
-                font-size: 0.6rem;
-                color: rgba(169, 169, 169, 0.86);
-                margin-left: 1.7rem;
+            .progress-button i,
+            .help-button i,
+            .exit-button i {
+                margin-right: 0 !important;
             }
-               @media (max-width: 767.98px) {
-                    .progress-label,
-                    .help-label,
-                    .exit-label {
-                        display: none !important;
-                    }
 
-                    .progress-button i,
-                    .help-button i,
-                    .exit-button i {
-                        margin-right: 0 !important;
-                    }
+            .test-name-label {
+                display: none !important;
+            }
 
-                    .test-name-label {
-                        display: none !important;
-                    }
-                }
+            .student-logo {
+                height: 42px;
+            }
 
-                /* Force dropdown to a larger width using an id or !important */
-                #progressDropdownMenu.dropdown-menu {
-                    min-width: 300px !important;
-                    max-width: 90vw;
-                }
+            .exit-button {
+                width: 38px;
+                height: 38px;
+                padding: 0;
+                border-radius: 50%;
+                justify-content: center;
+            }
+        }
 
-                .dropdown {
-                    position: relative;
-                }
+        .draggable-item {
+                background: var(--primary);
+            }
 
-                /* Flex layout for legend row */
-                .legend-row {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    flex-wrap: nowrap;
-                    gap: 6px;
-                    font-size: 0.85rem;
-                    margin-bottom: 8px;
-                }
-
-                .legend-row span {
-                    display: flex;
-                    align-items: center;
-                    gap: 6px;
-                    white-space: nowrap;
-                }
-
-                /* Question number button spacing */
-                #statusContainer .col {
-                    padding-left: 4px;
-                    padding-right: 4px;
-                }
-            #statusContainer button {
-                    padding: 0.4rem 0.6rem;
-                    border-radius: 999px;
-                    font-size: 0.75rem;
-                    border: none;
-                    min-width: unset;
-                    background-color: #6c757d; /* fallback color */
-                    color: white;
-                    display: inline-flex;
-                    align-items: center;
-                    justify-content: center;
-                }
-
-                .table-mcq-container {
-                        width: 100%;
-                        overflow: hidden;
-                        position: relative;
-                    }
-
-                    .table-mcq-scroll {
-                        overflow-x: auto;
-                        -webkit-overflow-scrolling: touch;
-                    }
-
-                    /* Sticky first column */
-                    .table-mcq-table .sticky-col {
-                        position: sticky;
-                        left: 0;
-                        background: #fff;
-                        z-index: 2;
-                        min-width: 140px; /* adjust based on text */
-                        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-                    }
-
-                    /* Reduce radio button size */
-                    .small-radio {
-                        transform: scale(0.8);
-                        margin: 0;
-                    }
+            .draggable-item:hover {
+                background: var(--primary-dark);
+            }
 
 
+        @media (max-width: 576px) {
 
+            #progressDropdownMenu {
+                width: 240px !important;
+            }
 
-                /* Responsive behavior for smaller screens */
-                @media (max-width: 576px) {
-                    #progressDropdownMenu {
-                        width: 240px !important;
-                    }
+            .legend-row {
+                flex-wrap: wrap;
+                gap: 6px;
+                font-size: 0.75rem;
+            }
 
-                    .legend-row {
-                        flex-wrap: wrap;
-                        gap: 6px;
-                        font-size: 0.75rem;
-                    }
+            #statusContainer {
+                --bs-columns: 5;
+            }
+        }
 
-                    #statusContainer {
-                        --bs-columns: 5;
-                    }
-                }
+        .option {
+                cursor: pointer;
+            }
 
-                        
-    </style>
+            .option label,
+            .option span {
+                cursor: pointer;
+            }
+
+            .btn-nav-action {
+                border-color: #e5d2c8;
+                color: var(--primary-dark);
+                background: #fff;
+            }
+
+            .btn-nav-action:hover {
+                background: var(--primary-light);
+                border-color: var(--primary);
+                color: var(--primary-dark);
+            }
+
+            .test-name-label {
+                background: var(--primary-light);
+                color: var(--primary-dark);
+                padding: 6px 12px;
+                border-radius: 999px;
+                font-size: .85rem;
+                font-weight: 600;
+                margin: 0;
+            }
+
+            .exit-button {
+                background: transparent;
+                border: none;
+                color: #6c757d;
+                padding: 6px 10px;
+                border-radius: 8px;
+                transition: all .2s ease;
+            }
+
+            .exit-button:hover {
+                background: var(--primary-light);
+                color: var(--primary-dark);
+            }
+
+            .exit-button:focus,
+            .exit-button:active {
+                background: var(--primary-light);
+                color: var(--primary-dark);
+                box-shadow: none;
+            }
+
+            .form-control:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 0.15rem rgba(180, 110, 76, 0.15);
+            }
+            
+            .form-select:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 0.15rem rgba(180, 110, 76, 0.15);
+            }
+        </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-custom fixed-top py-2">
@@ -283,24 +456,22 @@
         <div class="d-flex justify-content-between align-items-center w-100 flex-wrap">
             <!-- Brand -->
             <a class="navbar-brand brand-logo d-flex flex-column align-items-start text-decoration-none" href="#">
-                <div class="d-flex align-items-center header-right fw-bold">
-                    <i class="bi bi-mortarboard-fill text-warning me-1"></i>
-                    ACCAPrep
-                </div>
-                <div class="brand-subtext">with <strong>MALASRI</strong></div>
+                <img src="{{ asset('images/logo.png') }}"
+                    alt="ACCAPrep with Malasri"
+                    class="student-logo">
             </a>
 
             <!-- Timer + Progress + Help + Exit -->
             <div class="d-flex flex-wrap justify-content-end align-items-center gap-2 mt-2 mt-lg-0" style="flex: 1 1 auto;">
                 <!-- Timer -->
-                <div class="d-flex align-items-center text-primary fw-semibold timer-display">
+                <div class="d-flex align-items-center  fw-semibold timer-display">
                     <i class="bi bi-clock me-1"></i>
                     <span id="countdown">Loading...</span>
                 </div>
 
                <!-- Progress Dropdown -->
                <div class="dropdown">
-                <button class="btn btn-outline-primary btn-sm dropdown-toggle" type="button" id="progressDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="btn btn-nav-action btn-sm dropdown-toggle" type="button" id="progressDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-bar-chart-fill me-1"></i> 
                     <span class="progress-label">Progress </span>
                 </button>
@@ -309,7 +480,7 @@
                     <li class="legend-row text-muted">
                         <span><span class="badge rounded-pill bg-success">&nbsp;</span> Answered</span>
                         <span><span class="badge rounded-pill bg-secondary">&nbsp;</span> Not Answered</span>
-                        <span><span class="badge rounded-pill bg-primary">&nbsp;</span> Current</span>
+                        <span><span class="badge rounded-pill bg-current">&nbsp;</span> Current</span>
                         <span><i class="bi bi-flag-fill text-danger"></i> Flagged</span>
                     </li>
                     <hr class="my-2">
@@ -326,7 +497,7 @@
 
 
                 <!-- Help Button -->
-                <button class="btn btn-outline-secondary btn-sm help-button" data-bs-toggle="modal" data-bs-target="#helpModal">
+                <button class="btn btn-nav-action btn-sm" data-bs-toggle="modal" data-bs-target="#helpModal">
                     <i class="bi bi-question-circle me-1"></i>
                     <span class="help-label">Help</span>
                 </button>
@@ -342,7 +513,7 @@
                 <!-- Exit Button -->
                 <form id="exitForm" action="{{ route('student.logout') }}" method="POST">
                     @csrf
-                    <button type="submit" class="exit-button btn btn-outline-danger btn-sm d-flex align-items-center">
+                    <button type="submit" class="exit-button btn btn-sm d-flex align-items-center">
                         <i class="bi bi-door-closed me-1"></i>
                         <span class="exit-label">Exit</span>
                     </button>
@@ -415,16 +586,17 @@
                         $options = is_array($question->options) ? $question->options : json_decode($question->options, true);
                     @endphp
                     @foreach($options as $key => $text)
-                        <div class="option">
-                            <input 
-                                type="checkbox" 
-                                name="answer[]" 
-                                value="{{ $key }}" 
-                                id="chk{{ $key }}" 
+                        <label class="option w-100">
+                            <input
+                                type="checkbox"
+                                name="answer[]"
+                                value="{{ $key }}"
+                                id="chk{{ $key }}"
                                 @if(is_array($selectedOption) && in_array($key, $selectedOption)) checked @endif
                             >
-                            <label for="chk{{ $key }}" class="mb-0">{{ $text }}</label>
-                        </div>
+
+                            <span>{{ $text }}</span>
+                        </label>
                     @endforeach
 
                 {{-- One Word --}}
@@ -517,7 +689,7 @@
                                                     id="drop-{{ $bIndex }}">
                                                     @if(isset($bToA[$bIndex]))
                                                         @php $aIdx = $bToA[$bIndex]; @endphp
-                                                        <div class="draggable bg-primary text-white rounded px-3 py-2"
+                                                        <div class="draggable draggable-item text-white rounded px-3 py-2"
                                                             draggable="true"
                                                             ondragstart="drag(event)"
                                                             id="drag-{{ $aIdx }}"
@@ -561,7 +733,7 @@
 
                         @foreach($availableOptions as $option)
 
-                            <div class="draggable bg-primary text-white rounded px-3 py-2"
+                            <div class="draggable draggable-item text-white rounded px-3 py-2"
                                 draggable="true"
                                 ondragstart="drag(event)"
                                 id="drag-{{ $option['index'] }}"
@@ -739,8 +911,8 @@
                             Save & Next
                         </button>
                     @else
-                        <button type="submit" class="btn btn-success btn-nav">
-                            Final Submit
+                        <button type="submit" class="btn btn-primary btn-nav">
+                            Review & Submit
                         </button>
                     @endif
                 </div>
@@ -753,120 +925,231 @@
     </div>
 
     
-  <!-- Help Modal -->
-<div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content" style="max-height: 80vh;">
-            <div class="modal-header">
-                <h5 class="modal-title" id="helpModalLabel">
-                    <i class="bi bi-question-circle me-2"></i>Help
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body overflow-auto">
-                <div class="mb-4">
-                    <h6><i class="bi bi-clock me-1 text-primary"></i> Timer</h6>
-                    <p>Your remaining time is shown at the top (<strong class="text-primary">MM:SS</strong>). The test auto-submits when time runs out.</p>
-                </div>
+        <!-- Help Modal -->
+        <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content border-0 shadow" style="max-height: 80vh; border-radius: 1rem; overflow: hidden;">
 
-                <div class="mb-4">
-                    <h6><i class="bi bi-box-arrow-right me-1 text-primary"></i> Navigation</h6>
-                    <ul class="mb-0">
-                        <li><strong>Previous:</strong> Go back to the previous question without saving changes.</li>
-                        <li><strong>Save & Next:</strong> Save your current answer and move to the next question. <span class="text-danger">Only saved answers are considered for evaluation.</span></li>
-                    </ul>
-                </div>
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-semibold" id="helpModalLabel">
+                            <i class="bi bi-question-circle me-2" style="color: var(--primary-dark);"></i>
+                            Help & Instructions
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
 
-                <div class="mb-4">
-                    <h6><i class="bi bi-flag me-1 text-danger"></i> Flag / Unflag</h6>
-                    <p>Click the <i class="bi bi-flag text-danger"></i> button to mark a question for review. Once flagged, the icon becomes <i class="bi bi-flag-fill text-danger"></i>. Click again to unflag.</p>
-                </div>
+                    <div class="modal-body overflow-auto">
 
-                <div class="mb-4">
-                    <h6><i class="bi bi-bar-chart-fill me-1 text-primary"></i> Progress Dropdown</h6>
-                    <p>The <span class="badge bg-primary">Progress</span> dropdown at the top shows your question status:</p>
-                    <ul class="mb-0">
-                        <li><span class="badge bg-success">●</span> Answered</li>
-                        <li><span class="badge bg-secondary">●</span> Not Answered</li>
-                        <li><span class="badge bg-primary">●</span> Current</li>
-                        <li><i class="bi bi-flag-fill text-danger"></i> Flagged</li>
-                    </ul>
-                </div>
+                        <div class="mb-4">
+                            <h6 class="fw-semibold">
+                                <i class="bi bi-clock me-2" style="color: var(--primary);"></i>
+                                Timer
+                            </h6>
+                            <p class="mb-0">
+                                Your remaining time is shown at the top
+                                (<strong style="color: var(--primary-dark);">MM:SS</strong>).
+                                The test will be automatically submitted when the timer reaches zero.
+                            </p>
+                        </div>
 
-                <div class="mb-4">
-                    <h6><i class="bi bi-check2-square me-1 text-success"></i> Final Submission</h6>
-                    <p>Once you reach the last question, a summary screen will show counts of answered, flagged, and unanswered questions. You can submit from there. <strong class="text-danger">After submission, no changes can be made.</strong></p>
-                </div>
+                        <div class="mb-4">
+                            <h6 class="fw-semibold">
+                                <i class="bi bi-box-arrow-right me-2" style="color: var(--primary);"></i>
+                                Navigation
+                            </h6>
+                            <ul class="mb-0">
+                                <li>
+                                    <strong>Previous</strong> – Move to the previous question without saving new changes.
+                                </li>
+                                <li>
+                                    <strong>Save & Next</strong> – Save your answer and move to the next question.
+                                </li>
+                                <li>
+                                    Only answers saved using <strong>Save & Next</strong> are considered for evaluation.
+                                </li>
+                            </ul>
+                        </div>
 
-                <div class="mb-4">
-                    <h6><i class="bi bi-journal-text me-1 text-info"></i> Question Types</h6>
-                    <ul class="mb-0">
-                        <li><strong>MCQ:</strong> Select one correct option.</li>
-                        <li><strong>Multiple Select:</strong> Select all correct options. Full marks are given only if all correct choices are selected.</li>
-                        <li><strong>One Word:</strong> Type a single word or number as your answer.</li>
-                        <li><strong>Table MCQ:</strong> Choose either <strong>Debit</strong> or <strong>Credit</strong> for each row in a table format.</li>
-                    </ul>
-                </div>
+                        <div class="mb-4">
+                            <h6 class="fw-semibold">
+                                <i class="bi bi-flag me-2 text-danger"></i>
+                                Flag Questions
+                            </h6>
+                            <p class="mb-0">
+                                Use the flag button to mark a question for review.
+                                Flagged questions remain highlighted in the Progress panel until reviewed or unflagged.
+                            </p>
+                        </div>
 
-                <div class="mb-4">
-                    <h6><i class="bi bi-info-circle me-1 text-secondary"></i> Test Overview</h6>
-                    <ul class="mb-0">
-                        <li><strong>Total Questions:</strong> {{ $mockTest->questions->count() }}</li>
-                        <li><strong>Total Marks:</strong> {{ $mockTest->questions->sum('marks') }}</li>
-                        <li><strong>Total Duration:</strong> {{ $mockTest->duration_minutes }} minutes</li>
-                    </ul>
-                </div>
+                        <div class="mb-4">
+                            <h6 class="fw-semibold">
+                                <i class="bi bi-bar-chart-fill me-2" style="color: var(--primary);"></i>
+                                Progress Panel
+                            </h6>
 
-                <div class="alert alert-info mb-0">
-                    <strong>Answers are saved</strong> only when you click <strong>Save & Next</strong>.
+                            <p>The Progress dropdown shows the status of every question.</p>
+
+                            <ul class="mb-0">
+                                <li><span class="badge bg-success">●</span> Answered</li>
+                                <li><span class="badge bg-secondary">●</span> Not Answered</li>
+                                <li>
+                                    <span class="badge"
+                                        style="background: var(--primary); color: white;">
+                                        ●
+                                    </span>
+                                    Current Question
+                                </li>
+                                <li><i class="bi bi-flag-fill text-danger"></i> Flagged for Review</li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-4">
+                            <h6 class="fw-semibold">
+                                <i class="bi bi-check2-square me-2 text-success"></i>
+                                Final Submission
+                            </h6>
+                            <p class="mb-0">
+                                Before submitting, you will see a summary showing answered,
+                                unanswered, and flagged questions.
+                                Once submitted, answers cannot be changed.
+                            </p>
+                        </div>
+
+                        <div class="mb-4">
+                            <h6 class="fw-semibold">
+                                <i class="bi bi-journal-text me-2" style="color: var(--primary);"></i>
+                                Supported Question Types
+                            </h6>
+
+                            <ul class="mb-0">
+                                <li><strong>MCQ</strong> – Select one correct option.</li>
+                                <li><strong>Multiple Select</strong> – Select all correct options.</li>
+                                <li><strong>One Word</strong> – Enter a word, number, or short answer.</li>
+                                <li><strong>Table MCQ</strong> – Choose the correct option for each row.</li>
+                                <li><strong>Drag & Drop</strong> – Match items by dragging them into the correct positions.</li>
+                                <li><strong>Dropdown</strong> – Complete the blanks using dropdown selections.</li>
+                            </ul>
+                        </div>
+
+                        <div class="mb-4">
+                            <h6 class="fw-semibold">
+                                <i class="bi bi-info-circle me-2 text-secondary"></i>
+                                Test Overview
+                            </h6>
+
+                            <ul class="mb-0">
+                                <li><strong>Total Questions:</strong> {{ $mockTest->questions->count() }}</li>
+                                <li><strong>Total Marks:</strong> {{ $mockTest->questions->sum('marks') }}</li>
+                                <li><strong>Duration:</strong> {{ $mockTest->duration_minutes }} minutes</li>
+                            </ul>
+                        </div>
+
+                        <div class="alert border-0 mb-0"
+                            style="background: var(--primary-light); color: var(--primary-dark);">
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            <strong>Important:</strong>
+                            Answers are saved only when you click
+                            <strong>Save & Next</strong>.
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
 
 
 
+        <!-- Final Submission Modal -->
+        <div class="modal fade" id="finalSubmitModal" tabindex="-1" aria-labelledby="finalSubmitModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content border-0 shadow" style="border-radius: 1rem; overflow: hidden;">
 
-    <!-- Final Submission Modal -->
-<div class="modal fade" id="finalSubmitModal" tabindex="-1" aria-labelledby="finalSubmitModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content rounded-3 shadow border-0">
-      <div class="modal-header">
-        <h5 class="modal-title" id="finalSubmitModalLabel">Final Submission</h5>
-      </div>
-      <div class="modal-body">
-        <p class="mb-3 fw-bold">Review your test status before submitting:</p>
-        <div class="d-grid gap-2">
-                <div class="d-flex justify-content-between align-items-center">
-                    <span>Answered</span> 
-                    <span class="badge bg-success rounded-pill" id="answeredCount">3</span>
+                    <div class="modal-header" style="background: var(--primary-light);">
+                        <h5 class="modal-title fw-semibold" id="finalSubmitModalLabel">
+                            <i class="bi bi-check-circle me-2" style="color: var(--primary-dark);"></i>
+                            Final Submission
+                        </h5>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <p class="fw-semibold mb-3">
+                            Review your test status before submitting:
+                        </p>
+
+                        <div class="d-grid gap-2">
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>
+                                    <i class="bi bi-check-circle-fill text-success me-1"></i>
+                                    Answered
+                                </span>
+                                <span class="badge bg-success rounded-pill" id="answeredCount">
+                                    0
+                                </span>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center ps-4">
+                                <span class="text-muted">
+                                    <i class="bi bi-flag-fill text-warning me-1"></i>
+                                    Flagged
+                                </span>
+                                <span class="badge bg-warning text-dark rounded-pill" id="answeredFlaggedCount">
+                                    0
+                                </span>
+                            </div>
+
+                            <hr class="my-2">
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span>
+                                    <i class="bi bi-dash-circle-fill text-secondary me-1"></i>
+                                    Not Answered
+                                </span>
+                                <span class="badge bg-secondary rounded-pill" id="unansweredCount">
+                                    0
+                                </span>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center ps-4">
+                                <span class="text-muted">
+                                    <i class="bi bi-flag-fill text-danger me-1"></i>
+                                    Flagged
+                                </span>
+                                <span class="badge bg-danger rounded-pill" id="unansweredFlaggedCount">
+                                    0
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <div class="alert border-0 mt-4 mb-0"
+                            style="background: var(--primary-light); color: var(--primary-dark);">
+                            <i class="bi bi-exclamation-circle-fill me-2"></i>
+                            Once submitted, your answers cannot be modified.
+                        </div>
+
+                    </div>
+
+                    <div class="modal-footer border-0">
+
+                        <button id="cancelFinalSubmit"
+                                class="btn btn-outline-secondary"
+                                data-bs-dismiss="modal">
+                            Review Again
+                        </button>
+
+                        <button id="confirmFinalSubmit"
+                                class="btn btn-primary">
+                            <i class="bi bi-check2-circle me-1"></i>
+                            Submit Test
+                        </button>
+
+                    </div>
+
                 </div>
-                <div class="d-flex justify-content-between align-items-center ms-3 text-muted">
-                    <span>➕ Flagged</span> 
-                    <span class="badge bg-warning text-dark rounded-pill" id="answeredFlaggedCount">1</span>
-                </div>
-
-                <div class="d-flex justify-content-between align-items-center">
-                    <span>Not Answered</span> 
-                    <span class="badge bg-secondary rounded-pill" id="unansweredCount">2</span>
-                </div>
-                <div class="d-flex justify-content-between align-items-center ms-3 text-muted">
-                    <span>➕ Flagged</span> 
-                    <span class="badge bg-danger rounded-pill" id="unansweredFlaggedCount">1</span>
-                </div>
-                </div>
-
-        <hr>
-        <p class="text-muted">Are you sure you want to submit your test?</p>
-      </div>
-      <div class="modal-footer border-0">
-        <button id="cancelFinalSubmit" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button id="confirmFinalSubmit" class="btn btn-success">Submit</button>
-      </div>
-    </div>
-  </div>
-</div>
+            </div>
+        </div>
 
   <!-- ✅ Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -1070,7 +1353,7 @@
                     title = `Q${status.index}: Answered`;
                 }
                 if (status.index == currentQuestionNumber) {
-                    bgClass = 'bg-primary';
+                    bgClass = 'bg-current';
                     title = `Q${status.index}: Current Question`;
                 }
                 if (status.is_flagged) {
