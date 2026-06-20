@@ -97,6 +97,7 @@
                     <ul class="dropdown-menu dropdown-menu-dark">
                         <li><a class="dropdown-item" href="/admin/institutes">Institutes</a></li>
                         <li><a class="dropdown-item" href="/admin/batches">Batches</a></li>
+                        <li><a class="dropdown-item" href="/admin/students">Students</a></li>
                         <li><a class="dropdown-item" href="/admin/papers">Papers</a></li>
                     </ul>
                 </li>

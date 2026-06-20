@@ -24,6 +24,11 @@ public function mockTests()
     return $this->belongsToMany(MockTest::class, 'mock_test_batch');
 }
 
+public function students()
+{
+    return $this->hasMany(Student::class);
+}
+
 
 }
 

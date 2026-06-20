@@ -9,85 +9,116 @@ use App\Models\MockTest;
 use App\Models\Question;
 use App\Models\StudentTestAttempt;
 use App\Models\StudentAnswer;
+use App\Models\Student;
 
 class StudentController extends Controller
 {
-    public function showLoginForm()
-    {
-        $institutes = Institute::all();
-        $batches = Batch::all();
+            public function showLoginForm()
+            {
+                return view('student.landing');
+            }
 
-        return view('student.landing', compact('institutes', 'batches'));
-    }
+            public function validateAccess(Request $request)
+        {
+          $request->validate([
+                'access_code' => 'required|string',
+                'email' => 'required|email',
+            ]);
 
-    public function validateAccess(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string',
-            'institute_id' => 'required|exists:institutes,id',
-            'batch_id' => 'required|exists:batches,id',
-            'access_code' => 'required|string',
-            'email' => 'required|email',
-        ]);
+            $studentEmail = strtolower(trim($request->email));
 
-        $now = \Carbon\Carbon::now('Asia/Kolkata');
+            $student = Student::with('batch')
+                ->where('email', $studentEmail)
+                ->where('is_active', true)
+                ->first();
 
-        $mockTest = MockTest::where('access_code', $request->access_code)
-            ->where('start_time', '<=', $now)
-            ->where(function ($q) use ($now) {
-                $q->whereNull('end_time')->orWhere('end_time', '>=', $now);
-            })
-            ->first();
+            if (!$student) {
+                return back()
+                    ->withErrors([
+                        'email' => 'Email address is not registered.'
+                    ])
+                    ->withInput();
+            }
 
-        if (!$mockTest) {
-            return back()
-                ->withErrors(['access_code' => 'Invalid or inactive access code.'])
-                ->withInput();
-        }
+            $batchId = $student->batch_id;
+            $instituteId = $student->batch->institute_id;
 
-        $studentEmail = $request->email;
+            $now = \Carbon\Carbon::now('Asia/Kolkata');
 
-        $existingAttempt = StudentTestAttempt::where('mock_test_id', $mockTest->id)
-            ->where('email', $studentEmail)
-            ->first();
+            // Verify access code
+            $mockTest = MockTest::where('access_code', $request->access_code)
+                ->where('start_time', '<=', $now)
+                ->where(function ($q) use ($now) {
+                    $q->whereNull('end_time')
+                    ->orWhere('end_time', '>=', $now);
+                })
+                ->first();
 
-        if ($existingAttempt) {
+            if (!$mockTest) {
+                return back()
+                    ->withErrors([
+                        'access_code' => 'Invalid or inactive access code.'
+                    ])
+                    ->withInput();
+            }
+
+            // Verify test is assigned to selected batch
+            $batchAllowed = $mockTest->batches()
+                ->where('batches.id', $batchId)
+                ->exists();
+
+            if (!$batchAllowed) {
+                return back()
+                    ->withErrors([
+                        'access_code' => 'This test is not available for the selected batch.'
+                    ])
+                    ->withInput();
+            }
+
+            // Check if attempt already exists
+            $existingAttempt = StudentTestAttempt::where('mock_test_id', $mockTest->id)
+                ->where('email', $studentEmail)
+                ->first();
+
+            if ($existingAttempt) {
+
+                session([
+                    'student_info' => [
+                        'name' => $existingAttempt->student_name,
+                        'institute_id' => $existingAttempt->institute_id,
+                        'batch_id' => $existingAttempt->batch_id,
+                        'email' => $existingAttempt->email,
+                    ],
+                    'mock_test_id' => $mockTest->id,
+                    'attempt_id' => $existingAttempt->id,
+                ]);
+
+                return redirect()->route('student.instructions');
+            }
+
+            // Create new attempt
+            $newAttempt = StudentTestAttempt::create([
+                'student_name' => $student->name,
+                'institute_id' => $instituteId,
+                'batch_id' => $batchId,
+                'mock_test_id' => $mockTest->id,
+                'email' => $studentEmail,
+                'access_code' => $request->access_code,
+            ]);
+
             session([
                 'student_info' => [
-                    'name' => $existingAttempt->student_name,
-                    'institute_id' => $existingAttempt->institute_id,
-                    'batch_id' => $existingAttempt->batch_id,
-                    'email' => $existingAttempt->email,
+                    'name' => $newAttempt->student_name,
+                    'institute_id' => $newAttempt->institute_id,
+                    'batch_id' => $newAttempt->batch_id,
+                    'email' => $newAttempt->email,
                 ],
                 'mock_test_id' => $mockTest->id,
-                'attempt_id' => $existingAttempt->id,
+                'attempt_id' => $newAttempt->id,
             ]);
 
             return redirect()->route('student.instructions');
         }
-
-        $newAttempt = StudentTestAttempt::create([
-            'student_name' => $request->name,
-            'institute_id' => $request->institute_id,
-            'batch_id' => $request->batch_id,
-            'mock_test_id' => $mockTest->id,
-            'email' => $studentEmail,
-            'access_code' => $request->access_code,
-        ]);
-
-        session([
-            'student_info' => [
-                'name' => $newAttempt->student_name,
-                'institute_id' => $newAttempt->institute_id,
-                'batch_id' => $newAttempt->batch_id,
-                'email' => $newAttempt->email,
-            ],
-            'mock_test_id' => $mockTest->id,
-            'attempt_id' => $newAttempt->id,
-        ]);
-
-        return redirect()->route('student.instructions');
-    }
 
     public function instructions()
     {

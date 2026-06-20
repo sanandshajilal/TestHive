@@ -10,6 +10,7 @@ use App\Models\Paper;
 use App\Models\Question;
 use App\Models\MockTest;
 use App\Models\StudentTestAttempt;
+use App\Models\Student;
 
 class DashboardController extends Controller
 {
@@ -21,6 +22,8 @@ class DashboardController extends Controller
         // Completed Attempts
         $completedAttempts = StudentTestAttempt::where('status', 'completed')
             ->count();
+
+        $studentCount = Student::where('is_active', true)->count();
 
         // Average Score %
         $attempts = StudentTestAttempt::with('mockTest.questions')
@@ -131,6 +134,7 @@ $upcomingTests = MockTest::where('start_time', '>', now())
                 'latestAverageScore' => $latestAverageScore,
                 'latestHighestScore' => $latestHighestScore,
                 'upcomingTests' => $upcomingTests,
+                'studentCount' => $studentCount,
         ]);
     }
 }

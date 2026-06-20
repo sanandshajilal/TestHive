@@ -197,7 +197,15 @@
                                 </div>
                             </td>
                             <td>
-                                {{ optional($mockTest->batches->first())->name ?? '-' }}
+                                @if($mockTest->batches->first())
+                                    <div>{{ $mockTest->batches->first()->name }}</div>
+
+                                    <div class="small text-muted">
+                                        {{ optional($mockTest->batches->first()->institute)->name ?? '' }}
+                                    </div>
+                                @else
+                                    -
+                                @endif
                             </td>
                             <td>{{ \Carbon\Carbon::parse($mockTest->start_time)->format('d M Y, h:i A') }}</td>
                              <td class="text-center">

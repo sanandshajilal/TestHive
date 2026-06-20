@@ -315,10 +315,11 @@ border-bottom: none;
             $cards = [
                 ['title' => 'Institutes', 'count' => $instituteCount ?? 0, 'icon' => 'bi-building', 'url' => route('institutes.index')],
                 ['title' => 'Batches', 'count' => $batchCount ?? 0, 'icon' => 'bi-people', 'url' => route('batches.index')],
+                ['title' => 'Students', 'count' => $studentCount ?? 0, 'icon' => 'bi-mortarboard', 'url' => route('students.index')],
                 ['title' => 'Papers', 'count' => $paperCount ?? 0, 'icon' => 'bi-journal-text', 'url' => route('papers.index')],
                 ['title' => 'Questions', 'count' => $questionCount ?? 0, 'icon' => 'bi-question-circle', 'url' => route('questions.index')],
                 ['title' => 'Mock Tests', 'count' => $mockTestCount ?? 0, 'icon' => 'bi-ui-checks-grid', 'url' => route('mock-tests.index')],
-                ['title' => 'Responses', 'count' => $responseCount ?? 0, 'icon' => 'bi-bar-chart-line', 'url' => route('mock-tests.index')],
+              
             ];
         @endphp
 
@@ -593,7 +594,7 @@ border-bottom: none;
 
 <div class="border-top pt-2 mt-4">
     <div class="text-center text-muted small">
-        ACCAPrep with Malasri v1.2 · Developed & Maintained by Sanand S
+        ACCAPrep with Malasri v1.3.1 · Developed & Maintained by Sanand S
     </div>
 </div>
 @endsection

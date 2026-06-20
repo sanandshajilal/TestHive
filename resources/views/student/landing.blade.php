@@ -176,7 +176,7 @@ body {
             </div>
         </div>
         <div class="divider"></div>
-        <div class="title-highlight text-uppercase">Enter your details to access the test</div>
+        <div class="title-highlight text-uppercase">Login to access the test</div>
 
         <div class="form-section">
             @if(session('error'))
@@ -189,57 +189,35 @@ body {
             <form method="POST" action="{{ route('student.validateAccess') }}" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
                 @csrf
 
-                <!-- Name -->
-                <div class="mb-3">
-                    <label class="form-label">Full Name</label>
-                    <input type="text" name="name" class="form-control" value="{{ old('name') }}" required>
-                    @error('name')
-                        <div class="text-danger small"><i class="bi bi-exclamation-circle-fill me-1"></i>{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <!-- Email -->
+           <!-- Email -->
                 <div class="mb-3">
                     <label class="form-label">Email Address</label>
-                    <input type="email" name="email" class="form-control" value="{{ old('email') }}" required>
+
+                    <input type="email"
+                        name="email"
+                        class="form-control"
+                        value="{{ old('email') }}"
+                        placeholder="Enter your registered email address"
+                        required>
+
                     @error('email')
-                        <div class="text-danger small"><i class="bi bi-exclamation-circle-fill me-1"></i>{{ $message }}</div>
+                        <div class="text-danger small">
+                            <i class="bi bi-exclamation-circle-fill me-1"></i>{{ $message }}
+                        </div>
                     @enderror
                 </div>
 
-                <!-- Institute and Batch in one row -->
-                <div class="row">
-                    <div class="mb-3 col-6">
-                        <label class="form-label">Institute</label>
-                        <select name="institute_id" id="institute" class="form-select" required>
-                            <option value="" disabled selected>Select Institute</option>
-                            @foreach($institutes as $institute)
-                                <option value="{{ $institute->id }}" {{ old('institute_id') == $institute->id ? 'selected' : '' }}>{{ $institute->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('institute_id')
-                            <div class="text-danger small"><i class="bi bi-exclamation-circle-fill me-1"></i>{{ $message }}</div>
-                        @enderror
-                    </div>
-                    <div class="mb-3 col-6">
-                        <label class="form-label">Batch</label>
-                        <select name="batch_id" id="batch" class="form-select" required>
-                            <option value="" disabled selected>Select Batch</option>
-                        </select>
-                        @error('batch_id')
-                            <div class="text-danger small"><i class="bi bi-exclamation-circle-fill me-1"></i>{{ $message }}</div>
-                        @enderror
-                    </div>
-                </div>
 
                <!-- Access Code -->
                 <div class="mb-3">
                     <label class="form-label">Access Code</label>
-                    <input type="text" name="access_code" class="form-control" value="{{ old('access_code') }}" required>
+                    <input type="text" name="access_code" class="form-control" value="{{ old('access_code') }}" 
+                    placeholder=" Enter the access code provided by tutor"
+                    required>
 
                     <div class="form-text">
                         <i class="bi bi-info-circle me-1"></i>
-                        Use the access code provided. Access is available only for active tests.
+                        Access is available only for active tests.
                     </div>
 
                     @error('access_code')
@@ -260,35 +238,7 @@ body {
     
 </div>
 
-<!-- Batch Dropdown Script -->
-<script>
-    const allBatches = @json($batches);
-    const oldBatch = "{{ old('batch_id') }}";
-    const oldInstitute = "{{ old('institute_id') }}";
 
-    function populateBatches(instituteId) {
-        const batchSelect = document.getElementById('batch');
-        batchSelect.innerHTML = '<option value="" disabled selected>Select Batch</option>';
-        allBatches.forEach(batch => {
-            if (batch.institute_id == instituteId) {
-                const option = document.createElement('option');
-                option.value = batch.id;
-                option.text = batch.name;
-                if (batch.id == oldBatch) {
-                    option.selected = true;
-                }
-                batchSelect.appendChild(option);
-            }
-        });
-    }
-
-    document.getElementById('institute').addEventListener('change', function () {
-        populateBatches(this.value);
-    });
-    if (oldInstitute) {
-        populateBatches(oldInstitute);
-    }
-</script>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/bootstrap.bundle.min.js"></script>

@@ -12,7 +12,7 @@ use App\Http\Controllers\MockTestController;
 use App\Http\Controllers\TopicController;
 use App\Http\Controllers\SubTopicController;
 use App\Http\Controllers\ResponseController;
-
+use App\Http\Controllers\StudentManagementController;
 use App\Http\Controllers\StudentController;
 
 Route::get('/', [StudentController::class, 'showLoginForm'])->name('student.index');
@@ -96,7 +96,15 @@ Route::post('admin/logout', [LoginController::class, 'logout'])->name('admin.log
     Route::get('/admin/responses/{attempt}', [ResponseController::class, 'show'])->name('response.show');
 
     Route::get('/admin/reports', [App\Http\Controllers\Admin\ReportController::class, 'index'])->name('admin.reports.index');
+    
+    
+    Route::get('/students/bulk-upload', [StudentManagementController::class, 'showBulkUploadForm'])
+    ->name('students.bulk-upload.form');
 
+    Route::post('/students/bulk-upload', [StudentManagementController::class, 'bulkUpload'])
+        ->name('students.bulk-upload');
+
+    Route::resource('students', StudentManagementController::class);
 
 });
 
