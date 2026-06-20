@@ -6,17 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+    // For Neon/PostgreSQL
+    public $withinTransaction = false;
+
     public function up(): void
     {
         Schema::create('students', function (Blueprint $table) {
+
             $table->id();
 
-            $table->foreignId('batch_id')
-                ->constrained()
-                ->cascadeOnDelete();
+            $table->unsignedBigInteger('batch_id');
+
+            $table->foreign('batch_id')
+                ->references('id')
+                ->on('batches')
+                ->onDelete('cascade');
 
             $table->string('name');
             $table->string('email');
@@ -29,9 +33,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('students');
