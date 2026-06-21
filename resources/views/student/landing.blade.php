@@ -26,15 +26,28 @@
 <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
 
 <style>
+
 body {
     background-color: #f7f8fa;
-    background-image:
-        radial-gradient(#e9ecef 1px, transparent 1px);
+    background-image: radial-gradient(#e9ecef 1px, transparent 1px);
     background-size: 24px 24px;
+
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
+
+.container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .login-container {
     max-width: 560px;
-    margin: 60px auto;
+    width: 100%;
+    margin: 20px auto;
     background-color: #ffffff;
     border-radius: 18px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
@@ -42,22 +55,26 @@ body {
     transition: all 0.3s ease;
     position: relative;
 }
+
 .top-bar {
     height: 6px;
-    background-color: #832b00   ;
+    background-color: #832b00;
 }
+
 .header-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1.2rem 1.5rem 0 1.5rem;
 }
+
 .header-left {
     font-size: 1.2rem;
     font-weight: bold;
     color: #343a40;
     letter-spacing: 0.5px;
 }
+
 .header-right {
     font-weight: bold;
     font-size: 1.2rem;
@@ -65,15 +82,18 @@ body {
     display: flex;
     align-items: center;
 }
+
 .header-right i {
     font-size: 0.5rem;
     margin-right: 6px;
     color: #facc15;
 }
+
 .divider {
     border-top: 1px solid #e5e7eb;
     margin: 0 1.5rem 1rem 1.5rem;
 }
+
 .title-highlight {
     background-color: #f7e3d8;
     color: #9a5631;
@@ -86,9 +106,11 @@ body {
     letter-spacing: 1px;
     margin: 1.2rem 2rem 1.5rem 2rem;
 }
+
 .form-section {
     padding: 0 1.5rem 1.5rem 1.5rem;
 }
+
 .form-label {
     font-weight: 500;
     color: #333;
@@ -97,7 +119,7 @@ body {
 .form-control:focus,
 .form-select:focus {
     border-color: #b46e4c;
-    box-shadow: 0 0 0 0.2rem rgba(180,110,76,0.15);
+    box-shadow: 0 0 0 0.2rem rgba(180, 110, 76, 0.15);
 }
 
 .btn-primary {
@@ -105,6 +127,7 @@ body {
     border-color: #b46e4c;
     transition: all 0.2s ease;
 }
+
 .btn-primary:hover {
     background-color: #832b00;
     border-color: #832b00;
@@ -124,15 +147,24 @@ body {
     border-color: #832b00 !important;
 }
 
+.btn-primary:disabled,
+.btn-primary.disabled {
+    background-color: #b46e4c !important;
+    border-color: #b46e4c !important;
+    opacity: 0.85;
+}
+
 .disclaimer {
     font-size: 0.85rem;
     color: #6c757d;
     text-align: center;
-    margin-top: 30px;
+    padding-bottom: 20px;
 }
+
 .error-box {
     margin-bottom: 1rem;
 }
+
 .alert-icon {
     margin-right: 8px;
     font-size: 1.2rem;
@@ -143,22 +175,16 @@ body {
     line-height: 1.1;
     margin-bottom: 10px;
 }
+
 .brand-subtext {
     font-size: 0.6rem;
-    color:rgba(169, 169, 169, 0.86);
+    color: rgba(169, 169, 169, 0.86);
     margin-left: 1.5rem;
 }
-
-.btn-primary:disabled,
-.btn-primary.disabled {
-    background-color: #b46e4c !important;
-    border-color: #b46e4c !important;
-    opacity: 0.85;
-}
-
-
-
 </style>
+
+
+
 </head>
 <body>
 
@@ -191,13 +217,12 @@ body {
 
            <!-- Email -->
                 <div class="mb-3">
-                    <label class="form-label">Email Address</label>
+                    <label class="form-label">Registered Email Address</label>
 
                     <input type="email"
                         name="email"
                         class="form-control"
                         value="{{ old('email') }}"
-                        placeholder="Enter your registered email address"
                         required>
 
                     @error('email')
@@ -212,7 +237,6 @@ body {
                 <div class="mb-3">
                     <label class="form-label">Access Code</label>
                     <input type="text" name="access_code" class="form-control" value="{{ old('access_code') }}" 
-                    placeholder=" Enter the access code provided by tutor"
                     required>
 
                     <div class="form-text">

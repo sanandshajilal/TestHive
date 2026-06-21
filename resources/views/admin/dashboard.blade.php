@@ -2,25 +2,43 @@
 
 @section('content')
 <style>
+
     body {
         background-color: #f9fafb;
     }
 
+    /* Cards */
+
     .card {
         box-shadow:
             0 0 0 1px rgba(0,0,0,.03),
-            0 10px 25px rgba(78,115,223,.08) !important;
+            0 10px 25px rgba(180,110,76,.08) !important;
     }
 
+    .brand-top-card {
+    position: relative;
+    overflow: hidden;
+    }
+
+    .brand-top-card::before {
+        content: "";
+        display: block;
+        height: 6px;
+        background: #832b00;
+    }
+
+
+    /* Quick Action Cards */
+
     .quick-action-card {
-        transition: 0.2s;
-        border: 1px solid rgba(78,115,223,.08) !important;
+        transition: .2s;
+        border: 1px solid rgba(180,110,76,.08) !important;
     }
 
     .quick-action-card:hover {
-        box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 0 12px rgba(0,0,0,.08);
         transform: translateY(-2px);
-        border-color: rgba(78,115,223,.25) !important;
+        border-color: rgba(180,110,76,.25) !important;
     }
 
     .quick-action-card .card-body {
@@ -33,34 +51,49 @@
 
     .quick-action-icon {
         font-size: 1.5rem;
-        margin-bottom: 0.5rem;
-        color: #0d6efd;
+        margin-bottom: .5rem;
+        color: #b46e4c;
     }
+
     .quick-action-card:hover .quick-action-icon {
-        color: #4e73df;
+        color: #832b00;
     }
+
+    /* Dashboard Stat Icons */
 
     .stat-icon {
         font-size: 1.8rem;
-        color: #ffc107;
-        margin-bottom: 0.25rem;
+        color: #b46e4c;
+        margin-bottom: .25rem;
+        transition: .2s;
     }
-      .clickable-row {
+
+    /* Tables */
+
+    .clickable-row {
         cursor: pointer;
     }
 
-    .card-header {
-    font-size: 1rem;
-    font-weight: 700;
-}
-
     .clickable-row td {
-        transition: background-color 0.2s ease-in-out;
+        transition: background-color .2s ease;
     }
 
     .clickable-row:hover td {
-        background-color: #e9f2ff !important; /* soft blue */
+        background-color: #fdf6f1 !important;
     }
+
+    /* Card Headers */
+
+    .card-header {
+        font-size: 1rem;
+        font-weight: 700;
+    }
+
+    .card-header i{
+            color:#832b00 !important;
+        }
+
+    /* KPI Cards */
 
     .kpi-card {
         border: none;
@@ -84,122 +117,163 @@
         font-size: .9rem;
     }
 
+    /* Lists */
+
     .dashboard-list-item {
         border-bottom: 1px solid #eef2f7;
         padding: 12px 0;
     }
 
+    /* Dashboard Stat Cards */
+
     .dashboard-stat-card {
-    cursor: pointer;
-    transition: all .25s ease;
-}
+        cursor: pointer;
+        transition: all .25s ease;
+    }
 
-.dashboard-stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow:
-        0 10px 25px rgba(78,115,223,.12) !important;
-}
+    .dashboard-stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow:
+            0 10px 25px rgba(180,110,76,.12) !important;
+    }
 
-.dashboard-stat-card:hover .card-arrow {
-    transform: translateX(4px);
-    color: #4e73df;
-}
+    .dashboard-stat-card:hover .card-arrow {
+        transform: translateX(4px);
+        color: #832b00;
+    }
 
-.dashboard-stat-card:hover .stat-icon {
-    color: #4e73df;
-}
+    .dashboard-stat-card:hover .stat-icon {
+        color: #832b00;
+    }
 
-.card-arrow {
-    color: #adb5bd;
-    font-size: 1.1rem;
-    transition: all .25s ease;
-}
+    .dashboard-stat-card:active {
+        transform: scale(.98);
+    }
 
-.dashboard-stat-card:active {
-    transform: scale(0.98);
-}
+    .card-arrow {
+        color: #adb5bd;
+        font-size: 1.1rem;
+        transition: .25s;
+    }
 
-.dashboard-action-item {
-display: flex;
-align-items: center;
-padding: 1rem 1.25rem;
-color: #212529;
-border-bottom: 1px solid #f1f3f5;
-transition: all .2s ease;
-}
+    /* Quick Actions */
 
-.dashboard-action-item:last-child {
-border-bottom: none;
-}
-
-.dashboard-action-item:hover {
-background: #f8fafc;
-color: #4e73df;
-padding-left: 1.4rem;
-}
-
-.upcoming-test-item {
-padding: 1rem 1.25rem;
-border-bottom: 1px solid #f1f3f5;
-}
-
-.upcoming-test-item:last-child {
-border-bottom: none;
-}
-
-.upcoming-test-card {
-    display: flex;
-    align-items: center;
-    border: 1px solid #edf2f7;
-    border-radius: 16px;
-    padding: 14px;
-    margin-bottom: 12px;
-    transition: all .2s ease;
-}
-
-.upcoming-test-card:last-child {
-    margin-bottom: 0;
-}
-
-.upcoming-test-card:hover {
-    background: #fafcff;
-    border-color: #dbe7ff;
-}
-
-.date-card {
-    width: 72px;
-    min-width: 72px;
-    text-align: center;
-    border-radius: 14px;
-    background: #f8f5e9;
-    padding: 8px 0;
-}
-
-.date-day {
-    font-size: 1.8rem;
-    font-weight: 700;
-    line-height: 1;
-    color: #111827;
-}
-
-.date-month {
-    margin-top: 6px;
-    font-size: .75rem;
-    font-weight: 700;
-    color: #6b7280;
-    letter-spacing: .5px;
-}
+    .dashboard-action-item {
+        display: flex;
+        align-items: center;
+        padding: 1rem 1.25rem;
+        color: #212529;
+        border-bottom: 1px solid #f1f3f5;
+        transition: all .2s ease;
+    }
 
     
+
+    .dashboard-action-item:last-child {
+        border-bottom: none;
+    }
+
+    .dashboard-action-item:hover {
+        background: #fdf6f1;
+        color: #832b00;
+        padding-left: 1.4rem;
+    }
+
+    /* Upcoming Tests */
+
+    .upcoming-test-item {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid #f1f3f5;
+    }
+
+    .upcoming-test-item:last-child {
+        border-bottom: none;
+    }
+
+    .upcoming-test-card {
+        display: flex;
+        align-items: center;
+        border: 1px solid #edf2f7;
+        border-radius: 16px;
+        padding: 14px;
+        margin-bottom: 12px;
+        transition: all .2s ease;
+    }
+
+    .upcoming-test-card:last-child {
+        margin-bottom: 0;
+    }
+
+    .upcoming-test-card:hover {
+        background: #fcf7f3;
+        border-color: #edd7ca;
+    }
+
+    /* Date Block */
+
+    .date-card {
+        width: 72px;
+        min-width: 72px;
+        text-align: center;
+        border-radius: 14px;
+        background: #f7e3d8;
+        padding: 8px 0;
+    }
+
+    .date-day {
+        font-size: 1.8rem;
+        font-weight: 700;
+        line-height: 1;
+        color: #832b00;
+    }
+
+    .date-month {
+        margin-top: 6px;
+        font-size: .75rem;
+        font-weight: 700;
+        color: #9a5631;
+        letter-spacing: .5px;
+    }
+
+
+    .kpi-icon {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        font-size: 2rem;
+        color: #b46e4c;
+        opacity: 0.50;
+        transition: all .25s ease;
+    }
+
+    .kpi-card:hover .kpi-icon {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+
+    .kpi-value {
+        font-size: 1.9rem;
+        font-weight: 700;
+        line-height: 1.15;
+
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+
+        min-height: 4.3rem;
+    }
+    
+
 </style>
 
 <div class="container py-4">
-<div class="card border-0 rounded-4 shadow-sm mb-4">
+<div class="card border-0 rounded-4 shadow-sm mb-4 brand-top-card">
     <div class="card-body d-flex justify-content-between align-items-center">
         
         <div>
             <h3 class="mb-1 fw-bold">
-                Welcome back, {{ auth()->user()->name }} 👋
+                Welcome back, {{ auth()->user()->name }} 
             </h3>
             <p class="text-muted mb-0">
                Monitor tests, manage content, and track student progress from your dashboard.
@@ -225,19 +299,22 @@ border-bottom: none;
 
 <div class="col-md-3">
     <div class="card border-0 rounded-4 kpi-card h-100">
-        <div class="card-body">
+        <div class="card-body position-relative">
+
+            <i class="bi bi-ui-checks-grid kpi-icon"></i>
+
             <small class="text-muted d-block mb-2">
                 Latest Test
             </small>
 
             <div
-                    class="kpi-value"
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="bottom"
-                    title="{{ $latestMockTest?->title }}"
-                >
-                    {{ Str::limit($latestMockTest?->title, 12) }}
-                </div>
+                class="kpi-value"
+                data-bs-toggle="tooltip"
+                data-bs-placement="bottom"
+                title="{{ $latestMockTest?->title }}"
+            >
+                {{ Str::limit($latestMockTest?->title, 40) }}
+            </div>
 
             @if($latestMockTest)
                 <div class="small text-muted mt-1">
@@ -246,13 +323,17 @@ border-bottom: none;
                     {{ $latestMockTest->duration_minutes }} mins
                 </div>
             @endif
+
         </div>
     </div>
 </div>
 
 <div class="col-md-3">
     <div class="card border-0 rounded-4 kpi-card h-100">
-        <div class="card-body">
+        <div class="card-body position-relative">
+
+            <i class="bi bi-pencil-square kpi-icon"></i>
+
             <small class="text-muted d-block mb-2">
                 Attempts
             </small>
@@ -264,13 +345,17 @@ border-bottom: none;
             <div class="small text-muted">
                 Completed submissions
             </div>
+
         </div>
     </div>
 </div>
 
 <div class="col-md-3">
     <div class="card border-0 rounded-4 kpi-card h-100">
-        <div class="card-body">
+        <div class="card-body position-relative">
+
+            <i class="bi bi-graph-up-arrow kpi-icon"></i>
+
             <small class="text-muted d-block mb-2">
                 Average Score
             </small>
@@ -282,13 +367,17 @@ border-bottom: none;
             <div class="small text-muted">
                 Latest test average
             </div>
+
         </div>
     </div>
 </div>
 
 <div class="col-md-3">
     <div class="card border-0 rounded-4 kpi-card h-100">
-        <div class="card-body">
+        <div class="card-body position-relative">
+
+            <i class="bi bi-trophy kpi-icon"></i>
+
             <small class="text-muted d-block mb-2">
                 Highest Score
             </small>
@@ -300,11 +389,10 @@ border-bottom: none;
             <div class="small text-muted">
                 Best performer
             </div>
+
         </div>
     </div>
 </div>
-
-
 </div>
 
 
@@ -377,28 +465,28 @@ border-bottom: none;
 
             <a href="/admin/mock-tests/create"
                class="dashboard-action-item text-decoration-none">
-                <i class="bi bi-plus-circle text-primary me-2"></i>
+                <i class="bi bi-plus-circle me-2" style="color:#b46e4c;"></i>
                 Create New Test
                 <i class="bi bi-chevron-right ms-auto text-muted"></i>
             </a>
 
             <a href="/admin/questions/create"
                class="dashboard-action-item text-decoration-none">
-                <i class="bi bi-plus-square text-success me-2"></i>
+                <i class="bi bi-plus-square me-2" style="color:#9a5631;"></i>
                 Add New Question
                 <i class="bi bi-chevron-right ms-auto text-muted"></i>
             </a>
 
             <a href="/admin/questions"
                class="dashboard-action-item text-decoration-none">
-                <i class="bi bi-journal-text text-warning me-2"></i>
+                <i class="bi bi-journal-text me-2" style="color:#832b00;"></i>
                 View All Questions
                 <i class="bi bi-chevron-right ms-auto text-muted"></i>
             </a>
 
             <a href="{{ route('admin.reports.index') }}"
                class="dashboard-action-item text-decoration-none">
-                <i class="bi bi-bar-chart-line text-info me-2"></i>
+                <i class="bi bi-bar-chart-line me-2" style="color:#b46e4c;"></i>
                 View Reports
                 <i class="bi bi-chevron-right ms-auto text-muted"></i>
             </a>
@@ -592,10 +680,15 @@ border-bottom: none;
     </div>
 </div>
 
-<div class="border-top pt-2 mt-4">
-    <div class="text-center text-muted small">
-        ACCAPrep with Malasri v1.3.1 · Developed & Maintained by Sanand S
-    </div>
+        <div class="border-top pt-3 mt-4">
+            <div class="text-center small text-muted">
+                ACCAPrep with Malasri
+                <span class="mx-2">•</span>
+                v1.3.1
+                <span class="mx-2">•</span>
+                Developed & Maintained by <strong>Sanand S</strong>
+            </div>
+        </div>
 </div>
 @endsection
 

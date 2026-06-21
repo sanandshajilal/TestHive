@@ -8,28 +8,89 @@
         background-color: #f9fafb;
     }
 
+    /* Header */
+
     .header-box {
-        background-color: #ffffff;
+        position: relative;
+        background: #ffffff;
         border-radius: 1rem;
         padding: 1.25rem 1.5rem;
-        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
+        overflow: hidden;
     }
+
+    .header-box::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: #832b00;
+    }
+    /* Main Card */
 
     .card-style {
+        background: #ffffff;
         border-radius: 1rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        background-color: #fff;
-        padding: 1.5rem;
+        padding: 1.75rem;
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
     }
+
+    /* Labels */
 
     .form-label {
-        font-weight: 500;
+        font-weight: 600;
+        color: #374151;
     }
 
-    .btn-primary,
-    .btn-success {
-        border-radius: 50px;
+    /* Inputs */
+
+    .form-control,
+    .form-select {
+        border-radius: .75rem;
+        border: 1px solid #d9d9d9;
+        padding: .7rem .9rem;
+        transition: .2s;
     }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #b46e4c;
+        box-shadow: 0 0 0 .2rem rgba(180,110,76,.15);
+    }
+
+    .form-select {
+        background-position: right .9rem center;
+    }
+
+    /* Section Headings */
+
+    .border-bottom {
+        border-color: #edd7ca !important;
+    }
+
+    h6 i {
+        color: #832b00;
+    }
+
+    /* Question Bank */
+
+    #question-list {
+        background: #fcf7f3 !important;
+        border: 1px solid #edd7ca !important;
+        border-radius: .75rem;
+    }
+
+    #question-list .border {
+        border: 1px solid #edd7ca !important;
+    }
+
+    #question-list .bg-white:hover {
+        background: #fffaf7 !important;
+    }
+
+    /* Question Content */
 
     .question-content {
         line-height: 1.5;
@@ -44,19 +105,90 @@
         padding: 0;
     }
 
+    /* Preview Button */
+
     .icon-button {
         border: none;
         background: transparent;
         padding: 0;
-        margin-left: 0.5rem;
-        color: #6c757d;
-        transition: color 0.2s ease, transform 0.2s ease;
+        margin-left: .5rem;
+        color: #9a5631;
+        transition: all .2s ease;
     }
 
     .icon-button:hover {
-        color: #0d6efd;
-        transform: scale(1.2);
+        color: #832b00;
+        transform: scale(1.1);
         cursor: pointer;
+    }
+
+    /* Summary */
+
+    .alert-info {
+        background: #fcf7f3;
+        border: 1px solid #edd7ca;
+        color: #832b00;
+    }
+
+    /* Primary Button */
+
+    .btn-success {
+        background: #b46e4c;
+        border-color: #b46e4c;
+        border-radius: 50px;
+        transition: .2s;
+    }
+
+    .btn-success:hover {
+        background: #832b00;
+        border-color: #832b00;
+    }
+
+    /* Secondary Button */
+
+    .btn-secondary {
+        background: #f7e3d8;
+        border-color: #edd7ca;
+        color: #832b00;
+        border-radius: 50px;
+        transition: .2s;
+    }
+
+    .btn-secondary:hover {
+        background: #b46e4c;
+        border-color: #b46e4c;
+        color: #ffffff;
+    }
+
+    /* Modal */
+
+    .modal-content {
+        border-radius: 1rem;
+        border: none;
+    }
+
+    .modal-header {
+        border-bottom: 1px solid #edd7ca;
+    }
+
+    .modal-title {
+        color: #832b00;
+        font-weight: 600;
+    }
+
+    /* Scrollbar */
+
+    #question-list::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    #question-list::-webkit-scrollbar-thumb {
+        background: #d6b29d;
+        border-radius: 20px;
+    }
+
+    #question-list::-webkit-scrollbar-thumb:hover {
+        background: #b46e4c;
     }
 </style>
 @endsection
@@ -66,7 +198,7 @@
     <div class="header-box mb-4 d-flex justify-content-between align-items-center">
         <div>
             <h5 class="mb-0 text-dark fw-semibold">
-                <i class="bi bi-pencil-square text-warning me-2"></i>
+            <i class="bi bi-pencil-square me-2" style="color:#832b00;"></i>
                 Edit Test
             </h5>
 

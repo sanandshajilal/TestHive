@@ -6,35 +6,136 @@
 
 @section('styles')
 <style>
-    body {
-        background-color: #f9fafb;
-    }
-    .header-box {
-        background-color: #ffffff;
-        border-radius: 1rem;
-        padding: 1.25rem 1.5rem;
-        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
-    }
-    .card-style {
-        border-radius: 1rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        background-color: #fff;
-        padding: 1.5rem;
-    }
-    .summary-card {
-        height: 100%;
-        padding: 1rem 0.75rem;
-    }
-    .question-content p {
-        margin-bottom: 0.5rem;
-    }
-
-    @media (min-width: 768px) {
-    .min-w-md-0 {
-        min-width: 0 !important;
-    }
+body{
+    background:#f9fafb;
 }
 
+.back-btn{
+    border-color:#b46e4c;
+    color:#832b00;
+    background:#f7e3d8;
+    transition:.2s;
+}
+
+.back-btn:hover{
+    background:#b46e4c;
+    border-color:#b46e4c;
+    color:#fff;
+}
+
+/* Header */
+
+    .header-box {
+        position: relative;
+        background: #ffffff;
+        border-radius: 1rem;
+        padding: 1.25rem 1.5rem;
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
+        overflow: hidden;
+    }
+
+    .header-box::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: #832b00;
+    }
+
+/* Main Cards */
+
+.card-style{
+    background:#fff;
+    border-radius:1rem;
+    padding:1.5rem;
+    box-shadow:0 2px 10px rgba(180,110,76,.08);
+}
+
+/* Summary */
+
+.summary-stat{
+    flex:1;
+    text-align:center;
+    padding:.75rem 1rem;
+}
+
+.summary-stat:not(:last-child){
+    border-right:1px solid #edf0f2;
+}
+
+.summary-label{
+    font-size:.8rem;
+    color:#6c757d;
+}
+
+.summary-value{
+    font-size:1.35rem;
+    font-weight:700;
+}
+
+/* Question */
+
+.question-block{
+    background:#fff;
+    border:1px solid #eef0f2;
+    border-radius:1rem;
+    padding:1.5rem;
+    margin-bottom:1.5rem;
+    transition:.2s;
+}
+
+.question-block:hover{
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
+}
+
+.question-content p{
+    margin-bottom:.5rem;
+}
+
+.question-content table{
+    width:auto;
+    border-collapse:collapse;
+    margin-top:.5rem;
+}
+
+.question-content th,
+.question-content td{
+    border:1px solid #dee2e6;
+    padding:6px 10px;
+}
+
+/* Tables */
+
+.table{
+    margin-bottom:0;
+}
+
+.table thead{
+    background:#fcf7f3;
+}
+
+.table th{
+    color:#9a5631;
+    font-weight:600;
+}
+
+/* Badges */
+
+.badge{
+    font-weight:500;
+}
+
+/* Mobile */
+
+@media(min-width:768px){
+
+    .min-w-md-0{
+        min-width:0!important;
+    }
+
+}
 </style>
 @endsection
 
@@ -42,9 +143,14 @@
 <div class="container py-4">
     <!-- Heading -->
     <div class="header-box mb-4 d-flex justify-content-between align-items-center">
-        <h4 class="fw-semibold text-dark mb-0">📄 Response Sheet</h4>
-        <a href="{{ route('mock-tests.results', $attempt->mock_test_id) }}" class="btn btn-secondary rounded-pill">
-            <i class="bi bi-arrow-left me-1"></i> Back to Results
+        <h4 class="fw-semibold text-dark mb-0">
+            <i class="bi bi-file-earmark-text me-2" style="color:#832b00;"></i>
+            Response Sheet
+        </h4>
+        <a href="{{ route('mock-tests.results', $attempt->mock_test_id) }}"
+        class="btn btn-outline-secondary rounded-pill back-btn">
+            <i class="bi bi-arrow-left me-1"></i>
+            Back to Results
         </a>
     </div>
 
@@ -77,7 +183,7 @@
     @endphp
 
     <!-- Student & Test Info -->
-    <div class="card shadow-sm border-0 rounded-4 mb-4">
+    <div class="card-style mb-4">
         <div class="card-body">
             <div class="row gy-3">
                 <div class="col-md-4"><strong>Student:</strong><br>{{ $attempt->student_name }}</div>

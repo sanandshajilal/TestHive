@@ -4,89 +4,139 @@
 
 @section('styles')
 <style>
-    body {
-        background-color: #f9fafb;
-    }
+   body {
+    background-color: #f9fafb;
+}
 
-    .header-box {
-        background-color: #ffffff;
-        border-radius: 1rem;
-        padding: 1.25rem 1.5rem;
-        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
-    }
+/* Header */
 
-    .card-style {
-        border-radius: 1rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        background-color: #fff;
-        padding: 1.5rem;
-    }
+.header-box {
+    position: relative;
+    background: #ffffff;
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 2px 10px rgba(180,110,76,.08);
+    overflow: hidden;
+}
 
-    .btn-soft-warning {
-        background-color: #fff3cd;
-        color: #856404;
-        border: none;
-        transition: all .2s ease;
-    }
+.header-box::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: #832b00;
+}
+/* Card */
 
-    .btn-soft-danger {
-        background-color: #fdecea;
-        color: #dc3545;
-        border: none;
-        transition: all .2s ease;
-    }
+.card-style {
+    background: #ffffff;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(180,110,76,.08);
+}
 
-    .btn-soft-warning:hover {
-        background-color: #ffc107;
-        color: #212529;
-    }
+/* Primary Button */
 
-    .btn-soft-danger:hover {
-        background-color: #dc3545;
-        color: white;
-    }
+.btn-primary {
+    background: #b46e4c;
+    border-color: #b46e4c;
+}
 
-    .action-buttons .btn {
-        margin-right: 0.4rem;
-    }
+.btn-primary:hover {
+    background: #832b00;
+    border-color: #832b00;
+}
 
-    .table-bordered th,
-    .table-bordered td {
-        vertical-align: middle;
-    }
+/* Edit Button */
 
-    .alert {
-        margin-top: 1rem;
-        border-radius: 0.5rem;
-    }
+.btn-soft-warning {
+    background: #f7e3d8;
+    color: #832b00;
+    border: none;
+    transition: .2s;
+}
 
-    .table tbody tr {
-        transition: all .2s ease;
-    }
+.btn-soft-warning:hover {
+    background: #b46e4c;
+    color: #fff;
+}
 
-    .table tbody tr:hover {
-        background-color: #f8fafc;
-    }
+/* Delete Button */
 
-    .institute-name {
-        font-weight: 600;
-        color: #212529;
-    }
+.btn-soft-danger {
+    background: #fdecea;
+    color: #c0392b;
+    border: none;
+    transition: .2s;
+}
 
-    .empty-state {
-        padding: 3rem 1rem;
-        text-align: center;
-    }
+.btn-soft-danger:hover {
+    background: #c0392b;
+    color: #fff;
+}
 
-    .empty-state i {
-        font-size: 2.5rem;
-        color: #adb5bd;
-    }
+/* Tables */
 
-    .empty-state-text {
-        margin-top: 0.75rem;
-        color: #6c757d;
-    }
+.table thead {
+    background: #fcf7f3;
+}
+
+.table thead th {
+    color: #9a5631;
+    font-weight: 600;
+    border-bottom: 1px solid #edd7ca;
+}
+
+.table-bordered th,
+.table-bordered td {
+    vertical-align: middle;
+}
+
+.table tbody tr {
+    transition: .2s;
+}
+
+.table tbody tr:hover {
+    background: #fcf7f3;
+}
+
+/* Institute Name */
+
+.institute-name {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* Alert */
+
+.alert {
+    border-radius: .75rem;
+}
+
+/* Action Buttons */
+
+.action-buttons .btn {
+    margin-right: .4rem;
+}
+
+/* Empty State */
+
+.empty-state {
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.empty-state i {
+    font-size: 2.8rem;
+    color: #d6b29d;
+}
+
+.empty-state-text {
+    margin-top: .75rem;
+    color: #9a5631;
+}
 </style>
 @endsection
 
@@ -97,7 +147,7 @@
 
         <div>
            <h4 class="fw-semibold text-dark mb-0">
-                <i class="bi bi-buildings text-primary me-2"></i>
+                <i class="bi bi-buildings me-2" style="color:#832b00;"></i>
                 Institutes
             </h4>
 

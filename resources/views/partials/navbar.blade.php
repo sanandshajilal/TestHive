@@ -2,77 +2,131 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
-    .navbar .nav-link:hover {
-        color: #ffc107 !important;
+
+    .navbar {
+        position: sticky;
+        top: 0;
+        z-index: 1030;
+
+        background: rgba(255, 255, 255, 0.50);
+        backdrop-filter: blur(10px);
+
+         border-bottom: 1px solid rgba(0,0,0,.06); 
+        box-shadow: 0 2px 12px rgba(0, 0, 0, .06);
     }
 
-    .navbar .dropdown-menu a:hover {
-        background-color: #343a40;
+    /* Brand */
+
+    .navbar-brand {
+        padding: .35rem 0;
     }
+
+    .navbar-brand img {
+        height: 42px;
+        width: auto;
+    }
+
+    /* Navigation */
+
+    .navbar .nav-link {
+        color: #4b5563 !important;
+        font-weight: 500;
+        transition: all .2s ease;
+    }
+
+    .navbar .nav-link:hover,
+    .navbar .nav-link:focus {
+        color: #832b00 !important;
+    }
+
+    .navbar .nav-link.active {
+        color: #b46e4c !important;
+        font-weight: 600;
+    }
+
+    /* Dropdown */
+
+    .navbar .dropdown-menu {
+        border: none;
+        border-radius: 12px;
+        padding: .5rem;
+        margin-top: .6rem;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, .08);
+    }
+
+    .navbar .dropdown-item {
+        border-radius: 8px;
+        color: #4b5563;
+        padding: .55rem .9rem;
+        transition: all .2s ease;
+    }
+
+    .navbar .dropdown-item:hover,
+    .navbar .dropdown-item:focus {
+        background: #f7e3d8;
+        color: #832b00;
+    }
+
+    /* Logout */
 
     .navbar .btn-logout {
         border: none;
         background: transparent;
-        color: rgba(255, 255, 255, 0.55);
-        padding: 0.5rem 1rem;
-        padding-top: 0.5rem;
-        cursor: pointer;
+        color: #6b7280 !important;
+        padding: .5rem 0;
+        transition: all .2s ease;
+        text-decoration: none;
     }
 
     .navbar .btn-logout:hover {
-        color: #ffc107 !important;
+        color: #832b00 !important;
     }
 
-    .admin-logo {
-            position: relative;
-            display: inline-block;
-            color: #fff !important;
-            font-weight: 700;
-            line-height: 1;
-            padding-bottom: 10px;
+    /* Icons */
+
+    .navbar i {
+        font-size: .95rem;
+    }
+
+    /* Mobile */
+
+    .navbar-toggler {
+        border: none;
+    }
+
+    .navbar-toggler:focus {
+        box-shadow: none;
+    }
+
+    
+
+    /* Dropdown animation */
+
+        .dropdown-menu {
+            animation: dropdownFade .15s ease;
+            transform-origin: top;
         }
 
-        .logo-text {
-            color: #fff;
-            font-size: 1rem;
+    @keyframes dropdownFade {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
         }
 
-        .logo-tagline {
-            position: absolute;
-            left: 30px;      /* adjust based on icon width */
-            top: 100%;       /* place directly below ACCAPrep */
-            margin-top: -9px;
-            font-size: 8px;
-            line-height: 1;
-            color: rgba(255,255,255,.65);
-            white-space: nowrap;
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
-        .bi-mortarboard-fill {
-                position: relative;
-                top: 2px;
-            }
-
-            .navbar {
-            position: sticky;
-            top: 0;
-            z-index: 1030;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 12px rgba(0,0,0,.08);
-        }
-
-
+    }
 
 </style>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+<nav class="navbar navbar-expand-lg sticky-top">
     <div class="container-fluid">
-       <a href="/admin/dashboard" class="navbar-brand admin-logo text-decoration-none">
-            <i class="bi bi-mortarboard-fill text-warning me-1"></i>
-            <span class="logo-text">ACCAPrep</span>
-
-            <span class="logo-tagline">
-                with <strong>MALASRI</strong>
-            </span>
+        <a href="/admin/dashboard" class="navbar-brand text-decoration-none">
+            <img src="{{ asset('images/Logo.png') }}"
+                alt="ACCAPrep with Malasri"
+                height="40">
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar">
@@ -94,7 +148,7 @@
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                         <i class="bi bi-mortarboard me-1"></i> Academics
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-dark">
+                    <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="/admin/institutes">Institutes</a></li>
                         <li><a class="dropdown-item" href="/admin/batches">Batches</a></li>
                         <li><a class="dropdown-item" href="/admin/students">Students</a></li>
@@ -107,7 +161,7 @@
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                         <i class="bi bi-ui-checks-grid me-1"></i> Tests
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-dark">
+                    <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="/admin/mock-tests">All Tests</a></li>
                         <li><a class="dropdown-item" href="/admin/mock-tests/create">Add New Test</a></li>
                     </ul>
@@ -118,7 +172,7 @@
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                         <i class="bi bi-journal-text me-1"></i> Question Bank
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-dark">
+                    <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="/admin/questions">All Questions</a></li>
                         <li><a class="dropdown-item" href="/admin/questions/create">Add New Question</a></li>
                     </ul>
@@ -127,7 +181,7 @@
                 <!-- Reports -->
                 <li class="nav-item ms-3">
                     <a class="nav-link" href="{{ route('admin.reports.index') }}">
-                        <i class="bi bi-bar-chart-line me-1"></i> Reports
+                        <i class="bi bi-clipboard-data me-1"></i></i> Reports
                     </a>
                 </li>
 

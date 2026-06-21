@@ -8,46 +8,167 @@
         background-color: #f9fafb;
     }
 
+    /* Header */
+
     .page-header {
-        background: #fff;
+        background: #ffffff;
         border-radius: 1rem;
         padding: 1.25rem 1.5rem;
         margin-bottom: 1.5rem;
-        box-shadow: 0 1px 6px rgba(0,0,0,.05);
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
+        border-top: 5px solid #832b00;
     }
 
+    /* Form Card */
+
     .form-card {
-        background: #fff;
+        background: #ffffff;
         border-radius: 1rem;
         padding: 2rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,.04);
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
     }
+
+    /* Labels */
 
     .form-label {
         font-weight: 600;
+        color: #374151;
     }
 
     .required {
         color: #dc3545;
     }
 
-    .sample-box {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
+    /* Inputs */
+
+    .form-control,
+    .form-select {
         border-radius: .75rem;
-        padding: 1rem;
+        border: 1px solid #d9d9d9;
+        padding: .7rem .9rem;
+        transition: .2s;
+        background: #ffffff;
+    }
+
+    .form-control:hover,
+    .form-select:hover {
+        border-color: #b46e4c;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #b46e4c;
+        box-shadow: 0 0 0 .2rem rgba(180,110,76,.15);
+    }
+
+    /* Buttons */
+
+    .btn-primary {
+        background: #b46e4c;
+        border-color: #b46e4c;
+        border-radius: 50px;
+        transition: .2s;
+    }
+
+    .btn-primary:hover {
+        background: #832b00;
+        border-color: #832b00;
+    }
+
+    .btn-outline-secondary {
+        background: #f7e3d8;
+        border: 1px solid #edd7ca;
+        color: #832b00;
+        border-radius: 50px;
+        transition: all .2s ease;
+    }
+
+    .btn-outline-secondary:hover {
+        background: #b46e4c;
+        border-color: #b46e4c;
+        color: #ffffff;
+    }
+
+    /* Template Box */
+
+    .sample-box {
+        background: #fcf7f3;
+        border: 1px solid #edd7ca;
+        border-radius: .85rem;
+        padding: 1.25rem;
         margin-top: 1rem;
+    }
+
+    .sample-box strong {
+        color: #832b00;
     }
 
     .sample-box pre {
         margin-bottom: 0;
-        font-size: .9rem;
+        margin-top: .5rem;
+        padding: 1rem;
+        border-radius: .6rem;
+        background: #ffffff;
+        border: 1px solid #f1e4dc;
         color: #495057;
+        font-size: .9rem;
     }
+
+    /* Download Button */
+
+    .sample-box .btn-outline-secondary {
+        background: #ffffff;
+    }
+
+    .sample-box .btn-outline-secondary:hover,
+    .sample-box .btn-outline-secondary:focus {
+        background: #f7e3d8;
+        border-color: #b46e4c;
+        color: #832b00 !important;
+    }
+
+    .sample-box .btn-outline-secondary i {
+        color: inherit;
+    }
+
+    /* Form Text */
+
+    .form-text {
+        color: #6c757d;
+    }
+
+    /* Validation */
+
+    .invalid-feedback {
+        font-size: .875rem;
+    }
+
+    /* Upload Icon */
 
     .upload-icon {
         font-size: 3rem;
-        color: #6c757d;
+        color: #b46e4c;
+        opacity: .7;
+    }
+
+    .form-select {
+        border-radius: .75rem;
+        border: 1px solid #d9d9d9;
+        padding: .7rem .9rem;
+
+        /* Keep space for arrow */
+        padding-right: 2.5rem;
+
+        /* ACCAPrep arrow */
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23832b00' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right .9rem center;
+        background-size: 16px 12px;
+    }
+
+    .form-select:focus {
+        border-color: #b46e4c;
+        box-shadow: 0 0 0 .2rem rgba(180,110,76,.15);
     }
 </style>
 @endsection
@@ -59,7 +180,7 @@
     <div class="page-header">
 
         <h4 class="mb-1">
-            <i class="bi bi-upload text-primary me-2"></i>
+            <i class="bi bi-upload me-2" style="color:#832b00;"></i>
             Bulk Upload Students
         </h4>
 
@@ -147,19 +268,24 @@
                         CSV Format
                     </strong>
 
-                    <a href="{{ asset('templates/student_upload_template.csv') }}"
-                       class="btn btn-sm btn-outline-secondary">
+                <a href="{{ asset('templates/student_upload_template.csv') }}"
+                            class="btn btn-sm btn-outline-secondary">
 
-                        <i class="bi bi-download me-1"></i>
-                        Download Template
+                                <i class="bi bi-download me-1"></i>
+                                Download Template
 
-                    </a>
+                            </a>
 
                 </div>
 
 <pre>name,email
 Sanand S,sanand@gmail.com
 Mala Sri,maal@gmail.com</pre>
+
+<div class="small text-muted mt-2">
+    <i class="bi bi-info-circle me-1"></i>
+    First row must contain the column headers name,email.
+</div>
 
             </div>
 

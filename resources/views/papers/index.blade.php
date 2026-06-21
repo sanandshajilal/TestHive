@@ -6,81 +6,137 @@
         background-color: #f9fafb;
     }
 
+    /* Header */
+
     .header-box {
-        background-color: #ffffff;
+        position: relative;
+        background: #ffffff;
         border-radius: 1rem;
         padding: 1.25rem 1.5rem;
-        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
+        overflow: hidden;
     }
+
+    .header-box::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: #832b00;
+    }
+
+    /* Card */
 
     .card-style {
+        background: #ffffff;
         border-radius: 1rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        background-color: #fff;
         padding: 1.5rem;
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
     }
 
-    .table thead {
-        background-color: #f1f3f5;
+    /* Primary Button */
+
+    .btn-primary {
+        background: #b46e4c;
+        border-color: #b46e4c;
     }
 
-    .table tbody tr {
-        transition: all .2s ease;
+    .btn-primary:hover {
+        background: #832b00;
+        border-color: #832b00;
     }
 
-    .table tbody tr:hover {
-        background-color: #f8fafc;
-    }
+    /* Edit Button */
 
     .btn-soft-warning {
-        background-color: #fff3cd;
-        color: #856404;
+        background: #f7e3d8;
+        color: #832b00;
         border: none;
-        transition: all .2s ease;
-    }
-
-    .btn-soft-danger {
-        background-color: #fdecea;
-        color: #dc3545;
-        border: none;
-        transition: all .2s ease;
+        transition: .2s;
     }
 
     .btn-soft-warning:hover {
-        background-color: #ffc107;
-        color: #212529;
+        background: #b46e4c;
+        color: #ffffff;
+    }
+
+    /* Delete Button */
+
+    .btn-soft-danger {
+        background: #fdecea;
+        color: #c0392b;
+        border: none;
+        transition: .2s;
     }
 
     .btn-soft-danger:hover {
-        background-color: #dc3545;
-        color: #fff;
+        background: #c0392b;
+        color: #ffffff;
     }
 
-    .action-buttons .btn {
-        margin-right: 0.4rem;
+    /* Table */
+
+    .table thead {
+        background: #fcf7f3;
     }
 
-    .alert {
-        margin-top: 1rem;
-        border-radius: 0.5rem;
+    .table thead th {
+        color: #9a5631;
+        font-weight: 600;
+        border-bottom: 1px solid #edd7ca;
     }
+
+    .table tbody tr {
+        transition: .2s;
+    }
+
+    .table tbody tr:hover {
+        background: #fcf7f3;
+    }
+
+    /* Paper Name */
 
     .paper-name {
         font-weight: 600;
-        color: #212529;
+        color: #1f2937;
     }
 
+    /* Content Badge */
+
     .content-badge {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        color: #374151;
-        font-weight: 500;
+        background: #f7e3d8;
+        border: 1px solid #edd7ca;
+        color: #832b00;
+        font-weight: 600;
+        transition: .2s;
     }
 
     .content-badge:hover {
-        background: #eef4ff;
-        border-color: #dbe7ff;
+        background: #b46e4c;
+        border-color: #b46e4c;
+        color: #ffffff;
     }
+
+    .content-badge:hover i {
+        color: #ffffff !important;
+    }
+
+    /* Alerts */
+
+    .alert {
+        margin-top: 1rem;
+        border-radius: .75rem;
+    }
+
+    /* Action Buttons */
+
+    .action-buttons .btn {
+        margin-right: .4rem;
+    }
+
+    /* Empty State */
 
     .empty-state {
         text-align: center;
@@ -88,13 +144,13 @@
     }
 
     .empty-state i {
-        font-size: 2.5rem;
-        color: #adb5bd;
+        font-size: 2.8rem;
+        color: #d6b29d;
     }
 
     .empty-state-text {
-        margin-top: 0.75rem;
-        color: #6c757d;
+        margin-top: .75rem;
+        color: #9a5631;
     }
 </style>
 @endsection
@@ -106,7 +162,7 @@
 
         <div>
             <h4 class="fw-semibold text-dark mb-0">
-                <i class="bi bi-journal-text text-primary me-2"></i>
+                <i class="bi bi-journal-text me-2" style="color:#832b00;"></i>
                 Papers
             </h4>
 
@@ -181,12 +237,12 @@
                             <a href="{{ route('topics.by-paper', $paper->id) }}"
                                class="badge content-badge text-decoration-none px-3 py-2">
 
-                                <i class="bi bi-diagram-3 text-info me-1"></i>
+                                <i class="bi bi-diagram-3 me-1" style="color:#9a5631;"></i>
                                 {{ $paper->topics_count }}
 
                                 <span class="mx-1">|</span>
 
-                                <i class="bi bi-question-circle text-warning me-1"></i>
+                                <i class="bi bi-question-circle me-1" style="color:#b46e4c;"></i>
                                 {{ $paper->questions_count }}
 
                             </a>

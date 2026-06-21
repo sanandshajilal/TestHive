@@ -10,49 +10,154 @@
         background-color: #f9fafb;
     }
 
+    /* Header */
+
     .header-box {
-        background-color: #ffffff;
+        position: relative;
+        background: #ffffff;
         border-radius: 1rem;
         padding: 1.25rem 1.5rem;
-        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
+        overflow: hidden;
     }
+
+    .header-box::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: #832b00;
+    }
+
+    /* Card */
 
     .card-style {
+        background: #ffffff;
         border-radius: 1rem;
-        background: #fff;
         padding: 1.5rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
     }
 
+    /* Summary */
+
     .summary-label {
-        font-size: 0.85rem;
-        color: #6c757d;
+        font-size: .85rem;
+        color: #9a5631;
+        text-transform: uppercase;
+        letter-spacing: .4px;
     }
 
     .summary-value {
+        font-size: 1.05rem;
         font-weight: 600;
-        color: #212529;
+        color: #1f2937;
     }
 
-    .table th, .table td {
+    /* Section Divider */
+
+    .border-bottom {
+        border-color: #edd7ca !important;
+    }
+
+    /* Tables */
+
+    .table thead {
+        background: #fcf7f3;
+    }
+
+    .table thead th {
+        color: #9a5631;
+        font-weight: 600;
+        border-bottom: 1px solid #edd7ca;
+    }
+
+    .table-bordered td,
+    .table-bordered th {
+        border-color: #edd7ca;
         vertical-align: middle;
     }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #fffdfb;
+    }
+
+    .table tbody tr:hover {
+        background: #fcf7f3;
+    }
+
+    /* Header icon */
+
+    .page-icon {
+        color: #832b00;
+    }
+
+    /* Secondary Button */
+
+    .btn-secondary {
+        background: #f7e3d8;
+        border-color: #edd7ca;
+        color: #832b00;
+        border-radius: 50px;
+        transition: .2s;
+    }
+
+    .btn-secondary:hover {
+        background: #b46e4c;
+        border-color: #b46e4c;
+        color: #ffffff;
+    }
+
+    /* View Button */
+
+    .btn-outline-primary {
+        border-color: #b46e4c;
+        color: #832b00;
+        border-radius: 50px;
+        transition: .2s;
+    }
+
+    .btn-outline-primary:hover {
+        background: #b46e4c;
+        border-color: #b46e4c;
+        color: #ffffff;
+    }
+
+    /* DataTables Buttons */
 
     .dataTables_wrapper .dt-buttons {
         margin-bottom: 1rem;
         display: flex;
-        gap: 0.5rem;
+        gap: .5rem;
+        flex-wrap: wrap;
+    }
+
+    .dataTables_wrapper .dt-buttons .btn {
+        border-radius: 50px !important;
     }
 
     .btn-sm {
-        border-radius: 50px !important;
-        font-size: 0.8rem;
-        padding: 0.35rem 0.75rem;
+        font-size: .8rem;
+        padding: .35rem .8rem;
     }
 
-    @media (max-width: 768px) {
+    /* Search */
+
+    .dataTables_filter input {
+        border-radius: .6rem !important;
+        border: 1px solid #d9d9d9 !important;
+        padding: .35rem .7rem !important;
+    }
+
+    .dataTables_filter input:focus {
+        border-color: #b46e4c !important;
+        box-shadow: 0 0 0 .2rem rgba(180,110,76,.15) !important;
+    }
+
+    @media (max-width:768px) {
         .dataTables_wrapper .dt-buttons {
-            flex-wrap: wrap;
+            justify-content: flex-start;
         }
     }
 </style>
@@ -64,7 +169,7 @@
     <div class="header-box mb-4 d-flex justify-content-between align-items-center">
         <div>
             <h5 class="fw-semibold text-dark mb-0">
-                <i class="bi bi-clipboard-data text-primary me-2"></i>
+                <i class="bi bi-clipboard-data page-icon me-2"></i>
                 Test Results
             </h5>
             <small class="text-muted">
@@ -106,7 +211,7 @@
     <div class="card-style">
         <div class="border-bottom pb-2 mb-3">
             <h5 class="fw-semibold mb-1">
-                <i class="bi bi-bar-chart-line me-2"></i>
+                <i class="bi bi-bar-chart-line me-2" style="color:#832b00;"></i>    
                 Student Performance
             </h5>
             <small class="text-muted">
@@ -172,11 +277,27 @@
             $('#resultsTable').DataTable({
                 dom: 'Bfrtip',
                 pageLength: 10,
-                buttons: [
-                    { extend: 'copy', text: 'Copy', className: 'btn btn-sm btn-outline-secondary' },
-                    { extend: 'excel', text: 'Excel', className: 'btn btn-sm btn-outline-success' },
-                    { extend: 'pdf', text: 'PDF', className: 'btn btn-sm btn-outline-danger' },
-                    { extend: 'print', text: 'Print', className: 'btn btn-sm btn-outline-dark' }
+                 buttons: [
+                    {
+                        extend: 'copy',
+                        text: 'Copy',
+                        className: 'btn btn-sm btn-outline-secondary rounded-pill'
+                    },
+                    {
+                        extend: 'excel',
+                        text: 'Excel',
+                        className: 'btn btn-sm btn-outline-success rounded-pill'
+                    },
+                    {
+                        extend: 'pdf',
+                        text: 'PDF',
+                        className: 'btn btn-sm btn-outline-danger rounded-pill'
+                    },
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        className: 'btn btn-sm btn-outline-dark rounded-pill'
+                    }
                 ]
             });
         }

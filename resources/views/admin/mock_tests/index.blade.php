@@ -12,95 +12,203 @@
         background-color: #f9fafb;
     }
 
-    .card-style {
+    /* Header */
+
+    .header-box {
+        position: relative;
+        background: #ffffff;
         border-radius: 1rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        background-color: #fff;
-        padding: 1.5rem;
-    }
-
-    .table thead {
-        background-color: #f1f3f5;
-    }
-
-    .btn-sm {
-        padding: 0.35rem 0.6rem;
-        font-size: 0.8rem;
-    }
-
-    .table-responsive {
-        border-radius: 0.75rem;
+        padding: 1.25rem 1.5rem;
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
         overflow: hidden;
     }
 
-    
-
-    .dataTables_wrapper .dt-buttons {
-        margin-bottom: 1rem;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
+    .header-box::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: #832b00;
     }
 
-    .dataTables_wrapper .dt-buttons .btn,
-    .dataTables_wrapper .dataTables_filter input {
-        border-radius: 0.5rem !important;
+    /* Main Card */
+
+    .card-style {
+        background: #ffffff;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
     }
 
-    .dataTables_wrapper .dataTables_filter {
-        margin-bottom: 1rem;
-        margin-top: 0.5rem;
+    /* KPI Cards */
+
+    .card.border-0.shadow-sm.rounded-4 {
+        box-shadow: 0 2px 10px rgba(180,110,76,.08) !important;
+        transition: .2s;
     }
+
+    .card.border-0.shadow-sm.rounded-4:hover {
+        transform: translateY(-2px);
+    }
+
+    /* Table */
+
+    .table-responsive {
+        border-radius: .75rem;
+        overflow: hidden;
+    }
+
+    .table thead {
+        background: #fcf7f3;
+    }
+
+    .table thead th {
+        color: #9a5631;
+        font-weight: 600;
+        border-bottom: 1px solid #edd7ca;
+    }
+
+    .table tbody tr {
+        transition: all .2s ease;
+    }
+
+    .table tbody tr:hover {
+        background: #fcf7f3;
+    }
+
+    /* Test Name */
+
+    .test-name {
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    /* Action Buttons */
 
     .action-buttons .btn {
         margin-right: 4px;
     }
 
-    .btn-soft-info {
-        background-color: #e7f1ff;
-        color: #0d6efd;
-        border: none;
+    .btn-sm {
+        padding: .35rem .6rem;
+        font-size: .8rem;
     }
+
+    /* Primary Button */
+
+    .btn-primary {
+        background: #b46e4c;
+        border-color: #b46e4c;
+    }
+
+    .btn-primary:hover {
+        background: #832b00;
+        border-color: #832b00;
+    }
+
+    /* Soft View Button */
+
+    .btn-soft-info {
+        background: #f7e3d8;
+        color: #832b00;
+        border: none;
+        transition: .2s;
+    }
+
+    .btn-soft-info:hover {
+        background: #b46e4c;
+        color: #ffffff;
+    }
+
+    /* Soft Edit Button */
 
     .btn-soft-warning {
-        background-color: #fff3cd;
-        color: #856404;
+        background: #f7e3d8;
+        color: #832b00;
         border: none;
+        transition: .2s;
     }
+
+    .btn-soft-warning:hover {
+        background: #b46e4c;
+        color: #ffffff;
+    }
+
+    /* Soft Delete Button */
 
     .btn-soft-danger {
-        background-color: #fdecea;
-        color: #dc3545;
+        background: #fdecea;
+        color: #c0392b;
         border: none;
+        transition: .2s;
     }
 
-    .btn-soft-danger:hover,
-    .btn-soft-info:hover,
-    .btn-soft-warning:hover {
-        opacity: 0.85;
+    .btn-soft-danger:hover {
+        background: #c0392b;
+        color: #ffffff;
     }
 
-    .header-box {
-        background-color: #ffffff;
-        border-radius: 1rem;
-        padding: 1.25rem 1.5rem;
-        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+    /* DataTables */
+
+    .dataTables_wrapper .dt-buttons {
+        margin-bottom: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: .5rem;
     }
 
-    .test-name {
-    font-weight: 600;
-}
+    .dataTables_wrapper .dataTables_filter {
+        margin-bottom: 1rem;
+        margin-top: .5rem;
+    }
 
+    .dataTables_wrapper .dataTables_filter input {
+        border-radius: .5rem !important;
+        border: 1px solid #edd7ca;
+        padding: .35rem .75rem;
+    }
 
+    .dataTables_wrapper .dataTables_filter input:focus {
+        border-color: #b46e4c;
+        box-shadow: 0 0 0 .2rem rgba(180,110,76,.15);
+        outline: none;
+    }
+
+    .dt-button {
+        background: #f7e3d8 !important;
+        color: #832b00 !important;
+        border: 1px solid #edd7ca !important;
+        border-radius: 50px !important;
+        transition: .2s;
+    }
+
+    .dt-button:hover {
+        background: #b46e4c !important;
+        color: #ffffff !important;
+        border-color: #b46e4c !important;
+    }
+
+    /* Alerts */
+
+    .alert {
+        border-radius: .75rem;
+    }
+
+    /* Responsive */
 
     @media screen and (max-width: 768px) {
+
         .dataTables_wrapper .dataTables_filter {
             float: none;
             text-align: left;
         }
+
         .dataTables_wrapper .dt-buttons {
-            justify-content: start;
+            justify-content: flex-start;
         }
+
     }
 </style>
 @endsection
@@ -110,7 +218,7 @@
 
     <div class="header-box mb-4 d-flex justify-content-between align-items-center">
         <h4 class="fw-semibold text-dark mb-0">
-            <i class="bi bi-clipboard-check text-primary me-2"></i>
+            <i class="bi bi-clipboard-check me-2" style="color:#832b00;"></i>
             All Tests
         </h4>
         <a href="{{ route('mock-tests.create') }}" class="btn btn-primary rounded-pill">

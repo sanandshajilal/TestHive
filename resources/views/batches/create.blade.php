@@ -8,32 +8,102 @@
         background-color: #f9fafb;
     }
 
+    /* Header */
+
     .header-box {
-        background-color: #ffffff;
+        position: relative;
+        background: #ffffff;
         border-radius: 1rem;
         padding: 1.25rem 1.5rem;
-        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
+        overflow: hidden;
     }
+
+    .header-box::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: #832b00;
+    }
+
+    /* Form Card */
 
     .card-style {
+        background: #ffffff;
         border-radius: 1rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        background-color: #fff;
         padding: 1.75rem;
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
     }
+
+    /* Labels */
 
     .form-label {
-        font-weight: 500;
+        font-weight: 600;
+        color: #374151;
     }
 
-    .btn-success,
-    .btn-secondary {
-        border-radius: 50px;
+    /* Inputs */
+
+    .form-control,
+    .form-select {
+        border-radius: .75rem;
+        border: 1px solid #d9d9d9;
+        padding: .7rem .9rem;
+        transition: .2s;
     }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #b46e4c;
+        box-shadow: 0 0 0 .2rem rgba(180,110,76,.15);
+    }
+
+    /* Primary Button */
+
+    .btn-success {
+        background: #b46e4c;
+        border-color: #b46e4c;
+        border-radius: 50px;
+        transition: .2s;
+    }
+
+    .btn-success:hover {
+        background: #832b00;
+        border-color: #832b00;
+    }
+
+    /* Secondary Button */
+
+    .btn-secondary {
+        background: #f7e3d8;
+        border-color: #edd7ca;
+        color: #832b00;
+        border-radius: 50px;
+        transition: all .2s ease;
+    }
+
+    .btn-secondary:hover,
+    .btn-secondary:focus {
+        background: #b46e4c;
+        border-color: #b46e4c;
+        color: #ffffff;
+    }
+
+    .btn-secondary:active {
+        background: #832b00 !important;
+        border-color: #832b00 !important;
+        color: #ffffff !important;
+    }
+
+    /* Alert */
 
     .alert {
-        border-radius: 0.75rem;
+        border-radius: .75rem;
     }
+    
 </style>
 @endsection
 
@@ -44,7 +114,7 @@
 
         <div>
             <h5 class="mb-0 text-dark fw-semibold">
-                <i class="bi bi-people-fill me-2 text-primary"></i>
+                <i class="bi bi-people-fill me-2" style="color:#832b00;"></i>
                 Create Batch
             </h5>
 
@@ -123,15 +193,14 @@
                     <div class="d-flex justify-content-end gap-2">
 
                         <a href="{{ route('batches.index') }}"
-                           class="btn btn-secondary">
+                        class="btn btn-secondary px-4">
                             Cancel
                         </a>
 
                         <button type="submit"
-                                class="btn btn-success">
+                                class="btn btn-success px-4">
                             Create Batch
                         </button>
-
                     </div>
 
                 </form>

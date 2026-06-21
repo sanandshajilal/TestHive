@@ -9,54 +9,94 @@
         background-color: #f9fafb;
     }
 
+    /* Header */
+
     .header-box {
-        background-color: #ffffff;
+        position: relative;
+        background: #ffffff;
         border-radius: 1rem;
         padding: 1.25rem 1.5rem;
-        box-shadow: 0 1px 6px rgba(0,0,0,.05);
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
+        overflow: hidden;
+    }
+
+    .header-box::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: #832b00;
+    }
+
+    /* Buttons */
+
+    .btn-primary {
+        background: #b46e4c;
+        border-color: #b46e4c;
+        border-radius: 50px;
+    }
+
+    .btn-primary:hover {
+        background: #832b00;
+        border-color: #832b00;
+    }
+
+    .btn-outline-primary {
+        color: #832b00;
+        border-color: #b46e4c;
+        border-radius: 50px;
+    }
+
+    .btn-outline-primary:hover {
+        background: #b46e4c;
+        border-color: #b46e4c;
+        color: #ffffff;
     }
 
     .btn-soft-warning {
-        background-color: #fff3cd;
-        color: #856404;
-        border: none;
-        transition: all .2s ease;
-    }
-
-    .btn-soft-danger {
-        background-color: #fdecea;
-        color: #dc3545;
+        background: #f7e3d8;
+        color: #832b00;
         border: none;
         transition: all .2s ease;
     }
 
     .btn-soft-warning:hover {
-        background-color: #ffc107;
-        color: #212529;
+        background: #b46e4c;
+        color: #ffffff;
+    }
+
+    .btn-soft-danger {
+        background: #fdecea;
+        color: #dc3545;
+        border: none;
+        transition: all .2s ease;
     }
 
     .btn-soft-danger:hover {
-        background-color: #dc3545;
-        color: #fff;
+        background: #dc3545;
+        color: #ffffff;
     }
+
+    /* Accordion */
 
     .accordion-item {
         border: none;
         margin-bottom: 1rem;
         border-radius: 1rem !important;
         overflow: hidden;
-        box-shadow: 0 2px 8px rgba(0,0,0,.04);
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
     }
 
     .accordion-button {
-        background: #fff;
+        background: #ffffff;
         padding: 1rem 1.25rem;
         box-shadow: none !important;
     }
 
     .accordion-button:not(.collapsed) {
-        background: #f8fafc;
-        color: inherit;
+        background: #fcf7f3;
     }
 
     .accordion-button:focus {
@@ -64,10 +104,12 @@
         border-color: transparent;
     }
 
+    /* Batch */
+
     .batch-title {
         font-size: 1rem;
         font-weight: 600;
-        color: #212529;
+        color: #374151;
     }
 
     .batch-meta {
@@ -77,8 +119,8 @@
     }
 
     .student-count {
-        background: #eef2ff;
-        color: #4f46e5;
+        background: #f7e3d8;
+        color: #832b00;
         padding: .35rem .8rem;
         border-radius: 999px;
         font-size: .8rem;
@@ -86,9 +128,11 @@
     }
 
     .accordion-body {
-        background: #fff;
+        background: #ffffff;
         padding: 1rem;
     }
+
+    /* Student List */
 
     .list-group {
         padding: 0;
@@ -99,17 +143,22 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-radius: .75rem;
-        padding: .85rem 1rem;
-        margin-bottom: .5rem;
-        border: 1px solid #e2e8f0;
-        background: #fff;
+        border-radius: .8rem;
+        padding: .9rem 1rem;
+        margin-bottom: .6rem;
+        border: 1px solid #f1e4dc;
+        background: #ffffff;
         transition: all .2s ease;
     }
 
+    .list-group-item:last-child {
+        margin-bottom: 0;
+    }
+
     .list-group-item:hover {
-        background-color: #f8fafc;
-        border-color: #dbe7ff;
+        background: #fcf7f3;
+        border-color: #edd7ca;
+        transform: translateY(-1px);
     }
 
     .student-name {
@@ -126,17 +175,30 @@
         margin-left: .25rem;
     }
 
+    /* Badges */
+
+    .bg-success-subtle {
+        background: #eef9f0 !important;
+    }
+
+    .text-success {
+        color: #198754 !important;
+    }
+
+    /* Empty */
+
     .empty-state {
         text-align: center;
-        padding: 1.5rem;
+        padding: 2rem 1rem;
         color: #6c757d;
     }
 
     .empty-state i {
         display: block;
         font-size: 2rem;
-        margin-bottom: .5rem;
-        color: #adb5bd;
+        margin-bottom: .6rem;
+        color: #b46e4c;
+        opacity: .7;
     }
 </style>
 
@@ -151,7 +213,7 @@
 
     <div>
         <h4 class="fw-semibold text-dark mb-0">
-            <i class="bi bi-mortarboard-fill text-primary me-2"></i>
+            <i class="bi bi-mortarboard-fill me-2" style="color:#832b00;"></i>
             Students
         </h4>
 
@@ -200,7 +262,7 @@
 
                         <div class="batch-title">
 
-                            <i class="bi bi-people-fill text-primary me-2"></i>
+                            <i class="bi bi-people-fill me-2" style="color:#b46e4c;"></i>
 
                             {{ $batch->name }}
 
@@ -213,12 +275,10 @@
                         </div>
 
                     </div>
-
-                    <span class="student-count me-3">
-
-                        {{ $batch->students->count() }} Students
-
-                    </span>
+                        <span class="student-count me-3">
+                            <i class="bi bi-person-fill me-1"></i>
+                            {{ $batch->students->count() }}
+                        </span>
 
                 </div>
 

@@ -8,27 +8,118 @@
         background-color: #f9fafb;
     }
 
-    .form-card {
-        background: #fff;
-        border-radius: 1rem;
-        padding: 2rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,.04);
-    }
+    /* Header */
 
     .page-header {
-        background: #fff;
+        background: #ffffff;
         border-radius: 1rem;
         padding: 1.25rem 1.5rem;
         margin-bottom: 1.5rem;
-        box-shadow: 0 1px 6px rgba(0,0,0,.05);
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
+        border-top: 5px solid #832b00;
     }
+
+    /* Form Card */
+
+    .form-card {
+        background: #ffffff;
+        border-radius: 1rem;
+        padding: 2rem;
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
+    }
+
+    /* Labels */
 
     .form-label {
         font-weight: 600;
+        color: #374151;
     }
 
     .required {
         color: #dc3545;
+    }
+
+    /* Inputs */
+
+    .form-control,
+    .form-select {
+        border-radius: .75rem;
+        border: 1px solid #d9d9d9;
+        padding: .7rem .9rem;
+        transition: .2s;
+        background: #ffffff;
+    }
+
+    .form-control:hover,
+    .form-select:hover {
+        border-color: #b46e4c;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #b46e4c;
+        box-shadow: 0 0 0 .2rem rgba(180,110,76,.15);
+    }
+
+    /* Primary Button */
+
+    .btn-primary {
+        background: #b46e4c;
+        border-color: #b46e4c;
+        border-radius: 50px;
+        transition: .2s;
+    }
+
+    .btn-primary:hover {
+        background: #832b00;
+        border-color: #832b00;
+    }
+
+    /* Secondary Button */
+
+    .btn-outline-secondary {
+        background: #f7e3d8;
+        border: 1px solid #edd7ca;
+        color: #832b00;
+        border-radius: 50px;
+        transition: all .2s ease;
+    }
+
+    .btn-outline-secondary:hover,
+    .btn-outline-secondary:focus {
+        background: #b46e4c;
+        border-color: #b46e4c;
+        color: #ffffff;
+    }
+
+    /* Validation */
+
+    .invalid-feedback {
+        font-size: .875rem;
+    }
+
+    .is-invalid {
+        border-color: #dc3545;
+    }
+
+    .form-select {
+        border-radius: .75rem;
+        border: 1px solid #d9d9d9;
+        padding: .7rem .9rem;
+
+        /* Keep space for arrow */
+        padding-right: 2.5rem;
+
+        /* ACCAPrep arrow */
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23832b00' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right .9rem center;
+        background-size: 16px 12px;
+    }
+
+    .form-select:focus {
+        border-color: #b46e4c;
+        box-shadow: 0 0 0 .2rem rgba(180,110,76,.15);
     }
 </style>
 @endsection
@@ -40,7 +131,7 @@
     <div class="page-header">
 
         <h4 class="mb-1">
-            <i class="bi bi-person-plus-fill text-primary me-2"></i>
+            <i class="bi bi-person-plus-fill me-2" style="color:#832b00;"></i>
             Add Student
         </h4>
 

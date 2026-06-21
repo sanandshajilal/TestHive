@@ -6,32 +6,115 @@
         background-color: #f9fafb;
     }
 
+    /* Header */
+
     .header-box {
-        background-color: #ffffff;
+        position: relative;
+        background: #ffffff;
         border-radius: 1rem;
         padding: 1.25rem 1.5rem;
-        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
+        overflow: hidden;
     }
+
+    .header-box::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: #832b00;
+    }
+
+    /* Main Card */
 
     .card-style {
+        background: #ffffff;
         border-radius: 1rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        background-color: #fff;
         padding: 1.5rem;
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
     }
+
+    /* Section Divider */
+
+    .border-bottom {
+        border-color: #edd7ca !important;
+    }
+
+    /* Labels */
 
     .form-label {
-        font-weight: 500;
-        }
-        .section-heading {
-        border-bottom: 1px solid #e5e7eb;
-        padding-bottom: 0.75rem;
-        margin-bottom: 1rem;
+        font-weight: 600;
+        color: #374151;
     }
 
-    .form-select,
-    .form-control {
-        border-radius: 0.6rem;
+    /* Inputs */
+
+    .form-control,
+    .form-select {
+        border: 1px solid #d9d9d9;
+        border-radius: .75rem;
+        transition: all .2s ease;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #b46e4c;
+        box-shadow: 0 0 0 .2rem rgba(180,110,76,.15);
+    }
+
+    /* Primary Button */
+
+    .btn-success {
+        background: #b46e4c;
+        border-color: #b46e4c;
+        color: #fff;
+        border-radius: 50px;
+        transition: .2s;
+    }
+
+    .btn-success:hover {
+        background: #832b00;
+        border-color: #832b00;
+        color: #fff;
+    }
+
+    /* Secondary Button */
+
+    .btn-secondary {
+        background: #f7e3d8;
+        border-color: #edd7ca;
+        color: #832b00;
+        border-radius: 50px;
+        transition: .2s;
+    }
+
+    .btn-secondary:hover {
+        background: #b46e4c;
+        border-color: #b46e4c;
+        color: #fff;
+    }
+
+    /* Alerts */
+
+    .alert {
+        border-radius: .75rem;
+    }
+
+    /* Validation */
+
+    .text-danger {
+        font-size: .9rem;
+    }
+
+
+
+    /* Section Icons */
+
+    h5 i,
+    h6 i {
+        color: #832b00;
     }
 </style>
 @endsection
@@ -41,7 +124,7 @@
     <div class="header-box mb-4 d-flex justify-content-between align-items-center">
         <div>
             <h5 class="mb-0 text-dark fw-semibold">
-                <i class="bi bi-pencil-square text-warning me-2"></i>
+                <i class="bi bi-pencil-square me-2" style="color:#832b00;"></i>
                 Edit Question
             </h5>
 
@@ -60,7 +143,7 @@
             @method('PUT')
             <div class="border-bottom pb-2 mb-3">
                 <h6 class="fw-semibold mb-1">
-                    <i class="bi bi-sliders me-2"></i>
+                    <i class="bi bi-sliders me-2" style="color:#832b00;"></i>
                     Question Configuration
                 </h6>
             </div>
@@ -116,7 +199,7 @@
 
             <div class="border-bottom pb-2 mb-3 mt-4">
                 <h6 class="fw-semibold mb-1">
-                    <i class="bi bi-pencil-square me-2"></i>
+                    <i class="bi bi-pencil-square me-2" style="color:#832b00;"></i>
                     Question Content
                 </h6>
             </div>
@@ -138,7 +221,7 @@
 
             <div class="border-bottom pb-2 mb-3 mt-4">
                 <h6 class="fw-semibold mb-1">
-                    <i class="bi bi-award me-2"></i>
+                    <i class="bi bi-award me-2" style="color:#832b00;"></i>
                     Scoring
                 </h6>
             </div>

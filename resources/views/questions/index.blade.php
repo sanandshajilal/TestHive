@@ -3,171 +3,258 @@
 @section('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
-    <style>
-        body {
-            background-color: #f9fafb;
-        }
+<style>
+    body {
+        background-color: #f9fafb;
+    }
 
-        .card-style {
-            border-radius: 1rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-            background-color: #fff;
-            padding: 1.5rem;
-        }
+    /* Header */
 
-        .table thead {
-            background-color: #f1f3f5;
-        }
+    .header-box {
+        position: relative;
+        background: #ffffff;
+        border-radius: 1rem;
+        padding: 1.25rem 1.5rem;
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
+        overflow: hidden;
+    }
 
-        td {
-            white-space: normal !important;
-            word-wrap: break-word;
-        }
+    .header-box::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: #832b00;
+    }
 
-        td.question-col {
-            max-width: 800px;
-            min-width: 400px;
-        }
+    /* Main Card */
 
-        .btn-sm {
-            padding: 0.35rem 0.6rem;
-            font-size: 0.8rem;
-        }
+    .card-style {
+        background: #ffffff;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
+    }
 
-        .table-responsive {
-            border-radius: 0.75rem;
-            overflow: hidden;
+    /* Summary Cards */
+
+    .summary-card {
+        background: #ffffff;
+        border: 1px solid #edd7ca;
+        border-radius: 1rem;
+        padding: 1rem 1.25rem;
+        height: 100%;
+        transition: all .2s ease;
+        box-shadow: 0 2px 8px rgba(180,110,76,.08);
+    }
+
+    .summary-card:hover {
+        border-color: #d6b29d;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(180,110,76,.12);
+    }
+
+    .summary-label {
+        font-size: .8rem;
+        color: #9a5631;
+        margin-bottom: .35rem;
+    }
+
+    .summary-value {
+        font-size: 1.45rem;
+        font-weight: 700;
+        color: #1f2937;
+        line-height: 1;
+    }
+
+    /* Filters */
+
+    .border-bottom {
+        border-color: #edd7ca !important;
+    }
+
+    .form-control,
+    .form-select {
+        border-radius: .75rem;
+        border: 1px solid #d9d9d9;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #b46e4c;
+        box-shadow: 0 0 0 .2rem rgba(180,110,76,.15);
+    }
+
+    /* Table */
+
+    .table thead {
+        background: #fcf7f3;
+    }
+
+    .table thead th {
+        color: #9a5631;
+        font-weight: 600;
+        border-bottom: 1px solid #edd7ca;
+    }
+
+    .table-bordered th,
+    .table-bordered td {
+        border-color: #edd7ca;
+        vertical-align: middle;
+    }
+
+    .table tbody tr:hover {
+        background: #fcf7f3;
+    }
+
+    td {
+        white-space: normal !important;
+        word-wrap: break-word;
+    }
+
+    td.question-col {
+        max-width: 800px;
+        min-width: 400px;
+    }
+
+    /* Rendered HTML tables inside questions */
+
+    .question-col table {
+        border-collapse: collapse;
+        border: 1px solid #edd7ca;
+        width: auto;
+        margin-top: .5rem;
+        margin-bottom: .5rem;
+    }
+
+    .question-col th,
+    .question-col td {
+        border: 1px solid #edd7ca;
+        padding: 6px 10px;
+        font-size: .9rem;
+        text-align: left;
+    }
+
+    .question-col th {
+        background: #fcf7f3;
+        color: #9a5631;
+        font-weight: 600;
+    }
+
+    /* Buttons */
+
+    .btn-primary {
+        background: #b46e4c;
+        border-color: #b46e4c;
+    }
+
+    .btn-primary:hover {
+        background: #832b00;
+        border-color: #832b00;
+    }
+
+    .btn-soft-info {
+        background: #e9f3f3;
+        color: #2f6d73;
+        border: none;
+        transition: .2s;
+    }
+
+    .btn-soft-info:hover {
+        background: #2f6d73;
+        color: #fff;
+    }
+
+    .btn-soft-warning {
+        background: #f7e3d8;
+        color: #832b00;
+        border: none;
+        transition: .2s;
+    }
+
+    .btn-soft-warning:hover {
+        background: #b46e4c;
+        color: #fff;
+    }
+
+    .btn-soft-danger {
+        background: #fdecea;
+        color: #c0392b;
+        border: none;
+        transition: .2s;
+    }
+
+    .btn-soft-danger:hover {
+        background: #c0392b;
+        color: #fff;
+    }
+
+    .btn-sm.btn-soft-info,
+    .btn-sm.btn-soft-warning,
+    .btn-sm.btn-soft-danger {
+        padding: .35rem .6rem;
+        font-size: .8rem;
+        min-width: 32px;
+        height: 32px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: .3rem;
+    }
+
+    /* DataTables */
+
+    .table-responsive {
+        border-radius: .75rem;
+        overflow: hidden;
+    }
+
+    .dataTables_wrapper .dt-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .5rem;
+        margin-bottom: 1rem;
+    }
+
+    .dataTables_wrapper .dt-buttons .btn {
+        border-radius: 50px !important;
+    }
+
+    .dataTables_wrapper .dataTables_filter {
+        margin-top: .5rem;
+        margin-bottom: 1rem;
+    }
+
+    .dataTables_wrapper .dataTables_filter input {
+        border-radius: .75rem !important;
+        border: 1px solid #d9d9d9 !important;
+        padding: .35rem .75rem !important;
+    }
+
+    .dataTables_wrapper .dataTables_filter input:focus {
+        border-color: #b46e4c !important;
+        box-shadow: 0 0 0 .2rem rgba(180,110,76,.15) !important;
+    }
+
+    @media (max-width:768px) {
+
+        .dataTables_wrapper .dataTables_filter {
+            float: none;
+            text-align: left;
         }
 
         .dataTables_wrapper .dt-buttons {
-            margin-bottom: 1rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
+            justify-content: flex-start;
         }
-
-        .dataTables_wrapper .dt-buttons .btn,
-        .dataTables_wrapper .dataTables_filter input {
-            border-radius: 0.5rem !important;
-        }
-
-        .dataTables_wrapper .dataTables_filter {
-            margin-bottom: 1rem;
-            margin-top: 0.5rem;
-        }
-
-        .header-box {
-            background-color: #ffffff;
-            border-radius: 1rem;
-            padding: 1.25rem 1.5rem;
-            box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
-        }
-
-        .action-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 0.25rem;
-        }
-
-        .btn-soft-warning {
-            background-color: #fff3cd;
-            color: #856404;
-            border: none;
-        }
-
-        .btn-soft-danger {
-            background-color: #fdecea;
-            color: #dc3545;
-            border: none;
-        }
-        .btn-soft-info {
-                background-color: #d1ecf1; /* light blue */
-                color: #0c5460;            /* dark teal/blue for contrast */
-                border: none;
-            }
-
-        .btn-soft-warning:hover,
-        .btn-soft-danger:hover,
-        .btn-soft-info:hover {
-            opacity: 0.85;
-        }
-        
-        .btn-sm.btn-soft-warning,
-        .btn-sm.btn-soft-danger,
-        .btn-sm.btn-soft-info {
-            padding: 0.35rem 0.6rem;
-            font-size: 0.8rem;
-            min-width: 30px;
-            height: 30px;
-            line-height: 1;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: none;
-        }
-
-            .question-col table {
-                border-collapse: collapse;
-                border: 1px solid #ccc;
-                width: auto;
-                margin-top: 0.5rem;
-                margin-bottom: 0.5rem;
-            }
-
-            .question-col th,
-            .question-col td {
-                border: 1px solid #ccc;
-                padding: 6px 10px;
-                font-size: 0.9rem;
-                text-align: left;
-            }
-
-            .question-col th {
-                background-color: #f8f9fa;
-                font-weight: 600;
-            }
-
-            .summary-card {
-                background: #ffffff;
-                border: 1px solid #e9ecef;
-                border-radius: 0.75rem;
-                padding: 1rem 1.25rem;
-                height: 100%;
-                transition: all 0.2s ease;
-                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-            }
-
-            .summary-card:hover {
-                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-                transform: translateY(-1px);
-            }
-
-            .summary-label {
-                font-size: 0.8rem;
-                color: #6c757d;
-                margin-bottom: 0.35rem;
-            }
-
-            .summary-value {
-                font-size: 1.4rem;
-                font-weight: 700;
-                color: #212529;
-                line-height: 1;
-            }
-
-
-
-        @media screen and (max-width: 768px) {
-            .dataTables_wrapper .dataTables_filter {
-                float: none;
-                text-align: left;
-            }
-
-            .dataTables_wrapper .dt-buttons {
-                justify-content: start;
-            }
-        }
-    </style>
+    }
+</style>
 @endsection
 
 @section('content')
@@ -175,7 +262,7 @@
     <div class="header-box mb-4 d-flex justify-content-between align-items-center">
         <div>
             <h4 class="fw-semibold text-dark mb-0">
-                <i class="bi bi-collection text-primary me-2"></i>
+                <i class="bi bi-collection me-2" style="color:#832b00;"></i>
                 Question Bank
             </h4>
 
@@ -224,7 +311,7 @@
         <!-- Filters -->
          <div class="border-bottom pb-2 mb-3">
             <h6 class="fw-semibold mb-1">
-                <i class="bi bi-funnel me-2"></i>
+                <i class="bi bi-funnel me-2" style="color:#832b00;"></i>
                 Filters
             </h6>
 

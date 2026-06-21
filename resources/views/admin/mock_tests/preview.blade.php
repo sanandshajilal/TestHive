@@ -8,64 +8,150 @@
         background-color: #f9fafb;
     }
 
+    /* Header */
+
     .header-box {
-        background-color: #ffffff;
+        position: relative;
+        background: #ffffff;
         border-radius: 1rem;
         padding: 1.25rem 1.5rem;
-        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
+        overflow: hidden;
     }
+
+    .header-box::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: #832b00;
+    }
+
+    /* Main Cards */
 
     .card-style {
+        background: #ffffff;
         border-radius: 1rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        background-color: #fff;
-        padding: 1.5rem;
+        padding: 1.75rem;
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
     }
+
+    /* Question Card */
 
     .question-card {
-        background-color: #fff;
-        border: 1px solid #e3e6ea;
+        background: #ffffff;
+        border: 1px solid #edd7ca;
         border-radius: 1rem;
-        padding: 1.25rem 1.5rem;
-        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.025);
+        padding: 1.4rem 1.5rem;
         margin-bottom: 1.5rem;
+        transition: all .2s ease;
     }
 
+    .question-card:hover {
+        box-shadow: 0 4px 12px rgba(180,110,76,.12);
+        border-color: #d6b29d;
+    }
+
+    /* Section Divider */
+
+    .border-bottom {
+        border-color: #edd7ca !important;
+    }
+
+    /* Heading Icons */
+
+    h5 i,
+    h6 i {
+        color: #832b00;
+    }
+
+    /* Edit Link */
+
+    .edit-link {
+        position: absolute;
+        top: 1rem;
+        right: 1.25rem;
+        font-size: .875rem;
+        color: #9a5631;
+        text-decoration: none;
+        transition: .2s;
+    }
+
+    .edit-link:hover {
+        color: #832b00;
+        text-decoration: none;
+    }
+
+    /* Question */
+
+    .question-content {
+        word-break: break-word;
+        line-height: 1.7;
+        color: #1f2937;
+    }
+
+    /* Meta */
+
     .question-meta {
-        font-size: 0.875rem;
-        color: #6c757d;
-        border-top: 1px dashed #dee2e6;
-        padding-top: 0.75rem;
+        font-size: .85rem;
+        color: #9a5631;
+        border-top: 1px dashed #edd7ca;
+        padding-top: .75rem;
         margin-top: 1rem;
         text-align: right;
     }
 
-    .edit-link {
-        font-size: 0.875rem;
-        color: #6c757d;
-        position: absolute;
-        top: 1rem;
-        right: 1.25rem;
-        text-decoration: none;
+    /* Tables */
+
+    .table thead {
+        background: #fcf7f3;
     }
 
-    .edit-link:hover {
-        text-decoration: underline;
-        color: #0d6efd;
+    .table thead th {
+        color: #9a5631;
+        border-bottom: 1px solid #edd7ca;
+        font-weight: 600;
     }
 
-    .question-content {
-        word-break: break-word;
+    .table-bordered td,
+    .table-bordered th {
+        border-color: #edd7ca;
     }
 
-    .question-card {
-    transition: all .2s ease;
-}
+    /* Secondary Button */
 
-.question-card:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,.06);
-}
+    .btn-secondary {
+        background: #f7e3d8;
+        border-color: #edd7ca;
+        color: #832b00;
+        border-radius: 50px;
+        transition: .2s;
+    }
 
+    .btn-secondary:hover {
+        background: #b46e4c;
+        border-color: #b46e4c;
+        color: #ffffff;
+    }
+
+    /* Test Information */
+
+    .card-style h4 {
+        color: #832b00;
+        font-weight: 700;
+    }
+
+    strong {
+        color: #374151;
+    }
+
+    /* Empty State */
+
+    .card-style p {
+        margin-bottom: 0;
+    }
 </style>
 @endsection
 
@@ -75,7 +161,7 @@
     <div class="header-box mb-4 d-flex justify-content-between align-items-center">
         <div>
             <h5 class="mb-0 text-dark fw-semibold">
-                <i class="bi bi-file-earmark-text text-primary me-2"></i>
+                <i class="bi bi-file-earmark-text me-2" style="color:#832b00;"></i>
                 Test Preview
             </h5>
 
@@ -118,7 +204,7 @@
     <div class="card-style">
         <div class="border-bottom pb-2 mb-4">
             <h5 class="fw-semibold mb-1">
-                <i class="bi bi-journal-check me-2"></i>
+                <i class="bi bi-journal-check me-2" style="color:#832b00;"></i>
                 Question Bank
             </h5>
 

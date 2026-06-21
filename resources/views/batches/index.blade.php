@@ -8,55 +8,102 @@
         background-color: #f9fafb;
     }
 
+    /* Header */
+
     .header-box {
-        background-color: #ffffff;
+        position: relative;
+        background: #ffffff;
         border-radius: 1rem;
         padding: 1.25rem 1.5rem;
-        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
+        overflow: hidden;
     }
+
+    .header-box::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 5px;
+        background: #832b00;
+    }
+
+    /* Cards */
 
     .card-style {
+        background: #ffffff;
         border-radius: 1rem;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-        background-color: #fff;
         padding: 1.5rem;
+        box-shadow: 0 2px 10px rgba(180,110,76,.08);
     }
+
+    /* Primary Button */
+
+    .btn-primary {
+        background: #b46e4c;
+        border-color: #b46e4c;
+        border-radius: 50px;
+        transition: .2s;
+    }
+
+    .btn-primary:hover {
+        background: #832b00;
+        border-color: #832b00;
+    }
+
+    /* Soft Buttons */
 
     .btn-soft-warning {
-        background-color: #fff3cd;
-        color: #856404;
-        border: none;
-        transition: all .2s ease;
-    }
-
-    .btn-soft-danger {
-        background-color: #fdecea;
-        color: #dc3545;
+        background: #f7e3d8;
+        color: #832b00;
         border: none;
         transition: all .2s ease;
     }
 
     .btn-soft-warning:hover {
-        background-color: #ffc107;
-        color: #212529;
+        background: #b46e4c;
+        color: #ffffff;
+    }
+
+    .btn-soft-danger {
+        background: #fdecea;
+        color: #dc3545;
+        border: none;
+        transition: all .2s ease;
     }
 
     .btn-soft-danger:hover {
-        background-color: #dc3545;
-        color: #fff;
+        background: #dc3545;
+        color: #ffffff;
     }
 
+    /* Institute Header */
+
     .institute-header {
-        background: #f8fafc;
-        border: 1px solid #e2e8f0;
-        color: #1f2937;
+        background: #fcf7f3;
+        border: 1px solid #edd7ca;
+        color: #832b00;
         font-weight: 600;
-        padding: 0.85rem 1.25rem;
-        border-radius: 0.75rem;
+        padding: .9rem 1.25rem;
+        border-radius: .85rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
+
+    .institute-header i {
+        color: #b46e4c !important;
+    }
+
+    .institute-header .badge {
+        background: #ffffff !important;
+        color: #832b00 !important;
+        border: 1px solid #edd7ca !important;
+        font-weight: 600;
+    }
+
+    /* Batch List */
 
     .list-group {
         padding: 0;
@@ -67,40 +114,50 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-radius: 0.75rem;
-        padding: 0.85rem 1rem;
-        margin-bottom: 0.5rem;
-        border: 1px solid #e2e8f0;
-        background-color: #ffffff;
+        padding: .9rem 1rem;
+        margin-bottom: .6rem;
+        border-radius: .85rem;
+        border: 1px solid #f1e4dc;
+        background: #ffffff;
         transition: all .2s ease;
     }
 
-    .list-group-item:hover {
-        background-color: #f8fafc;
-        border-color: #dbe7ff;
+    .list-group-item:last-child {
+        margin-bottom: 0;
     }
 
-    .batch-actions .btn {
-        margin-left: 0.25rem;
+    .list-group-item:hover {
+        background: #fcf7f3;
+        border-color: #edd7ca;
+        transform: translateY(-1px);
     }
 
     .batch-name {
         font-weight: 600;
-        color: #212529;
+        color: #374151;
     }
+
+    .batch-actions .btn {
+        margin-left: .3rem;
+    }
+
+    /* Empty State */
 
     .empty-state {
         text-align: center;
-        padding: 1rem;
-        color: #6c757d;
+        padding: 2rem 1rem;
+        color: #6b7280;
     }
 
     .empty-state i {
-        font-size: 1.75rem;
         display: block;
-        margin-bottom: 0.5rem;
-        color: #adb5bd;
+        font-size: 2rem;
+        margin-bottom: .75rem;
+        color: #b46e4c;
+        opacity: .7;
     }
+
+    /* Spacing */
 
     .section-spacing {
         margin-top: 1rem;
@@ -115,7 +172,7 @@
 
         <div>
             <h4 class="fw-semibold text-dark mb-0">
-                <i class="bi bi-people-fill text-primary me-2"></i>
+                <i class="bi bi-people-fill me-2" style="color:#832b00;"></i>
                 Batches
             </h4>
 
@@ -138,7 +195,7 @@
             <div class="institute-header">
 
                 <div>
-                    <i class="bi bi-building me-2 text-primary"></i>
+                    <i class="bi bi-building me-2" style="color:#b46e4c;"></i>
                     {{ $institute->name }}
                 </div>
 
