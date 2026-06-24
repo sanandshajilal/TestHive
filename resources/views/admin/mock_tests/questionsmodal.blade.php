@@ -2,7 +2,7 @@
     {{-- Question --}}
     <div class="mb-3">
         <div class="fw-bold">Question:</div>
-        <div class="question-content">{!! $question->question_text !!}</div>
+        <div class="question-content">{!! str_replace('[blank]', '__________', $question->question_text) !!}</div>
     </div>
 
     @php
