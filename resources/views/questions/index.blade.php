@@ -503,15 +503,37 @@ td.question-col {
    DATATABLES
 =================================== */
 
-.dataTables_wrapper .dt-buttons {
+.dataTables_wrapper .dt-buttons .btn {
 
-    display: flex;
+    background: #fff !important;
 
-    flex-wrap: wrap;
+    color: #9a5631 !important;
 
-    gap: .5rem;
+    border: 1px solid #edd7ca !important;
 
-    margin-bottom: 1rem;
+    border-radius: 50px !important;
+
+    padding: .45rem 1rem !important;
+
+    font-size: .84rem !important;
+
+    font-weight: 600 !important;
+
+    box-shadow: 0 2px 8px rgba(180,110,76,.06);
+
+    transition: all .2s ease;
+
+}
+
+.dataTables_wrapper .dt-buttons .btn:hover {
+
+    background: #b46e4c !important;
+
+    color: #fff !important;
+
+    border-color: #b46e4c !important;
+
+    box-shadow: 0 4px 12px rgba(180,110,76,.15);
 
 }
 
@@ -774,22 +796,26 @@ td.question-col {
             buttons: [
                 {
                     extend: 'copy',
-                    className: 'btn btn-outline-secondary btn-sm rounded-pill',
+                    text: '<i class="bi bi-clipboard me-1"></i> Copy',
+                    className: 'btn',
                     exportOptions: { columns: ':not(:last-child)' }
                 },
                 {
                     extend: 'excel',
-                    className: 'btn btn-outline-success btn-sm rounded-pill',
+                    text: '<i class="bi bi-file-earmark-excel me-1"></i> Excel',
+                    className: 'btn',
                     exportOptions: { columns: ':not(:last-child)' }
                 },
                 {
                     extend: 'pdf',
-                    className: 'btn btn-outline-danger btn-sm rounded-pill',
+                    text: '<i class="bi bi-file-earmark-pdf me-1"></i> PDF',
+                    className: 'btn',
                     exportOptions: { columns: ':not(:last-child)' }
                 },
                 {
                     extend: 'print',
-                    className: 'btn btn-outline-dark btn-sm rounded-pill',
+                    text: '<i class="bi bi-printer me-1"></i> Print',
+                    className: 'btn',
                     exportOptions: { columns: ':not(:last-child)' }
                 }
             ]
