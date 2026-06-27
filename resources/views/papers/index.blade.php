@@ -172,8 +172,8 @@
         </div>
 
         <a href="{{ route('papers.create') }}" class="btn btn-primary rounded-pill">
-            <i class="bi bi-plus-circle me-1"></i>
-            Add New Paper
+            <i class="bi bi-plus-circle"></i>
+            <span class="d-none d-md-inline ms-1">Add New Paper</span>
         </a>
 
     </div>

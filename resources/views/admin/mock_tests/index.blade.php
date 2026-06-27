@@ -211,7 +211,11 @@ body {
 
     border-radius: .75rem;
 
-    overflow: hidden;
+    overflow-x: auto;
+
+    overflow-y: hidden;
+
+    -webkit-overflow-scrolling: touch;
 
 }
 
@@ -238,6 +242,8 @@ body {
     border-collapse: separate;
 
     border-spacing: 0 10px;
+
+    min-width: 1100px;
 
 }
 
@@ -519,17 +525,27 @@ body {
    MOBILE
 =================================== */
 
-@media(max-width:768px){
+@media (max-width:768px){
 
-    .action-buttons{
+    .header-box{
 
-        justify-content:flex-start;
+        flex-direction: column;
+
+        align-items: flex-start !important;
+
+        gap: 1rem;
+
+    }
+
+    .header-box .btn{
+
+        width: 100%;
 
     }
 
     .dataTables_wrapper .dt-buttons{
 
-        justify-content:flex-start;
+        justify-content: flex-start;
 
     }
 

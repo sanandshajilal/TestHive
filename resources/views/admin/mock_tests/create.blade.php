@@ -210,9 +210,10 @@
                 Configure test details and select questions from the question bank.
             </small>
         </div>
-        <a href="{{ route('mock-tests.index') }}" class="btn btn-secondary rounded-pill">
-            <i class="bi bi-arrow-left me-1"></i> Back to Tests
-        </a>
+            <a href="{{ route('mock-tests.index') }}" class="btn btn-secondary rounded-pill">
+                <i class="bi bi-arrow-left"></i>
+                <span class="d-none d-md-inline ms-1">Back to Tests</span>
+            </a>
     </div>
 
     {{-- Form --}}

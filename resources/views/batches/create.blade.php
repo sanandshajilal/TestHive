@@ -124,8 +124,8 @@
         </div>
 
         <a href="{{ route('batches.index') }}" class="btn btn-secondary rounded-pill">
-            <i class="bi bi-arrow-left me-1"></i>
-            Back to Batches
+            <i class="bi bi-arrow-left"></i>
+            <span class="d-none d-md-inline ms-1">Back to Batches</span>
         </a>
 
     </div>

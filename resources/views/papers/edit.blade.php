@@ -179,7 +179,8 @@
             </small>
         </div>
         <a href="{{ route('papers.index') }}" class="btn btn-secondary rounded-pill">
-            <i class="bi bi-arrow-left me-1"></i> Back to Papers
+            <i class="bi bi-arrow-left"></i>
+            <span class="d-none d-md-inline ms-1">Back to Papers</span>
         </a>
     </div>
 

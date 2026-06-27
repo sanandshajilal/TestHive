@@ -233,7 +233,11 @@ body {
 
     border-radius: .75rem;
 
-    overflow: hidden;
+    overflow-x: auto;
+
+    overflow-y: hidden;
+
+    -webkit-overflow-scrolling: touch;
 
 }
 
@@ -261,11 +265,14 @@ body {
 
     border-spacing: 0 10px;
 
+    min-width: 1200px;
+
 }
 
 /* ===================================
    ROW CARD STYLE
 =================================== */
+
 
 #questionsTable tbody tr {
 
@@ -573,17 +580,33 @@ td.question-col {
    MOBILE
 =================================== */
 
-@media(max-width:768px){
+@media (max-width:768px){
+
+    .header-box{
+
+        flex-direction: column;
+
+        align-items: flex-start !important;
+
+        gap: 1rem;
+
+    }
+
+    .header-box .btn{
+
+        width: 100%;
+
+    }
 
     td.question-col{
 
-        min-width:260px;
+        min-width: 420px;
 
     }
 
     .dataTables_wrapper .dt-buttons{
 
-        justify-content:flex-start;
+        justify-content: flex-start;
 
     }
 
@@ -653,8 +676,8 @@ td.question-col {
                 Narrow down questions by paper, topic, sub-topic and type.
             </small>
         </div>
-        <div class="row mb-4">
-            <div class="col-md-3">
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-md-3">
                 <select id="paper_id" class="form-select">
                     <option value="">All Papers</option>
                     @foreach ($papers as $paper)
@@ -663,19 +686,19 @@ td.question-col {
                 </select>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-12 col-md-3">
                 <select id="topic_id" class="form-select">
                     <option value="">All Topics</option>
                 </select>
             </div>
 
-            <div class="col-md-3">
+           <div class="col-12 col-md-3">
                 <select id="sub_topic_id" class="form-select">
                     <option value="">All Subtopics</option>
                 </select>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-12 col-md-3">
                 <select id="filterType" class="form-select">
                     <option value="">All Types</option>
                     <option value="mcq">MCQ</option>

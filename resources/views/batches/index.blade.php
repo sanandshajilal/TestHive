@@ -182,8 +182,8 @@
         </div>
 
         <a href="{{ route('batches.create') }}" class="btn btn-primary rounded-pill">
-            <i class="bi bi-plus-circle me-1"></i>
-            Add Batch
+            <i class="bi bi-plus-circle"></i>
+            <span class="d-none d-md-inline ms-1">Add Batch</span>
         </a>
 
     </div>

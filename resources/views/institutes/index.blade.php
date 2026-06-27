@@ -137,6 +137,23 @@
     margin-top: .75rem;
     color: #9a5631;
 }
+
+@media (max-width: 767.98px) {
+
+    .header-box .btn {
+
+        width: 42px;
+        height: 42px;
+        padding: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+    }
+
+}
+
 </style>
 @endsection
 
@@ -152,13 +169,13 @@
             </h4>
 
             <small class="text-muted">
-                Manage registered institutes ({{ $institutes->count() }})
+                Manage registered institutes 
             </small>
         </div>
 
         <a href="{{ route('institutes.create') }}" class="btn btn-primary rounded-pill">
-            <i class="bi bi-plus-circle me-1"></i>
-            Add Institute
+            <i class="bi bi-plus-circle"></i>
+            <span class="d-none d-md-inline ms-1">Add Institute</span>
         </a>
 
     </div>

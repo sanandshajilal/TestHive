@@ -149,8 +149,8 @@ body{
         </h4>
         <a href="{{ route('mock-tests.results', $attempt->mock_test_id) }}"
         class="btn btn-outline-secondary rounded-pill back-btn">
-            <i class="bi bi-arrow-left me-1"></i>
-            Back to Results
+            <i class="bi bi-arrow-left"></i>
+            <span class="d-none d-md-inline ms-1">Back to Results</span>
         </a>
     </div>
 

@@ -200,6 +200,8 @@
         color: #b46e4c;
         opacity: .7;
     }
+
+    
 </style>
 
 @endsection
@@ -224,19 +226,16 @@
 
     <div>
 
-            <a href="{{ route('students.bulk-upload.form') }}"
-            class="btn btn-outline-primary rounded-pill me-2">
-                <i class="bi bi-upload me-1"></i>
-                Bulk Upload
-            </a>
-
+        <a href="{{ route('students.bulk-upload.form') }}"
+        class="btn btn-outline-primary rounded-pill me-2">
+            <i class="bi bi-upload"></i>
+            <span class="d-none d-md-inline ms-1">Bulk Upload</span>
+        </a>
 
         <a href="{{ route('students.create') }}"
-           class="btn btn-primary rounded-pill">
-
-            <i class="bi bi-plus-circle me-1"></i>
-            Add Student
-
+        class="btn btn-primary rounded-pill">
+            <i class="bi bi-plus-circle"></i>
+            <span class="d-none d-md-inline ms-1">Add Student</span>
         </a>
 
     </div>

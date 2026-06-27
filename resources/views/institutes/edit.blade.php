@@ -90,6 +90,21 @@
         border-color: #b46e4c;
         color: #ffffff;
     }
+
+        @media (max-width: 767.98px) {
+
+    .header-box .btn {
+
+        width: 42px;
+        height: 42px;
+        padding: 0;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+    }
+}
 </style>
 @endsection
 
@@ -109,9 +124,9 @@
             </small>
         </div>
 
-        <a href="{{ route('institutes.index') }}" class="btn btn-secondary rounded-pill">
-            <i class="bi bi-arrow-left me-1"></i>
-            Back to Institutes
+      <a href="{{ route('institutes.index') }}" class="btn btn-secondary rounded-pill">
+            <i class="bi bi-arrow-left"></i>
+            <span class="d-none d-md-inline ms-1">Back to Institutes</span>
         </a>
 
     </div>
