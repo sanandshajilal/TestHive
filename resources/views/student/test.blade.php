@@ -188,6 +188,32 @@
             margin-bottom: 25px;
         }
 
+        .question-text table{
+            width:100%;
+            border-collapse:collapse;
+            margin:18px 0;
+            font-size:.95rem;
+        }
+
+        .question-text th{
+            background:#fcf7f3;
+            color:#832b00;
+            font-weight:600;
+            border:1px solid #d9d9d9;
+            padding:10px 12px;
+        }
+
+        .question-text td{
+            border:1px solid #e3e3e3;
+            padding:10px 12px;
+        }
+
+        .question-text tr:nth-child(even){
+            background:#fafafa;
+        }
+
+        
+
         /* ---------- OPTIONS ---------- */
 
         .option {

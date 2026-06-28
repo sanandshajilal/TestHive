@@ -153,6 +153,47 @@
             margin-bottom: .5rem;
         }
 
+
+        /* ---------- QUESTION TABLES ---------- */
+
+        .question-content table{
+            width:100%;
+            border-collapse:collapse;
+            margin:18px 0;
+            font-size:.95rem;
+        }
+
+        .question-content th{
+            background:var(--primary-light);
+            color:var(--primary-dark);
+            font-weight:600;
+            border:1px solid #d9d9d9;
+            padding:10px 12px;
+        }
+
+        .question-content td{
+            border:1px solid #e3e3e3;
+            padding:10px 12px;
+        }
+
+        .question-content tr:nth-child(even){
+            background:#fafafa;
+        }
+
+        /* First column slightly emphasized */
+
+        .question-content td:first-child{
+            font-weight:600;
+        }
+
+        /* Better alignment for numerical data */
+
+        .question-content th:not(:first-child),
+        .question-content td:not(:first-child){
+            text-align:right;
+        }
+        
+
         /* ---------- BADGES ---------- */
 
         .badge-correct {
