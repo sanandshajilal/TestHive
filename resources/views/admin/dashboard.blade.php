@@ -179,45 +179,85 @@
         padding-left: 1.4rem;
     }
 
-    /* Upcoming Tests */
-
-    .upcoming-test-item {
-        padding: 1rem 1.25rem;
-        border-bottom: 1px solid #f1f3f5;
+   .active-tests-body{
+        max-height:220px;
+        overflow-y:auto;
+        padding-right:6px;
     }
 
-    .upcoming-test-item:last-child {
-        border-bottom: none;
+    .upcoming-test-card{
+        display:flex;
+        align-items:flex-start;
+        gap:12px;
+        padding:12px;
+        border:1px solid #edd7ca;
+        border-radius:16px;
+        margin-bottom:10px;
+        background:#fff;
+        transition:.25s;
     }
 
-    .upcoming-test-card {
-        display: flex;
-        align-items: center;
-        border: 1px solid #edf2f7;
-        border-radius: 16px;
-        padding: 14px;
-        margin-bottom: 12px;
-        transition: all .2s ease;
+    .upcoming-test-card:hover{
+        border-color:#d8b39f;
+        box-shadow:0 6px 16px rgba(180,110,76,.10);
     }
 
-    .upcoming-test-card:last-child {
-        margin-bottom: 0;
+
+
+    .date-card i{
+        color:#b46e4c !important;
+         font-size:1.4rem !important;
     }
 
-    .upcoming-test-card:hover {
-        background: #fcf7f3;
-        border-color: #edd7ca;
+    .date-card small{
+        color:#832b00 !important;
+        font-size:.72rem;
     }
 
+    .progress{
+        background:#f3ece8;
+        border-radius:999px;
+        height:5px !important;
+    }
+
+
+
+    .progress-bar{
+        background:#b46e4c !important;
+    }
+
+    .upcoming-test-card .fw-semibold.fs-6{
+        font-size:1.08rem !important;
+    }
+
+    /* Scrollbar */
+
+    .active-tests-body::-webkit-scrollbar{
+        width:6px;
+    }
+
+    .active-tests-body::-webkit-scrollbar-track{
+        background:#faf6f3;
+    }
+
+    .active-tests-body::-webkit-scrollbar-thumb{
+        background:#d4b09b;
+        border-radius:20px;
+    }
+
+    .active-tests-body::-webkit-scrollbar-thumb:hover{
+        background:#b46e4c;
+    }
     /* Date Block */
 
     .date-card {
-        width: 72px;
-        min-width: 72px;
+        width: 52px;
+        min-width: 56px;
+        height:52px;  
         text-align: center;
         border-radius: 14px;
         background: #f7e3d8;
-        padding: 8px 0;
+        padding: 6px 0;
     }
 
     .date-day {
@@ -497,7 +537,7 @@
 
 </div>
 
-{{-- Upcoming Tests --}}
+{{-- Active Tests --}}
 <div class="col-lg-8">
 
     <div class="card border-0 rounded-4 shadow-sm h-100">
@@ -505,82 +545,128 @@
         <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
 
             <div class="fw-semibold">
-                <i class="bi bi-calendar-event text-primary me-2"></i>
-                Upcoming Tests
+                <i class="bi bi-play-circle-fill text-success me-2"></i>
+                Active Tests
+
+                <span class="badge rounded-pill"
+                    style="background:#fcf7f3;color:#832b00;border:1px solid #edd7ca;">
+                    {{ $activeTests->count() }}
+                </span>
+
             </div>
 
-          <a href="{{ route('mock-tests.index') }}"
-            class="text-muted text-decoration-none">
+            <a href="{{ route('mock-tests.index') }}"
+               class="text-muted text-decoration-none">
                 <i class="bi bi-arrow-right"></i>
             </a>
 
         </div>
 
-        <div class="card-body pt-1">
+        <div class="card-body pt-2 active-tests-body">
 
-            @forelse($upcomingTests ?? [] as $test)
+            @forelse($activeTests as $test)
 
                 <div class="upcoming-test-card">
 
-                    {{-- Date Block --}}
-                    <div class="date-card">
+                    {{-- LIVE --}}
+                    <div class="date-card d-flex flex-column justify-content-center align-items-center">
 
-                        <div class="date-day">
-                            {{ \Carbon\Carbon::parse($test->start_time)->format('d') }}
-                        </div>
+                        <i class="bi bi-play-fill fs-4"></i>
 
-                        <div class="date-month">
-                            {{ strtoupper(\Carbon\Carbon::parse($test->start_time)->format('M')) }}
-                        </div>
+                        <small class="fw-semibold">
+                           ACTIVE
+                        </small>
 
                     </div>
 
-                    {{-- Test Details --}}
+                    {{-- Details --}}
                     <div class="flex-grow-1 ms-3">
 
-                        <div class="fw-semibold fs-6">
-                            {{ $test->title }}
-                        </div>
+                        <div class="d-flex justify-content-between align-items-start flex-wrap">
 
-                       <div class="small text-muted mt-1">
-                            {{ $test->paper?->name }}
-                            •
-                            {{ $test->duration_minutes }} mins
-                        </div>
+                            <div>
 
-                        @if($test->batches->first())
-                            <div class="small text-muted">
+                                <div class="fw-semibold fs-6">
 
-                                {{ $test->batches->first()->name }}
+                                    {{ $test->title }}
 
-                                @if($test->batches->first()->institute)
-                                    • {{ $test->batches->first()->institute->name }}
-                                @endif
+                                </div>
+
+                                <div class="small text-muted mt-1">
+
+                                    {{ $test->paper?->name }}
+                                    •
+
+                                    {{ $test->duration_minutes }} mins
+
+                                    @if($test->batches->first())
+
+                                        •
+
+                                        {{ $test->batches->first()->name }}
+
+                                        @if($test->batches->first()->institute)
+
+                                            • {{ $test->batches->first()->institute->name }}
+
+                                        @endif
+
+                                    @endif
+
+                                </div>
 
                             </div>
-                        @endif
 
-                    </div>
+                            <span class="badge rounded-pill"
+                                style="background:#f7e3d8;color:#832b00;border:1px solid #e5d2c8;">
+                                Available
+                            </span>
 
-                    {{-- Schedule --}}
-                    <div class="text-end">
-
-                        @php
-                            $testDate = \Carbon\Carbon::parse($test->start_time);
-                        @endphp
-
-                        <div class="fw-semibold small">
-                            @if($testDate->isTomorrow())
-                                Tomorrow
-                            @elseif($testDate->isToday())
-                                Today
-                            @else
-                                {{ $testDate->format('d M Y') }}
-                            @endif
                         </div>
 
-                        <div class="small text-muted">
-                            {{ $testDate->format('h:i A') }}
+                        {{-- Availability --}}
+                        <div class="small text-muted mt-1">
+
+                            <i class="bi bi-calendar-event me-2" style="color:#832b00;"></i>
+
+                            {{ \Carbon\Carbon::parse($test->start_time)->format('d M Y, h:i A') }}
+
+                            <i class="bi bi-arrow-right mx-2"></i>
+
+                            {{ \Carbon\Carbon::parse($test->end_time)->format('d M Y, h:i A') }}
+
+                        </div>
+
+                        {{-- Progress --}}
+                        <div class="mt-2">
+
+                            <div class="d-flex justify-content-between small mb-1">
+
+                                <span>
+
+                                    <i class="bi bi-people me-1"></i>
+
+                                    Students Completed
+
+                                </span>
+
+                                <strong>
+
+                                    {{ $test->completed_students }} / {{ $test->total_students }}
+
+                                </strong>
+
+                            </div>
+
+                            <div class="progress" style="height:7px;">
+
+                                <div class="progress-bar bg-success"
+                                     role="progressbar"
+                                     style="width: {{ $test->completion_percentage }}%;">
+                                </div>
+
+                            </div>
+
                         </div>
 
                     </div>
@@ -590,8 +676,11 @@
             @empty
 
                 <div class="text-center text-muted py-5">
-                    <i class="bi bi-calendar-x fs-2 d-block mb-2"></i>
-                    No upcoming tests scheduled.
+
+                    <i class="bi bi-play-circle fs-2 d-block mb-2"></i>
+
+                    No active tests at the moment.
+
                 </div>
 
             @endforelse
@@ -599,9 +688,8 @@
         </div>
 
     </div>
-</div>
-</div>
 
+</div>
     {{-- Recent Activity --}}
     <div class="row g-4">
         <div class="col-lg-6">
@@ -684,7 +772,7 @@
             <div class="text-center small text-muted">
                 ACCAPrep with Malasri
                 <span class="mx-2">•</span>
-                v1.3.1
+                v1.3.4
                 <span class="mx-2">•</span>
                 Developed & Maintained by <strong>Sanand S</strong>
             </div>

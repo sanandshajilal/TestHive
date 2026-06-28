@@ -239,10 +239,28 @@
                 <div class="summary-label">Duration</div>
                 <div class="summary-value">{{ $mockTest->duration_minutes }} minutes</div>
             </div>
-            <div class="col-md-4">
-                <div class="summary-label">Students Attempted</div>
-                <div class="summary-value">{{ $attempts->count() }}</div>
-            </div>
+                <div class="col-md-4">
+                    <div class="summary-label">Students Attempted</div>
+
+                    <div class="summary-value">
+                        {{ $completedStudents }} / {{ $totalStudents }}
+                        <span class="text-muted fs-6">
+                            ({{ $completionPercentage }}%)
+                        </span>
+                    </div>
+
+    
+                </div>
+
+                <div class="col-md-4">
+                    <div class="summary-label">Average Score</div>
+
+                    <div class="summary-value">
+                        {{ $averageScore }}%
+                    </div>
+
+
+                </div>
         </div>
     </div>
 

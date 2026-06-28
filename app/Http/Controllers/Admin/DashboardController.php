@@ -96,14 +96,36 @@ class DashboardController extends Controller
                 );
             }
 
-$upcomingTests = MockTest::where('start_time', '>', now())
-    ->orderBy('start_time')
-    ->with([
-        'paper',
-        'batches.institute'
-    ])
-    ->take(2)
-    ->get();
+            $activeTests = MockTest::where('start_time', '<=', now())
+                ->where('end_time', '>=', now())
+                ->with([
+                    'paper',
+                    'batches.institute',
+                    'batches.students'
+                ])
+                ->orderBy('start_time')
+                ->get();
+
+                foreach ($activeTests as $test) {
+
+                    $batch = $test->batches->first();
+
+                    $totalStudents = $batch
+                        ? $batch->students->where('is_active', true)->count()
+                        : 0;
+
+                    $completedStudents = StudentTestAttempt::where('mock_test_id', $test->id)
+                        ->where('status', 'completed')
+                        ->count();
+
+                    $test->total_students = $totalStudents;
+
+                    $test->completed_students = $completedStudents;
+
+                    $test->completion_percentage = $totalStudents > 0
+                        ? round(($completedStudents / $totalStudents) * 100)
+                        : 0;
+                }
         
 
         return view('admin.dashboard', [
@@ -133,7 +155,7 @@ $upcomingTests = MockTest::where('start_time', '>', now())
                 'latestAttempts' => $latestAttempts,
                 'latestAverageScore' => $latestAverageScore,
                 'latestHighestScore' => $latestHighestScore,
-                'upcomingTests' => $upcomingTests,
+                'activeTests' => $activeTests,
                 'studentCount' => $studentCount,
         ]);
     }

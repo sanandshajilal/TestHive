@@ -8,6 +8,7 @@ use App\Models\Batch;
 use App\Models\Topic;
 use App\Models\Subtopic;
 use App\Models\Question;
+use App\Models\StudentTestAttempt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -230,7 +231,45 @@ public function update(Request $request, MockTest $mockTest)
                     ->where('mock_test_id', $id)
                     ->get();
 
-                return view('admin.mock_tests.results', compact('mockTest', 'attempts'));
+                    $batch = $mockTest->batches->first();
+
+                    $totalStudents = $batch
+                        ? $batch->students()->where('is_active', true)->count()
+                        : 0;
+
+                    $completedStudents = StudentTestAttempt::where('mock_test_id', $mockTest->id)
+                        ->where('status', 'completed')
+                        ->count();
+
+                    $completionPercentage = $totalStudents > 0
+                        ? round(($completedStudents / $totalStudents) * 100)
+                        : 0;
+
+                    $totalPossibleMarks = $mockTest->questions->sum('marks');
+
+                    $averageScore = StudentTestAttempt::where('mock_test_id', $mockTest->id)
+                        ->where('status', 'completed')
+                        ->get()
+                        ->avg(function ($attempt) use ($totalPossibleMarks) {
+
+                            return $totalPossibleMarks > 0
+                                ? ($attempt->total_marks / $totalPossibleMarks) * 100
+                                : 0;
+
+                        });
+
+                    $averageScore = round($averageScore ?? 0, 1);
+                        return view(
+                            'admin.mock_tests.results',
+                            compact(
+                                'mockTest',
+                                'attempts',
+                                'totalStudents',
+                                'completedStudents',
+                                'completionPercentage',
+                                'averageScore'
+                            )
+                        );
             }
 
 
