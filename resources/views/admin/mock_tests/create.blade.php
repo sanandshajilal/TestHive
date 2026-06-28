@@ -192,6 +192,126 @@
     #questionList::-webkit-scrollbar-thumb:hover {
         background: #b46e4c;
     }
+
+    #summaryContent .badge{
+    min-width:36px;
+    font-weight:600;
+    }
+
+    #summaryContent .fw-semibold{
+        color:#832b00;
+    }
+
+    #summaryContent .text-muted{
+        font-size:.92rem;
+    }
+
+    #summaryContent .d-flex:hover{
+        background:#fcf7f3;
+        border-radius:.5rem;
+    }
+
+    .summary-badge{
+        background:#f7e3d8;
+        color:#832b00;
+        border:1px solid #edd7ca;
+        font-weight:600;
+    }
+
+    .topic-icon{
+        color:#b46e4c;
+    }
+
+    .topic-badge{
+        background:#fcf7f3;
+        color:#832b00;
+        border:1px solid #edd7ca;
+        font-weight:500;
+    }
+
+    .subtopic-badge{
+        background:#fff;
+        color:#8b6b57;
+        border:1px solid #edd7ca;
+        font-weight:500;
+    }
+
+    .btn-soft-secondary{
+
+        background:#fff;
+
+        color:#832b00;
+
+        border:1px solid #edd7ca;
+
+        border-radius:50px;
+
+        transition:.2s;
+
+    }
+
+    .btn-soft-secondary:hover{
+
+        background:#b46e4c;
+
+        color:#fff;
+
+        border-color:#b46e4c;
+
+    }
+
+    .question-count-badge{
+
+        background:#fcf7f3;
+
+        color:#832b00;
+
+        border:1px solid #edd7ca;
+
+        font-weight:600;
+
+    }
+
+    .summary-count{
+
+        background:#fcf7f3;
+
+        color:#832b00;
+
+        border:1px solid #edd7ca;
+
+        min-width:36px;
+
+    }
+
+    /* Question checkbox */
+
+    .form-check-input{
+
+        border-color:#d7b29d;
+
+        cursor:pointer;
+
+    }
+
+    .form-check-input:checked{
+
+        background-color:#b46e4c;
+
+        border-color:#b46e4c;
+
+    }
+
+    .form-check-input:focus{
+
+        border-color:#b46e4c;
+
+        box-shadow:0 0 0 .2rem rgba(180,110,76,.15);
+
+    }
+
+
+
 </style>
 @endsection
 
@@ -311,12 +431,32 @@
             </div>
 
             {{-- Selected Question Summary --}}
-            <div class="mb-3">
-                <div class="alert alert-info" id="questionSummary" style="display:none;">
-                    <strong>Selected Questions by Topic:</strong>
-                    <ul class="mb-0" id="topicCounts" style="list-style: inside;"></ul>
+                <div class="mb-3">
+
+                    <div id="questionSummary" class="card border-0 shadow-sm" style="display:none;">
+
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+
+                                <h6 class="mb-0 fw-semibold">
+                                    <i class="bi bi-check2-square me-2"></i>
+                                    Selection Summary
+                                </h6>
+
+                                <span class="badge rounded-pill summary-badge" id="totalSelected">
+                                    0 Questions
+                                </span>
+
+                            </div>
+
+                            <div id="summaryContent"></div>
+
+                        </div>
+
+                    </div>
+
                 </div>
-            </div>
 
             {{-- Question Bank --}}
             <input type="hidden" name="question_ids_serialized" id="question_ids_serialized">
@@ -327,7 +467,43 @@
                         Question Bank
                     </h6>
                 </div>
-                <p class="text-muted">Select the required questions from the list below:</p>
+               <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+
+                <div>
+                    <p class="text-muted mb-1">
+                        Select the required questions from the list below.
+                    </p>
+
+                    <span class="badge question-count-badge" id="questionCountBadge">
+                        0 Questions Found
+                    </span>
+                </div>
+
+                <div class="d-flex gap-2 flex-wrap">
+
+                    <button
+                        type="button"
+                        class="btn btn-soft-secondary btn-sm rounded-pill"
+                        onclick="addFilteredQuestions()">
+
+                        <i class="bi bi-check2-square me-1"></i>
+                        Add All Filtered
+
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-soft-secondary btn-sm rounded-pill"
+                        onclick="removeFilteredQuestions()">
+
+                        <i class="bi bi-x-circle me-1"></i>
+                        Remove Filtered
+
+                    </button>
+
+                </div>
+
+            </div>
                 <div id="questionList" class="p-3" style="max-height:350px;overflow-y:auto;">
                     <p class="text-muted">Select a paper to load questions...</p>
                 </div>
@@ -360,6 +536,7 @@
 @section('scripts')
 <script>
 const selectedQuestions = new Map();
+let currentFilteredQuestions = [];
 
 document.getElementById('paper_id').addEventListener('change', () => {
     loadTopics();
@@ -375,6 +552,7 @@ document.getElementById('filterSubtopic').addEventListener('change', loadQuestio
 document.getElementById('filterType').addEventListener('change', loadQuestions);
 
 function loadTopics() {
+
     const paperId = document.getElementById('paper_id').value;
     const topicSelect = document.getElementById('filterTopic');
     const subtopicSelect = document.getElementById('filterSubtopic');
@@ -383,51 +561,96 @@ function loadTopics() {
     subtopicSelect.innerHTML = '<option value="">-- Subtopic --</option>';
 
     if (!paperId) {
-        topicSelect.innerHTML = '<option value="">-- Select Paper First --</option>';
+
+        topicSelect.innerHTML =
+            '<option value="">-- Select Paper First --</option>';
+
         return;
+
     }
 
     fetch(`/api/topics/${paperId}`)
         .then(res => res.json())
         .then(data => {
+
             let options = '<option value="">-- Topic --</option>';
-            data.forEach(t => options += `<option value="${t.id}">${t.name}</option>`);
+
+            data.forEach(topic => {
+
+                options += `<option value="${topic.id}">
+                                ${topic.name}
+                            </option>`;
+
+            });
+
             topicSelect.innerHTML = options;
+
         });
+
 }
 
 function loadSubtopics() {
+
     const topicId = document.getElementById('filterTopic').value;
     const subtopicSelect = document.getElementById('filterSubtopic');
 
-    subtopicSelect.innerHTML = '<option value="">-- Loading... --</option>';
+    subtopicSelect.innerHTML =
+        '<option value="">-- Loading... --</option>';
 
     if (!topicId) {
-        subtopicSelect.innerHTML = '<option value="">-- Topic First --</option>';
+
+        subtopicSelect.innerHTML =
+            '<option value="">-- Topic First --</option>';
+
         return;
+
     }
 
     fetch(`/api/subtopics/${topicId}`)
         .then(res => res.json())
         .then(data => {
-            let options = '<option value="">-- Subtopic --</option>';
-            data.forEach(s => options += `<option value="${s.id}">${s.name}</option>`);
+
+            let options =
+                '<option value="">-- Subtopic --</option>';
+
+            data.forEach(subtopic => {
+
+                options += `<option value="${subtopic.id}">
+                                ${subtopic.name}
+                            </option>`;
+
+            });
+
             subtopicSelect.innerHTML = options;
+
         });
+
 }
 
+
+
 function loadQuestions() {
+
     const paperId = document.getElementById('paper_id').value;
     const topicId = document.getElementById('filterTopic').value;
     const subtopicId = document.getElementById('filterSubtopic').value;
     const type = document.getElementById('filterType').value;
 
     if (!paperId) {
-        document.getElementById('questionList').innerHTML = '<p class="text-muted">Select a paper to load questions...</p>';
+
+        document.getElementById('questionList').innerHTML =
+            '<p class="text-muted">Select a paper to load questions...</p>';
+
+        document.getElementById('questionCountBadge').innerHTML =
+            '0 Questions Found';
+
+        currentFilteredQuestions = [];
+
         return;
     }
 
     let query = `paper_id=${paperId}`;
+
     if (topicId) query += `&topic_id=${topicId}`;
     if (subtopicId) query += `&subtopic_id=${subtopicId}`;
     if (type) query += `&type=${type}`;
@@ -435,78 +658,307 @@ function loadQuestions() {
     fetch(`/admin/mock-tests/questions-by-paper?${query}`)
         .then(res => res.json())
         .then(data => {
+
+            currentFilteredQuestions = data;
+
+            document.getElementById('questionCountBadge').innerHTML =
+                `${data.length} Question${data.length !== 1 ? 's' : ''} Found`;
+
             let html = '';
+
             if (data.length === 0) {
-                html = '<p class="text-danger">No questions found for this filter.</p>';
+
+                html = `
+                    <div class="text-center py-5">
+
+                        <i class="bi bi-search fs-1 text-muted"></i>
+
+                        <p class="text-danger mt-3 mb-0">
+                            No questions found for the selected filters.
+                        </p>
+
+                    </div>
+                `;
+
             } else {
+
                 data.forEach(q => {
-                    const checked = selectedQuestions.has(q.id) ? 'checked' : '';
+
+                    const checked =
+                        selectedQuestions.has(q.id) ? 'checked' : '';
+
                     html += `
-                        <div class="border rounded p-3 mb-3 bg-white shadow-sm">
-                            <div class="d-flex align-items-start justify-content-between gap-3">
-                                <div class="form-check d-flex gap-2 w-100">
-                                    <input class="form-check-input mt-1" type="checkbox" name="question_ids[]" value="${q.id}" id="q${q.id}" ${checked}
-                                        onchange="handleSelection(this, '${q.topic_name}')">
-                                    <label class="form-check-label w-100" for="q${q.id}">
-                                        <div class="question-content">${q.question_text}</div>
-                                        <small class="text-muted d-block mt-1">[${q.topic_name}]</small>
-                                    </label>
-                                </div>
-                               <button type="button" class="icon-button" onclick="previewQuestion(${q.id})">
-                                    <i class="bi bi-eye fs-6"></i>
-                                </button>
+
+                    <div class="border rounded p-3 mb-3 bg-white shadow-sm">
+
+                        <div class="d-flex align-items-start justify-content-between gap-3">
+
+                            <div class="form-check d-flex gap-2 w-100">
+
+                                <input
+                                    class="form-check-input mt-1"
+                                    type="checkbox"
+                                    id="q${q.id}"
+                                    value="${q.id}"
+                                    ${checked}
+                                    onchange="handleSelection(this,
+                                        '${q.topic_name}',
+                                        '${q.subtopic_name}')">
+
+                                <label class="form-check-label w-100" for="q${q.id}">
+
+                                    <div class="question-content">
+
+                                        ${q.question_text}
+
+                                    </div>
+
+                                    <div class="mt-2">
+
+                                        <span class="badge topic-badge me-2">
+
+                                            ${q.topic_name}
+
+                                        </span>
+
+                                        <span class="badge subtopic-badge">
+
+                                            ${q.subtopic_name}
+
+                                        </span>
+
+                                    </div>
+
+                                </label>
 
                             </div>
+
+                            <button
+                                type="button"
+                                class="icon-button"
+                                onclick="previewQuestion(${q.id})">
+
+                                <i class="bi bi-eye fs-6"></i>
+
+                            </button>
+
                         </div>
+
+                    </div>
+
                     `;
+
                 });
+
             }
+
             document.getElementById('questionList').innerHTML = html;
+
         });
+
 }
 
-function handleSelection(input, topicName) {
+function handleSelection(input, topicName, subtopicName) {
+
+    const id = parseInt(input.value);
+
     if (input.checked) {
-        selectedQuestions.set(parseInt(input.value), topicName);
+
+        selectedQuestions.set(id, {
+            topic: topicName,
+            subtopic: subtopicName
+        });
+
     } else {
-        selectedQuestions.delete(parseInt(input.value));
+
+        selectedQuestions.delete(id);
+
     }
+
     updateQuestionSummary();
-    document.getElementById('question_ids_serialized').value = JSON.stringify([...selectedQuestions.keys()]);
+
+    document.getElementById('totalSelected').innerHTML =
+        `${selectedQuestions.size} Question${selectedQuestions.size !== 1 ? 's' : ''}`;
+
+    document.getElementById('question_ids_serialized').value =
+        JSON.stringify([...selectedQuestions.keys()]);
+}
+
+
+
+function addFilteredQuestions() {
+
+    currentFilteredQuestions.forEach(q => {
+
+        selectedQuestions.set(q.id, {
+
+            topic: q.topic_name,
+
+            subtopic: q.subtopic_name
+
+        });
+
+    });
+
+    document
+        .querySelectorAll('#questionList input[type="checkbox"]')
+        .forEach(cb => cb.checked = true);
+
+    updateQuestionSummary();
+
+    document.getElementById('totalSelected').innerHTML =
+        `${selectedQuestions.size} Question${selectedQuestions.size !== 1 ? 's' : ''}`;
+
+    document.getElementById('question_ids_serialized').value =
+        JSON.stringify([...selectedQuestions.keys()]);
+}
+
+
+
+function removeFilteredQuestions() {
+
+    currentFilteredQuestions.forEach(q => {
+
+        selectedQuestions.delete(q.id);
+
+    });
+
+    document
+        .querySelectorAll('#questionList input[type="checkbox"]')
+        .forEach(cb => cb.checked = false);
+
+    updateQuestionSummary();
+
+    document.getElementById('totalSelected').innerHTML =
+        `${selectedQuestions.size} Question${selectedQuestions.size !== 1 ? 's' : ''}`;
+
+    document.getElementById('question_ids_serialized').value =
+        JSON.stringify([...selectedQuestions.keys()]);
 }
 
 function updateQuestionSummary() {
-    const counts = {};
-    for (let topic of selectedQuestions.values()) {
-        counts[topic] = (counts[topic] || 0) + 1;
-    }
 
-    const list = document.getElementById('topicCounts');
-    list.innerHTML = '';
-    Object.keys(counts).forEach(topic => {
-        list.innerHTML += `<li>${topic}: ${counts[topic]} question(s)</li>`;
+    const summary = {};
+
+    selectedQuestions.forEach(question => {
+
+        if (!summary[question.topic]) {
+            summary[question.topic] = {};
+        }
+
+        if (!summary[question.topic][question.subtopic]) {
+            summary[question.topic][question.subtopic] = 0;
+        }
+
+        summary[question.topic][question.subtopic]++;
+
     });
 
-    document.getElementById('questionSummary').style.display = selectedQuestions.size ? 'block' : 'none';
+    const container = document.getElementById('summaryContent');
+
+    container.innerHTML = '';
+
+    if (selectedQuestions.size === 0) {
+
+        document.getElementById('questionSummary').style.display = 'none';
+
+        document.getElementById('totalSelected').innerHTML =
+            '0 Questions';
+
+        return;
+    }
+
+    document.getElementById('questionSummary').style.display = 'block';
+
+    document.getElementById('totalSelected').innerHTML =
+        `${selectedQuestions.size} Question${selectedQuestions.size !== 1 ? 's' : ''}`;
+
+    let html = '';
+
+    Object.keys(summary)
+        .sort()
+        .forEach(topic => {
+
+            html += `
+
+                <div class="mb-3">
+
+                    <div class="fw-semibold text-dark border-bottom pb-1 mb-2">
+
+                        <i class="bi bi-folder2-open me-2 topic-icon"></i>
+
+                        ${topic}
+
+                    </div>
+
+            `;
+
+            Object.keys(summary[topic])
+                .sort()
+                .forEach(subtopic => {
+
+                    html += `
+
+                        <div class="d-flex justify-content-between align-items-center ms-4 py-1">
+
+                            <span class="text-muted">
+
+                                <i class="bi bi-dot"></i>
+
+                                ${subtopic}
+
+                            </span>
+
+                            <span class="badge summary-count">
+
+                                ${summary[topic][subtopic]}
+
+                            </span>
+
+                        </div>
+
+                    `;
+
+                });
+
+            html += `</div>`;
+
+        });
+
+    container.innerHTML = html;
 }
 
 function previewQuestion(id) {
-    const modal = new bootstrap.Modal(document.getElementById('questionPreviewModal'));
-    document.getElementById('questionPreviewContent').innerHTML = `<p class="text-muted">Loading...</p>`;
+
+    const modal = new bootstrap.Modal(
+        document.getElementById('questionPreviewModal')
+    );
+
+    document.getElementById('questionPreviewContent').innerHTML =
+        `<p class="text-muted">Loading...</p>`;
 
     fetch(`/api/question-preview/${id}`)
         .then(res => res.text())
         .then(html => {
+
             document.getElementById('questionPreviewContent').innerHTML = html;
+
             modal.show();
+
         });
 }
 
 function redirectAfterSubmit() {
-    document.getElementById('question_ids_serialized').value = JSON.stringify([...selectedQuestions.keys()]);
+
+    document.getElementById('question_ids_serialized').value =
+        JSON.stringify([...selectedQuestions.keys()]);
+
     setTimeout(() => {
+
         window.location.href = "/admin/mock-tests";
+
     }, 500);
+
     return true;
 }
 </script>

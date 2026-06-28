@@ -63,9 +63,11 @@ class MockTestController extends Controller
             ->orderBy('start_time', 'desc')
             ->get()
             ->map(function ($test) {
+
                 $now = Carbon::now();
+
                 $start = Carbon::parse($test->start_time);
-                $end = $start->copy()->addMinutes($test->duration_minutes);
+                $end   = Carbon::parse($test->end_time);
 
                 if ($now->lt($start)) {
                     $test->status = 'Upcoming';
@@ -96,10 +98,18 @@ class MockTestController extends Controller
     public function edit(MockTest $mockTest)
     {
         $papers = Paper::all();
+
         $batches = Batch::with('institute')->get();
-        $topics = Topic::all(); // ✅ Fix for $topics
+
+        $topics = Topic::all();
+
         $allQuestions = Question::where('paper_id', $mockTest->paper_id)->get();
+
         $selectedQuestionIds = $mockTest->questions->pluck('id')->toArray();
+
+        $selectedQuestions = $mockTest->questions()
+            ->with(['topic', 'subTopic'])
+            ->get();
 
         return view('admin.mock_tests.edit', compact(
             'mockTest',
@@ -107,36 +117,48 @@ class MockTestController extends Controller
             'batches',
             'topics',
             'allQuestions',
-            'selectedQuestionIds'
+            'selectedQuestionIds',
+            'selectedQuestions'
         ));
     }
 
-    public function update(Request $request, MockTest $mockTest)
-    {
-        $request->validate([
-            'title' => 'required|string',
-            'paper_id' => 'required|exists:papers,id',
-            'duration_minutes' => 'required|integer|min:1',
-            'start_time' => 'required|date',
-            'end_time' => 'required|date|after_or_equal:start_time',
-            'batch_id' => 'required|exists:batches,id',
-            'question_ids' => 'required|array',
-            'question_ids.*' => 'exists:questions,id',
+public function update(Request $request, MockTest $mockTest)
+{
+
+    $validated = $request->validate([
+        'title' => 'required|string',
+        'paper_id' => 'required|exists:papers,id',
+        'duration_minutes' => 'required|integer|min:1',
+        'start_time' => 'required|date',
+        'end_time' => 'required|date|after_or_equal:start_time',
+        'batch_id' => 'required|exists:batches,id',
+        'question_ids_serialized' => 'required|string',
+    ]);
+
+    
+    $questionIds = json_decode($validated['question_ids_serialized'], true);
+
+    if (!is_array($questionIds) || empty($questionIds)) {
+        return back()->withErrors([
+            'question_ids_serialized' => 'Please select at least one question.'
         ]);
-
-        $mockTest->update([
-            'title' => $request->title,
-            'paper_id' => $request->paper_id,
-            'duration_minutes' => $request->duration_minutes,
-            'start_time' => $request->start_time,
-            'end_time' => $request->end_time,
-        ]);
-
-        $mockTest->batches()->sync([$request->batch_id]);
-        $mockTest->questions()->sync($request->question_ids);
-
-        return redirect()->route('mock-tests.index')->with('success', 'Mock test updated successfully.');
     }
+
+    $mockTest->update([
+        'title' => $validated['title'],
+        'paper_id' => $validated['paper_id'],
+        'duration_minutes' => $validated['duration_minutes'],
+        'start_time' => $validated['start_time'],
+        'end_time' => $validated['end_time'],
+    ]);
+
+    $mockTest->batches()->sync([$validated['batch_id']]);
+    $mockTest->questions()->sync($questionIds);
+
+    return redirect()
+        ->route('mock-tests.index')
+        ->with('success', 'Mock test updated successfully.');
+}
 
     /**
      * AJAX: Filter questions by paper, topic, subtopic, type

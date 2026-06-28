@@ -124,23 +124,61 @@
         color: #ffffff;
     }
 
-    /* DataTables Buttons */
+/* ===================================
+   DATATABLES
+=================================== */
 
-    .dataTables_wrapper .dt-buttons {
-        margin-bottom: 1rem;
-        display: flex;
-        gap: .5rem;
-        flex-wrap: wrap;
-    }
+.dataTables_wrapper .dt-buttons {
 
-    .dataTables_wrapper .dt-buttons .btn {
-        border-radius: 50px !important;
-    }
+    display:flex;
 
-    .btn-sm {
-        font-size: .8rem;
-        padding: .35rem .8rem;
-    }
+    flex-wrap:wrap;
+
+    gap:.5rem;
+
+    margin-bottom:1rem;
+
+}
+
+.dataTables_wrapper .dt-buttons .btn{
+
+    border-radius:999px !important;
+
+}
+
+.dt-button{
+
+    background:#fff !important;
+
+    color:#9a5631 !important;
+
+    border:1px solid #edd7ca !important;
+
+    border-radius:50px !important;
+
+    padding:.45rem 1rem !important;
+
+    font-size:.84rem !important;
+
+    font-weight:600 !important;
+
+    box-shadow:0 2px 8px rgba(180,110,76,.06);
+
+    transition:all .2s ease;
+
+}
+
+.dt-button:hover{
+
+    background:#b46e4c !important;
+
+    color:#fff !important;
+
+    border-color:#b46e4c !important;
+
+    box-shadow:0 4px 12px rgba(180,110,76,.15);
+
+}
 
     /* Search */
 
@@ -278,27 +316,32 @@
             $('#resultsTable').DataTable({
                 dom: 'Bfrtip',
                 pageLength: 10,
-                 buttons: [
+                buttons: [
+
                     {
                         extend: 'copy',
-                        text: 'Copy',
-                        className: 'btn btn-sm btn-outline-secondary rounded-pill'
+                        text: '<i class="bi bi-clipboard me-1"></i> Copy',
+                        className: 'dt-export-btn buttons-copy'
                     },
+
                     {
                         extend: 'excel',
-                        text: 'Excel',
-                        className: 'btn btn-sm btn-outline-success rounded-pill'
+                        text: '<i class="bi bi-file-earmark-excel me-1"></i> Excel',
+                        className: 'dt-export-btn buttons-excel'
                     },
+
                     {
                         extend: 'pdf',
-                        text: 'PDF',
-                        className: 'btn btn-sm btn-outline-danger rounded-pill'
+                        text: '<i class="bi bi-file-earmark-pdf me-1"></i> PDF',
+                        className: 'dt-export-btn buttons-pdf'
                     },
+
                     {
                         extend: 'print',
-                        text: 'Print',
-                        className: 'btn btn-sm btn-outline-dark rounded-pill'
+                        text: '<i class="bi bi-printer me-1"></i> Print',
+                        className: 'dt-export-btn buttons-print'
                     }
+
                 ]
             });
         }
