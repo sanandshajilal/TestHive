@@ -108,6 +108,20 @@
         font-size: .9rem;
     }
 
+    .alert-danger{
+        background:#fdf4f2;
+        border:1px solid #f2d2c7;
+        color:#832b00;
+    }
+
+    .alert-danger ul{
+        margin-bottom:0;
+    }
+
+    .alert-danger li{
+        margin-bottom:.25rem;
+    }
+
 
 
     /* Section Icons */
@@ -139,6 +153,27 @@
     </div>
 
     <div class="card-style">
+        @if ($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+
+                <div class="fw-semibold mb-2">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    Please correct the following errors:
+                </div>
+
+                <ul class="mb-0 ps-3">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert">
+                </button>
+
+            </div>
+        @endif
         <form method="POST" action="{{ route('questions.update', $question->id) }}">
             @csrf
             @method('PUT')
@@ -153,11 +188,12 @@
                     <label class="form-label">Select Paper</label>
                     <select class="form-select" name="paper_id" required>
                         <option value="">-- Select Paper --</option>
-                        @foreach($papers as $paper)
-                            <option value="{{ $paper->id }}" {{ $question->paper_id == $paper->id ? 'selected' : '' }}>
-                                {{ $paper->name }}
-                            </option>
-                        @endforeach
+                            @foreach($papers as $paper)
+                                <option value="{{ $paper->id }}"
+                                    {{ old('paper_id', $question->paper_id) == $paper->id ? 'selected' : '' }}>
+                                    {{ $paper->name }}
+                                </option>
+                            @endforeach
                     </select>
                 </div>
 
@@ -165,7 +201,7 @@
                     <label class="form-label">Select Topic</label>
                     <select class="form-select" name="topic_id" id="topic_id" required>
                         @foreach($topics as $topic)
-                            <option value="{{ $topic->id }}" {{ $question->topic_id == $topic->id ? 'selected' : '' }}>
+                            <option value="{{ $topic->id }}" {{ old('topic_id', $question->topic_id) == $topic->id ? 'selected' : '' }}>
                                 {{ $topic->name }}
                             </option>
                         @endforeach
@@ -177,7 +213,7 @@
                     <select class="form-select" name="sub_topic_id" id="sub_topic_id">
                         <option value="">-- Optional Subtopic --</option>
                         @foreach($subtopics as $sub)
-                            <option value="{{ $sub->id }}" {{ $question->sub_topic_id == $sub->id ? 'selected' : '' }}>
+                            <option value="{{ $sub->id }}" {{ old('sub_topic_id', $question->sub_topic_id) == $sub->id ? 'selected' : '' }}>
                                 {{ $sub->name }}
                             </option>
                         @endforeach
@@ -188,12 +224,30 @@
                     <label class="form-label">Question Type</label>
                     <select class="form-select" name="question_type" id="question_type" required>
                         <option value="">-- Select Type --</option>
-                        <option value="mcq" {{ $question->question_type == 'mcq' ? 'selected' : '' }}>MCQ</option>
-                        <option value="multiple_select" {{ $question->question_type == 'multiple_select' ? 'selected' : '' }}>Multiple Select</option>
-                        <option value="one_word" {{ $question->question_type == 'one_word' ? 'selected' : '' }}>One Word</option>
-                        <option value="table_mcq" {{ $question->question_type == 'table_mcq' ? 'selected' : '' }}>Table MCQ</option>
-                        <option value="drag_and_drop" {{ $question->question_type == 'drag_and_drop' ? 'selected' : '' }}>Drag and Drop</option>
-                        <option value="dropdown" {{ $question->question_type == 'dropdown' ? 'selected' : '' }}>Drop Down List</option>
+                        <option value="mcq"
+                            {{ old('question_type', $question->question_type) == 'mcq' ? 'selected' : '' }}>
+                            MCQ
+                        </option>
+                        <option value="multiple_select"
+                            {{ old('question_type', $question->question_type) == 'multiple_select' ? 'selected' : '' }}>
+                            Multiple Select
+                        </option>
+                        <option value="one_word"
+                            {{ old('question_type', $question->question_type) == 'one_word' ? 'selected' : '' }}>
+                            One Word
+                        </option>
+                        <option value="table_mcq"
+                            {{ old('question_type', $question->question_type) == 'table_mcq' ? 'selected' : '' }}>
+                            Table MCQ
+                        </option>
+                        <option value="drag_and_drop"
+                            {{ old('question_type', $question->question_type) == 'drag_and_drop' ? 'selected' : '' }}>
+                            Drag and Drop
+                        </option>
+                        <option value="dropdown"
+                            {{ old('question_type', $question->question_type) == 'dropdown' ? 'selected' : '' }}>
+                            Drop Down List
+                        </option>
                     </select>
                 </div>
             </div>
@@ -211,9 +265,6 @@
                     <textarea name="question_text" id="question" class="form-control" required>{{ old('question_text', $question->question_text) }}</textarea>
                 </noscript>
             </div>
-            @error('question_text')
-                <div class="text-danger mt-1">{{ $message }}</div>
-            @enderror
 
                 @php
                     $partial = in_array($question->question_type, ['mcq', 'multiple_select']) ? 'mcq' : $question->question_type;

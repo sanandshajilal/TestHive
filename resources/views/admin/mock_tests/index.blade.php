@@ -643,14 +643,21 @@ body {
                                     {{ $loop->iteration }}
                                 </span>
                             </td>
-                            <td>
-                                <div class="test-name">
-                                    {{ $mockTest->title }}
-                                </div>
-                                <div class="paper-meta">
-                                    {{ $mockTest->paper->name ?? 'N/A' }}
-                                </div>
-                            </td>
+                                <td>
+                                    <div class="test-name">
+                                        {{ $mockTest->title }}
+                                    </div>
+
+                                    <div class="small text-muted">
+                                        {{ $mockTest->questions->count() }} Questions
+                                        &nbsp;•&nbsp;
+                                        {{ $mockTest->questions->sum('marks') }} Marks
+                                    </div>
+
+                                     <div class="paper-meta">
+                                        {{ $mockTest->paper->name ?? 'N/A' }}
+                                    </div>
+                                </td>
                                     <td class="text-center">
 
                                         @if($mockTest->batches->first())

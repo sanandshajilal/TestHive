@@ -244,7 +244,10 @@ class QuestionController extends Controller
                         $options = array_map('trim', $rawOptions);
                     }
                 } else {
-                    $options = array_map('trim', explode(',', $rawOptions));
+                    $options = preg_split('/\r\n|\r|\n/', $rawOptions);
+                    $options = array_values(array_filter(
+                        array_map('trim', $options)
+                    ));
                 }
 
                 $blanks[] = [
@@ -549,7 +552,10 @@ class QuestionController extends Controller
                             $options = array_map('trim', $rawOptions);
                         }
                     } else {
-                        $options = array_map('trim', explode(',', $rawOptions));
+                        $options = preg_split('/\r\n|\r|\n/', $rawOptions);
+                        $options = array_values(array_filter(
+                            array_map('trim', $options)
+                        ));
                     }
 
                     $blanks[] = [

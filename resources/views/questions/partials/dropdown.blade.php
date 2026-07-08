@@ -24,11 +24,6 @@
         Use <code>[blank]</code> in the <strong>Question</strong> field to add dropdowns.
     </p>
 
-    @if($errors->has('dropdown_mismatch'))
-        <div class="alert alert-warning">
-            {{ $errors->first('dropdown_mismatch') }}
-        </div>
-    @endif
 
     <div class="table-responsive">
         <table class="table table-bordered align-middle">
@@ -36,7 +31,7 @@
                 <tr>
                     <th width="80">Blank</th>
                     <th>Label</th>
-                    <th>Options (Comma Separated)</th>
+                    <th>Options (One Per Line)</th>
                     <th>Correct Answer</th>
                     <th width="80">Action</th>
                 </tr>
@@ -63,11 +58,13 @@
                             </td>
 
                             <td>
-                                <input type="text"
+                                <textarea
                                     name="dropdown_blank_options[]"
                                     class="form-control"
-                                    placeholder="India,USA,UK"
-                                    value="{{ is_array($options[$i] ?? '') ? implode(', ', $options[$i]) : ($options[$i] ?? '') }}">
+                                    rows="4"
+                                    placeholder="One option per line&#10;Option1&#10;Option2&#10;Option3..">{{ is_array($options[$i] ?? null)
+                                        ? implode("\n", $options[$i])
+                                        : ($options[$i] ?? '') }}</textarea>
                             </td>
 
                             <td>
@@ -102,12 +99,13 @@
                                 placeholder="e.g. Country">
                         </td>
 
-                        <td>
-                            <input type="text"
-                                name="dropdown_blank_options[]"
-                                class="form-control"
-                                placeholder="India,USA,UK">
-                        </td>
+                            <td>
+                                <textarea
+                                    name="dropdown_blank_options[]"
+                                    class="form-control"
+                                    rows="4"
+                                    placeholder="One option per line&#10;Option1&#10;Option2&#10;Option3.."></textarea>
+                            </td>
 
                         <td>
                             <input type="text"
@@ -184,10 +182,11 @@
                 </td>
 
                 <td>
-                    <input type="text"
+                    <textarea
                         name="dropdown_blank_options[]"
                         class="form-control"
-                        placeholder="India,USA,UK">
+                        rows="4"
+                        placeholder="One option per line&#10;Option1&#10;Option2&#10;Option3.."></textarea>
                 </td>
 
                 <td>

@@ -1,14 +1,6 @@
 <div id="drag-drop-section"
      class="mb-3 {{ old('question_type', $question->question_type ?? '') !== 'drag_and_drop' ? 'd-none' : '' }}">
 
-    @if ($errors->any())
-        <div class="alert alert-warning">
-            @foreach ($errors->all() as $error)
-                <div>{{ $error }}</div>
-            @endforeach
-        </div>
-    @endif
-
     <div class="row mb-3">
 
         <div class="col-md-6">

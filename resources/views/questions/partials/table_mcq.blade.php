@@ -7,36 +7,6 @@
 
 <div id="table-mcq-section" class="d-none mb-3">
 
-    {{-- Combined Error Box --}}
-    @php
-        $errorList = [];
-
-        if ($errors->has('table_mcq_statements')) {
-            $errorList[] = $errors->first('table_mcq_statements');
-        }
-
-        foreach (old('table_mcq_statements', []) as $i => $val) {
-            if ($errors->has("table_mcq_statements.$i")) {
-                $errorList[] = $errors->first("table_mcq_statements.$i");
-            }
-        }
-
-        foreach (old('table_mcq_answers', []) as $i => $val) {
-            if ($errors->has("table_mcq_answers.$i")) {
-                $errorList[] = $errors->first("table_mcq_answers.$i");
-            }
-        }
-    @endphp
-
-    @if (!empty($errorList))
-        <div class="alert alert-warning d-flex align-items-start gap-2">
-            <div class="flex-grow-1">
-                @foreach ($errorList as $msg)
-                    <div>{{ $msg }}</div>
-                @endforeach
-            </div>
-        </div>
-    @endif
 
         <div class="row mb-3">
         <div class="col-md-6">

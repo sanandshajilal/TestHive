@@ -35,18 +35,6 @@
         </div>
     @endforeach
 
-        @if($errors->has('correct_options'))
-                <div class="text-danger mt-1">
-                    {{ $errors->first('correct_options') }}
-                </div>
-            @endif
-
-            @if($errors->has('options'))
-            <div class="text-danger mt-1">
-                {{ $errors->first('options') }}
-            </div>
-        @endif
-
     <small class="text-muted">
         ☑ Check correct option(s). For MCQ, select only one. For Multiple Select, select all correct ones.
     </small>

@@ -106,6 +106,20 @@
         font-size: .9rem;
     }
 
+    .alert-danger{
+        background:#fdf4f2;
+        border:1px solid #f2d2c7;
+        color:#832b00;
+    }
+
+    .alert-danger ul{
+        margin-bottom:0;
+    }
+
+    .alert-danger li{
+        margin-bottom:.25rem;
+    }
+
 
 
     /* Section Icons */
@@ -141,12 +155,33 @@
             @if(session('success'))
             <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
                 {{ session('success') }}
-                <button type="button"
+                            <button type="button"
                         class="btn-close"
                         data-bs-dismiss="alert">
                 </button>
             </div>
         @endif
+
+                @if ($errors->any())
+                    <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
+                        <div class="fw-semibold mb-2">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            Please correct the following errors:
+                        </div>
+
+                        <ul class="mb-0 ps-3">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="alert">
+                        </button>
+                    </div>
+                @endif
+              
         <form method="POST" action="{{ route('questions.store') }}">
             @csrf
             <div class="border-bottom pb-2 mb-3">
@@ -216,9 +251,6 @@
                 <label class="form-label">Question</label>
                 <textarea class="form-control" name="question_text" id="question" required>{{ old('question_text') }}</textarea>
             </div>
-            @error('question_text')
-                <div class="text-danger mt-1">{{ $message }}</div>
-            @enderror
 
 
             {{-- Include partials --}}
