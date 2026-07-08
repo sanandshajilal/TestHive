@@ -10,6 +10,7 @@ use App\Models\Subtopic;
 use App\Models\Question;
 use App\Models\StudentTestAttempt;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
@@ -272,5 +273,28 @@ public function update(Request $request, MockTest $mockTest)
                         );
             }
 
+
+        public function duplicate(MockTest $mockTest)
+        {
+            DB::transaction(function () use ($mockTest, &$newTest) {
+
+                $newTest = $mockTest->replicate();
+
+                $newTest->title = $mockTest->title . ' - Copy';
+                $newTest->access_code = strtoupper(Str::random(6));
+
+                $newTest->save();
+                
+                $newTest->questions()->sync(
+                    $mockTest->questions->pluck('id')->toArray()
+                );
+    
+
+            });
+
+            return redirect()
+                ->route('mock-tests.edit', $newTest)
+                ->with('success', 'Mock Test duplicated successfully.');
+        }
 
 }

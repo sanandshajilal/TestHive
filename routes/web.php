@@ -58,6 +58,11 @@ Route::get('/student/test/{mock_test}/submit', [StudentController::class, 'submi
 Route::get('/student/results/{attemptId}', [StudentController::class, 'results'])->name('student.results');
 
 
+// Duplicate Mock Test
+
+Route::get('/mock-tests/{mockTest}/duplicate',
+    [MockTestController::class, 'duplicate'])
+    ->name('mock-tests.duplicate');
 
 
 

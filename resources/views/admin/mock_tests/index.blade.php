@@ -521,6 +521,17 @@ body {
 
 }
 
+.btn-soft-secondary{
+    background:#eef2f7;
+    color:#475569;
+    border:none;
+}
+
+.btn-soft-secondary:hover{
+    background:#475569;
+    color:#fff;
+}
+
 /* ===================================
    MOBILE
 =================================== */
@@ -719,6 +730,14 @@ body {
                                 <a href="{{ route('mock-tests.preview', $mockTest->id) }}" class="btn btn-sm btn-soft-info" title="Preview">
                                     <i class="bi bi-eye-fill"></i>
                                 </a>
+
+                                <button type="button"
+                                        class="btn btn-sm btn-soft-secondary duplicate-btn"
+                                        data-url="{{ route('mock-tests.duplicate', $mockTest->id) }}"
+                                        data-title="{{ $mockTest->title }}"
+                                        title="Duplicate Test">
+                                    <i class="bi bi-files"></i>
+                                </button>
                                 <a href="{{ route('mock-tests.edit', $mockTest->id) }}" class="btn btn-sm btn-soft-warning" title="Edit">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
@@ -738,6 +757,59 @@ body {
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="duplicateModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-files me-2"></i>
+                    Duplicate Mock Test
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+
+                <p class="mb-2">
+                    Do you want to duplicate this mock test?
+                </p>
+
+                <div class="alert alert-light border">
+                    <strong id="duplicateTestTitle"></strong>
+                </div>
+
+                <small class="text-muted">
+                    A new test will be created with the same questions and settings.
+                    Student attempts, results, batches and schedule will not be copied.
+                </small>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <a href=""
+                   id="confirmDuplicateBtn"
+                   class="btn btn-primary">
+                    <i class="bi bi-files me-1"></i>
+                    Duplicate
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')
@@ -802,5 +874,25 @@ body {
         }, 5000);
 
     });
+
+    document.querySelectorAll('.duplicate-btn').forEach(button => {
+
+    button.addEventListener('click', function () {
+
+        document.getElementById('duplicateTestTitle').innerText =
+            this.dataset.title;
+
+        document.getElementById('confirmDuplicateBtn').href =
+            this.dataset.url;
+
+        let modal = new bootstrap.Modal(document.getElementById('duplicateModal'));
+
+        modal.show();
+
+    });
+
+});
+
+
 </script>
 @endsection

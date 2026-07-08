@@ -772,7 +772,7 @@
             <div class="text-center small text-muted">
                 ACCAPrep with Malasri
                 <span class="mx-2">•</span>
-                v1.3.5
+                v1.4.1
                 <span class="mx-2">•</span>
                 Developed & Maintained by <strong>Sanand S</strong>
             </div>
