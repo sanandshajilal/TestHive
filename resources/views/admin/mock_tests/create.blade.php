@@ -425,6 +425,7 @@
                             <option value="table_mcq">Table MCQ</option>
                             <option value="drag_and_drop">Drag and Drop</option>
                             <option value="dropdown">Drop Down</option>
+                            <option value="paragraph">Scenario Based Questions</option>
                         </select>
                     </div>
                 </div>

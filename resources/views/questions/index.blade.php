@@ -576,6 +576,47 @@ td.question-col {
 
 }
 
+.toggle-scenario{
+
+    border:none;
+    background:none;
+
+    width:24px;
+
+    color:#832b00;
+
+}
+
+.toggle-scenario:hover{
+
+    color:#b46e4c;
+
+}
+
+.scenario-children{
+
+    padding-left:35px;
+
+}
+
+.scenario-children .card{
+
+    border-left:4px solid #b46e4c !important;
+
+    background:#fcfaf8;
+
+}
+
+.badge-scenario{
+
+    background:#f7e3d8;
+
+    color:#832b00;
+
+    font-weight:600;
+
+}
+
 /* ===================================
    MOBILE
 =================================== */
@@ -658,7 +699,7 @@ td.question-col {
             <div class="col-md-3">
                 <div class="summary-card">
                     <div class="summary-label">Question Types</div>
-                    <div class="summary-value">6</div>
+                    <div class="summary-value">7</div>
                 </div>
             </div>
 
@@ -707,6 +748,7 @@ td.question-col {
                     <option value="table_mcq">Table MCQ</option>
                     <option value="drag_and_drop">Drag and Drop</option>
                     <option value="dropdown">Drop Down List</option>
+                    <option value="paragraph">Scenario</option>
                 </select>
             </div>
         </div>
@@ -729,11 +771,92 @@ td.question-col {
                     @foreach ($questions as $question)
                         <tr>
                             <td class="question-index">
+
                                 <span class="question-number">
                                     {{ $loop->iteration }}
                                 </span>
+
                             </td>
-                            <td class="question-col">{!! str_replace('[blank]', '__________', $question->question_text) !!}</td>
+                                <td>
+
+                                    @if($question->question_type == 'paragraph')
+
+                                        <div class="d-flex align-items-center mb-2">
+
+                                            <button
+                                                type="button"
+                                                class="toggle-scenario btn btn-sm p-0 me-2"
+                                                data-target="scenario-{{ $question->id }}">
+
+                                                <i class="bi bi-chevron-right"></i>
+
+                                            </button>
+
+                                            <span class="fw-semibold">
+
+                                                Scenario Based Question
+
+                                            </span>
+
+                                            <span class="badge ms-2"
+                                                style="background:#f7e3d8;color:#832b00;">
+
+                                                {{ $question->children->count() }} Questions
+
+                                            </span>
+
+                                        </div>
+
+                                    @endif
+
+                                    {!! str_replace('[blank]', '__________', $question->question_text) !!}
+
+                                    @if($question->question_type == 'paragraph')
+
+                                        <div
+                                            id="scenario-{{ $question->id }}"
+                                            class="scenario-children d-none mt-3">
+
+                                            @foreach($question->children as $child)
+
+                                                <div class="card border-0 shadow-sm mb-3">
+
+                                                    <div class="card-body">
+
+                                                        <div class="d-flex justify-content-between">
+
+                                                            <strong>
+
+                                                                Question {{ $loop->iteration }}
+
+                                                            </strong>
+
+                                                            <span
+                                                                class="badge badge-scenario">
+
+                                                                {{ ucfirst(str_replace('_',' ',$child->question_type)) }}
+
+                                                            </span>
+
+                                                        </div>
+
+                                                        <div class="mt-2">
+
+                                                            {!! $child->question_text !!}
+
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            @endforeach
+
+                                        </div>
+
+                                    @endif
+
+                                </td>
                             <td class="text-center" data-id="{{ $question->paper->id ?? '' }}">
                                 <span class="meta-item paper-meta">
                                     <span class="meta-dot"></span>
@@ -755,7 +878,11 @@ td.question-col {
                             <td class="text-center" data-type="{{ $question->question_type }}">
                                 <span class="meta-item type-meta">
                                     <span class="meta-dot"></span>
-                                    {{ ucfirst(str_replace('_', ' ', $question->question_type)) }}
+                                    @if($question->question_type=='paragraph')
+                                        Scenario
+                                    @else
+                                        {{ ucfirst(str_replace('_',' ',$question->question_type)) }}
+                                    @endif
                                 </span>
                             </td>
                             <td class="text-center">
@@ -777,6 +904,7 @@ td.question-col {
                                 </div>
                             </td>
                         </tr>
+                       
                     @endforeach
                 </tbody>
             </table>
@@ -904,6 +1032,23 @@ td.question-col {
             }
         });
     });
+
+            document.addEventListener('click', function(e){
+
+                const btn = e.target.closest('.toggle-scenario');
+
+                if(!btn) return;
+
+                const target = document.getElementById(btn.dataset.target);
+
+                target.classList.toggle('d-none');
+
+                const icon = btn.querySelector('i');
+
+                icon.classList.toggle('bi-chevron-right');
+                icon.classList.toggle('bi-chevron-down');
+
+            });
 
     function previewQuestion(id) {
     fetch(`/api/question-preview/${id}`)

@@ -233,7 +233,7 @@
             </div>
             <div class="col-md-4">
                 <div class="summary-label">Total Questions</div>
-                <div class="summary-value">{{ $mockTest->questions->count() }}</div>
+                <div class="summary-value">{{ $totalQuestions }}</div>
             </div>
             <div class="col-md-4">
                 <div class="summary-label">Duration</div>

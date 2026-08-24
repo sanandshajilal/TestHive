@@ -1,4 +1,119 @@
 <div class="px-3 py-2">
+    @if($question->question_type === 'paragraph')
+
+    <div class="mb-4">
+
+        <h5 class="fw-semibold mb-3">
+            
+            Scenario
+        </h5>
+
+        <div class="border rounded p-3 bg-light">
+
+            {!! $question->question_text !!}
+
+        </div>
+
+    </div>
+
+    <hr>
+
+    @foreach($question->children as $child)
+
+        @php
+            $options = is_array($child->options)
+                ? $child->options
+                : json_decode($child->options, true) ?? [];
+
+            $correct = is_array($child->correct_answers)
+                ? $child->correct_answers
+                : json_decode($child->correct_answers, true) ?? [];
+        @endphp
+
+        <div class="card mb-4 border-0 shadow-sm">
+
+            <div class="card-header bg-light">
+
+                <strong>
+                    Question {{ $loop->iteration }}
+                </strong>
+
+                <span class="badge bg-secondary ms-2">
+
+                    {{ ucfirst(str_replace('_',' ',$child->question_type)) }}
+
+                </span>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="mb-3">
+
+                    {!! str_replace('[blank]', '__________', $child->question_text) !!}
+
+                </div>
+
+                {{-- MCQ / Multiple Select --}}
+                @if(in_array($child->question_type,['mcq','multiple_select']))
+
+                    <ul class="list-group">
+
+                        @foreach($options as $key=>$opt)
+
+                            <li class="list-group-item d-flex justify-content-between">
+
+                                <span>
+
+                                    {{ strtoupper($key) }}.
+                                    {!! $opt !!}
+
+                                </span>
+
+                                @if(in_array($key,$correct))
+
+                                    <span class="badge bg-success">
+                                        Correct
+                                    </span>
+
+                                @endif
+
+                            </li>
+
+                        @endforeach
+
+                    </ul>
+
+                {{-- One Word --}}
+                @elseif($child->question_type=='one_word')
+
+                    <strong>Correct Answer:</strong>
+
+                    {{ $correct[0] ?? '-' }}
+
+                @endif
+
+                <div class="text-end mt-3 text-muted small">
+
+                    Marks : {{ $child->marks }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    @endforeach
+
+    <div class="text-end text-muted small border-top pt-3">
+
+        {{ $question->topic->name ?? '-' }}
+        /
+        {{ $question->subTopic->name ?? '-' }}
+
+    </div>
+
+@else
     {{-- Question --}}
     <div class="mb-3">
         <div class="fw-bold">Question:</div>
@@ -141,3 +256,4 @@
         </div>
     </div>
 </div>
+@endif

@@ -191,18 +191,106 @@ class StudentController extends Controller
 
         }
 
-        $mockTest = MockTest::with('questions')->findOrFail($mock_test_id);
-        $questions = $mockTest->questions;
+        $mockTest = MockTest::findOrFail($mock_test_id);
 
-        if ($questionNumber < 1 || $questionNumber > $questions->count()) {
-            return redirect()->route('student.test', [$mock_test_id, 1]);
+        /*
+        |--------------------------------------------------------------------------
+        | Test Items
+        |--------------------------------------------------------------------------
+        | One item can be:
+        | 1. Standalone Question
+        | 2. Scenario (Paragraph) containing child questions
+        |--------------------------------------------------------------------------
+        */
+
+        $items = $this->getTestItems($mockTest);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Navigation Items
+        |--------------------------------------------------------------------------
+        |
+        | These are the actual screens/pages of the test.
+        | A Scenario occupies one screen.
+        |
+        */
+
+        $totalItems = $items->count();
+
+        if ($questionNumber < 1 || $questionNumber > $totalItems) {
+            return redirect()->route(
+                'student.test',
+                [$mock_test_id, 1]
+            );
         }
 
-        $question = $questions[$questionNumber - 1];
-        $totalQuestions = $questions->count();
+        $item = $items[$questionNumber - 1];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Question numbers represented by this screen
+        |--------------------------------------------------------------------------
+        */
+
+        $displayQuestionStart = 1;
+
+        for ($i = 0; $i < $questionNumber - 1; $i++) {
+
+            $previousItem = $items[$i];
+
+            if ($previousItem->question_type === 'paragraph') {
+
+                $displayQuestionStart += $previousItem->children->count();
+
+            } else {
+
+                $displayQuestionStart++;
+
+            }
+        }
+
+        if ($item->question_type === 'paragraph') {
+
+            $displayQuestionEnd =
+                $displayQuestionStart + $item->children->count() - 1;
+
+        } else {
+
+            $displayQuestionEnd = $displayQuestionStart;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Actual Scorable Questions
+        |--------------------------------------------------------------------------
+        |
+        | Standalone questions count individually.
+        | Scenario parent does not count.
+        | Scenario children count individually.
+        |
+        */
+
+        $scorableQuestions = collect();
+
+        foreach ($items as $testItem) {
+
+            if ($testItem->question_type === 'paragraph') {
+
+                foreach ($testItem->children as $child) {
+                    $scorableQuestions->push($child);
+                }
+
+            } else {
+
+                $scorableQuestions->push($testItem);
+
+            }
+        }
+
+        $totalQuestions = $scorableQuestions->count();
 
         $savedAnswer = StudentAnswer::where('attempt_id', $attemptId)
-            ->where('question_id', $question->id)
+            ->where('question_id', $item->id)
             ->first();
 
        $selectedOption = null;
@@ -211,7 +299,7 @@ class StudentController extends Controller
 
                 if (
                     in_array(
-                        $question->question_type,
+                        $item->question_type,
                         ['multiple_select', 'table_mcq', 'drag_and_drop', 'dropdown']
                     )
                 ) {
@@ -234,19 +322,22 @@ class StudentController extends Controller
         // ✅ 3. Calculate actual remaining seconds
         $remainingSeconds = $attempt->remaining_seconds ?? ($mockTest->duration_minutes * 60);
         
-        $isFlagged = \App\Models\StudentAnswer::where('attempt_id', $attemptId)
-            ->where('question_id', $question->id)
-            ->value('is_flagged') ?? false;
+            $isFlagged = \App\Models\StudentAnswer::where('attempt_id', $attemptId)
+                ->where('question_id', $item->id)
+                ->value('is_flagged') ?? false;
 
             // Handle dynamic labels for table_mcq
                $statements = [];
                     $labels = [];
 
-                    if ($question->question_type === 'table_mcq') {
-                        $statements = is_array($question->options) ? $question->options : json_decode($question->options, true) ?? [];
-                        $labels = explode(',', $question->table_mcq_labels ?? 'Debit,Credit');
+                    if ($item->question_type === 'table_mcq') {
 
-                        // Trim labels just in case
+                        $statements = is_array($item->options)
+                            ? $item->options
+                            : json_decode($item->options, true) ?? [];
+
+                        $labels = explode(',', $item->table_mcq_labels ?? 'Debit,Credit');
+
                         $labels = array_map('trim', $labels);
                     }
 
@@ -256,9 +347,12 @@ class StudentController extends Controller
         return response()
             ->view('student.test', compact(
                 'mockTest',
-                'question',
+                'item',
                 'questionNumber',
+                'totalItems',
                 'totalQuestions',
+                'displayQuestionStart',
+                'displayQuestionEnd',
                 'selectedOption',
                 'attempt',
                 'remainingSeconds',
@@ -320,35 +414,124 @@ protected function extractAnswerFromRequest(Request $request)
     $attemptId = session('attempt_id');
 
     if (!$student || !$attemptId) {
-        return response()->json(['error' => 'Session expired'], 401);
+        return response()->json([
+            'error' => 'Session expired'
+        ], 401);
     }
 
-    $mockTest = MockTest::with('questions')->findOrFail($mockTestId);
-    $questions = $mockTest->questions;
+    $mockTest = MockTest::findOrFail($mockTestId);
 
-    $studentAnswers = StudentAnswer::where('attempt_id', $attemptId)->get()->keyBy('question_id');
+    /*
+    |--------------------------------------------------------------------------
+    | Get Student-Facing Test Items
+    |--------------------------------------------------------------------------
+    |
+    | These are the navigation screens.
+    | A Scenario is one screen containing multiple child questions.
+    |
+    */
+
+    $questions = $this->getTestItems($mockTest);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Build Scorable Questions
+    |--------------------------------------------------------------------------
+    |
+    | For the review modal, each actual question must be counted
+    | separately.
+    |
+    | Example:
+    |
+    | Q1
+    | Q2
+    | Q3
+    | Q4
+    | Scenario
+    |   Q1
+    |   Q2
+    |   Q3
+    |
+    | Total scorable questions = 7
+    |
+    */
+
+    $scorableQuestions = collect();
+
+    foreach ($questions as $question) {
+
+        if ($question->question_type === 'paragraph') {
+
+            foreach ($question->children as $child) {
+                $scorableQuestions->push($child);
+            }
+
+        } else {
+
+            $scorableQuestions->push($question);
+
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Student Answers
+    |--------------------------------------------------------------------------
+    */
+
+    $studentAnswers = StudentAnswer::where('attempt_id', $attemptId)
+        ->get()
+        ->keyBy('question_id');
 
     $answered = 0;
     $unanswered = 0;
     $answeredFlagged = 0;
     $unansweredFlagged = 0;
 
-    foreach ($questions as $question) {
+    /*
+    |--------------------------------------------------------------------------
+    | Count Individual Scorable Questions
+    |--------------------------------------------------------------------------
+    */
+
+    foreach ($scorableQuestions as $question) {
+
         $answer = $studentAnswers->get($question->id);
-        $userAns = $answer ? $answer->selected_option : null;
 
-        $userAnsDecoded = $userAns ? json_decode($userAns, true) : null;
+        /*
+        |--------------------------------------------------------------------------
+        | Determine whether this question is answered
+        |--------------------------------------------------------------------------
+        */
 
-        $isAnswered = $answer && (!is_null($userAns) && (!is_array($userAnsDecoded) || !empty($userAnsDecoded)));
+        $isAnswered = $this->isAnswerRecordAnswered($answer);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Flag Status
+        |--------------------------------------------------------------------------
+        */
+
         $isFlagged = $answer && $answer->is_flagged;
 
+        /*
+        |--------------------------------------------------------------------------
+        | Answered / Unanswered
+        |--------------------------------------------------------------------------
+        */
+
         if ($isAnswered) {
+
             $answered++;
+
             if ($isFlagged) {
                 $answeredFlagged++;
             }
+
         } else {
+
             $unanswered++;
+
             if ($isFlagged) {
                 $unansweredFlagged++;
             }
@@ -360,9 +543,11 @@ protected function extractAnswerFromRequest(Request $request)
         'not_answered' => $unanswered,
         'answered_flagged' => $answeredFlagged,
         'unanswered_flagged' => $unansweredFlagged,
+
+        // Useful for the frontend if we want to display total later
+        'total' => $scorableQuestions->count(),
     ]);
 }
-
     
 
     public function saveAnswer(Request $request, $mock_test_id)
@@ -396,6 +581,59 @@ protected function extractAnswerFromRequest(Request $request)
 
         if (!$question) {
             return response()->json(['error' => 'Invalid question.'], 404);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Scenario Question
+        |--------------------------------------------------------------------------
+        */
+
+        if ($question->question_type === 'paragraph') {
+
+            $scenarioAnswers = $request->input('scenario_answers', []);
+
+            foreach ($scenarioAnswers as $childQuestionId => $answer) {
+
+                $childQuestion = Question::find($childQuestionId);
+
+                if (!$childQuestion) {
+                    continue;
+                }
+
+                $correct = $this->checkAnswer($childQuestion, $answer);
+
+                StudentAnswer::updateOrCreate(
+                    [
+                        'attempt_id' => $attemptId,
+                        'question_id' => $childQuestion->id,
+                    ],
+                    [
+                        'selected_option' => is_array($answer)
+                            ? json_encode($answer)
+                            : $answer,
+
+                        'is_correct' => $correct,
+
+                        'marks_awarded' => $correct
+                            ? $childQuestion->marks
+                            : 0,
+                    ]
+                );
+
+            }
+
+            if ($request->has('remaining_seconds')) {
+
+                StudentTestAttempt::where('id', $attemptId)->update([
+                    'remaining_seconds' => $request->remaining_seconds,
+                ]);
+
+            }
+
+            return response()->json([
+                'success' => true
+            ]);
         }
 
         $correct = $this->checkAnswer($question, $userAnswer);
@@ -440,12 +678,59 @@ protected function extractAnswerFromRequest(Request $request)
 
     switch ($question->question_type) {
         case 'table_mcq':
-            if (!is_array($userAnswer) || !is_array($correctAnswers)) {
+
+        if (!is_array($userAnswer) || !is_array($correctAnswers)) {
+            return false;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Normalize both arrays
+        |--------------------------------------------------------------------------
+        */
+
+        $normalize = function ($value) {
+            return strtolower(trim((string) $value));
+        };
+
+        $userAnswer = array_map($normalize, $userAnswer);
+        $correctAnswers = array_map($normalize, $correctAnswers);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Compare by row
+        |--------------------------------------------------------------------------
+        |
+        | Table MCQ answers correspond to specific rows.
+        | Therefore we compare each row individually rather than relying
+        | on array order.
+        |
+        */
+
+        foreach ($correctAnswers as $index => $correctAnswer) {
+
+            $studentAnswer = $userAnswer[$index] ?? null;
+
+            if ($studentAnswer === null) {
                 return false;
             }
-            $userAnswerLower = array_map('strtolower', $userAnswer);
-            $correctAnswerLower = array_map('strtolower', $correctAnswers);
-            return $userAnswerLower == $correctAnswerLower;
+
+            if ($studentAnswer !== $correctAnswer) {
+                return false;
+            }
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Make sure student has not supplied extra answers
+        |--------------------------------------------------------------------------
+        */
+
+        if (count($userAnswer) !== count($correctAnswers)) {
+            return false;
+        }
+
+        return true;
 
         case 'one_word':
             $normalize = function($string) {
@@ -496,38 +781,157 @@ protected function extractAnswerFromRequest(Request $request)
     }
 }
 
-    public function getQuestionStatuses($mockTestId)
-        {
-            $student = session('student_info');
-            $attemptId = session('attempt_id');
+/**
+ * Determine whether a test item has been answered.
+ *
+ * Standalone Question:
+ *     Answered if a StudentAnswer exists with a non-empty answer.
+ *
+ * Scenario Question:
+ *     Answered if ANY child question has been answered.
+ */
+private function isItemAnswered($item, $studentAnswers)
+{
+    // Standalone Question
+    if ($item->question_type !== 'paragraph') {
 
-            if (!$student || !$attemptId) {
-                return response()->json(['error' => 'Session expired'], 401);
-            }
+        return $this->isAnswerRecordAnswered(
+            $studentAnswers->get($item->id)
+        );
 
-            $mockTest = MockTest::with('questions')->findOrFail($mockTestId);
-            $questions = $mockTest->questions;
+    }
 
-            $studentAnswers = StudentAnswer::where('attempt_id', $attemptId)->get()->keyBy('question_id');
+    // Scenario Question
+    foreach ($item->children as $child) {
 
-            $statuses = $questions->map(function ($question, $index) use ($studentAnswers) {
-                $answer = $studentAnswers->get($question->id);
-                $userAns = $answer ? $answer->selected_option : null;
+        if ($this->isAnswerRecordAnswered(
+            $studentAnswers->get($child->id)
+        )) {
 
-                $userAnsDecoded = $userAns ? json_decode($userAns, true) : null;
+            return true;
 
-                $isAnswered = $answer && (!is_null($userAns) && (!is_array($userAnsDecoded) || !empty($userAnsDecoded)));
+        }
 
-                return [
-                    'index' => $index + 1,
-                    'is_answered' => $isAnswered,
-                    'is_flagged' => $answer && $answer->is_flagged,
-                ];
-                
-            });
+    }
 
-    return response()->json($statuses);
+    return false;
 }
+
+
+    /**
+     * Check whether a StudentAnswer actually contains an answer.
+     */
+    private function isAnswerRecordAnswered($answer)
+    {
+        if (!$answer) {
+            return false;
+        }
+
+        $value = $answer->selected_option;
+
+        if (is_null($value)) {
+            return false;
+        }
+
+        // JSON arrays
+        $decoded = json_decode($value, true);
+
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+
+            return count($decoded) > 0;
+
+        }
+
+        return trim((string)$value) !== '';
+    }
+
+   public function getQuestionStatuses($mockTestId)
+    {
+        $student = session('student_info');
+        $attemptId = session('attempt_id');
+
+        if (!$student || !$attemptId) {
+            return response()->json([
+                'error' => 'Session expired'
+            ], 401);
+        }
+
+        $mockTest = MockTest::findOrFail($mockTestId);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Student-facing test items
+        |--------------------------------------------------------------------------
+        |
+        | A Scenario is one navigation item.
+        |
+        */
+
+        $questions = $this->getTestItems($mockTest);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Student Answers
+        |--------------------------------------------------------------------------
+        */
+
+        $studentAnswers = StudentAnswer::where('attempt_id', $attemptId)
+            ->get()
+            ->keyBy('question_id');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Build Statuses
+        |--------------------------------------------------------------------------
+        */
+
+        $statuses = $questions->map(function ($question, $index) use ($studentAnswers) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Answered Status
+            |--------------------------------------------------------------------------
+            |
+            | For a normal question, this checks that question.
+            |
+            | For a Scenario, this checks its child questions.
+            |
+            */
+
+            $isAnswered = $this->isItemAnswered(
+                $question,
+                $studentAnswers
+            );
+
+            /*
+            |--------------------------------------------------------------------------
+            | Flag Status
+            |--------------------------------------------------------------------------
+            |
+            | IMPORTANT:
+            |
+            | A Scenario has ONE flag.
+            | The flag is stored against the Scenario parent question ID.
+            |
+            | Therefore, do NOT check the child questions here.
+            |
+            */
+
+            $answer = $studentAnswers->get($question->id);
+
+            $isFlagged = $answer
+                ? (bool) $answer->is_flagged
+                : false;
+
+            return [
+                'index' => $index + 1,
+                'is_answered' => $isAnswered,
+                'is_flagged' => $isFlagged,
+            ];
+        });
+
+        return response()->json($statuses);
+    }
 
 public function toggleFlag(Request $request, $mockTestId)
 {
@@ -559,41 +963,177 @@ public function submitTest($mock_test_id)
     $attemptId = session('attempt_id');
 
     if (!$student || !$attemptId) {
-        return redirect()->route('student.index')->withErrors(['error' => 'Session expired. Please login again.']);
+        return redirect()
+            ->route('student.index')
+            ->withErrors([
+                'error' => 'Session expired. Please login again.'
+            ]);
     }
 
-    $mockTest = MockTest::with('questions')->findOrFail($mock_test_id);
-    $questions = $mockTest->questions;
+    $mockTest = MockTest::findOrFail($mock_test_id);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Student-facing test items
+    |--------------------------------------------------------------------------
+    |
+    | Used for the grouped Scenario structure.
+    | We don't use this collection directly for scoring.
+    |
+    */
+
+    $questions = $this->getTestItems($mockTest);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Build Scorable Questions
+    |--------------------------------------------------------------------------
+    |
+    | Standalone question = one scorable question
+    |
+    | Scenario/paragraph = container only
+    | Scenario children = individual scorable questions
+    |
+    | Example:
+    |
+    | Q1
+    | Scenario
+    |   Q1
+    |   Q2
+    |   Q3
+    |
+    | Scorable questions:
+    |
+    | Q1
+    | Scenario Q1
+    | Scenario Q2
+    | Scenario Q3
+    |
+    */
+
+    $scorableQuestions = collect();
+
+    foreach ($questions as $question) {
+
+        if ($question->question_type === 'paragraph') {
+
+            foreach ($question->children as $child) {
+
+                $scorableQuestions->push($child);
+
+            }
+
+        } else {
+
+            $scorableQuestions->push($question);
+
+        }
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Calculate Result
+    |--------------------------------------------------------------------------
+    */
 
     $correctCount = 0;
     $wrongCount = 0;
     $notAttempted = 0;
 
-    foreach ($questions as $question) {
+    foreach ($scorableQuestions as $question) {
+
         $studentAnswer = StudentAnswer::where('attempt_id', $attemptId)
             ->where('question_id', $question->id)
             ->first();
 
-        $userAnswer = $studentAnswer ? $studentAnswer->selected_option : null;
+        /*
+        |--------------------------------------------------------------------------
+        | Determine whether the question was actually attempted
+        |--------------------------------------------------------------------------
+        */
+
+        $userAnswer = $studentAnswer
+            ? $studentAnswer->selected_option
+            : null;
 
         $isAttempted = false;
 
-        if (in_array($question->question_type, ['multiple_select', 'table_mcq', 'dropdown', 'drag_and_drop'])) {
-            $decoded = is_array($userAnswer) ? $userAnswer : json_decode($userAnswer, true);
-            $isAttempted = is_array($decoded) && count($decoded) > 0;
-            $userAnswer = $decoded;
-        } elseif ($question->question_type === 'one_word') {
-            $isAttempted = $userAnswer !== null && trim($userAnswer) !== '';
-        } else {
-            $isAttempted = $userAnswer !== null;
+        /*
+        |--------------------------------------------------------------------------
+        | Array-based question types
+        |--------------------------------------------------------------------------
+        */
+
+            if (in_array($question->question_type, [
+                'multiple_select',
+                'table_mcq',
+                'dropdown',
+                'drag_and_drop'
+            ])) {
+
+                if (is_array($userAnswer)) {
+
+                    $userAnswer = $userAnswer;
+
+                } else {
+
+                    $userAnswer = json_decode($userAnswer, true) ?? [];
+
+                }
+
+                $isAttempted = is_array($userAnswer)
+                    && count($userAnswer) > 0;
+            }
+
+        /*
+        |--------------------------------------------------------------------------
+        | One Word
+        |--------------------------------------------------------------------------
+        */
+
+        elseif ($question->question_type === 'one_word') {
+
+            $isAttempted =
+                $userAnswer !== null
+                && trim((string) $userAnswer) !== '';
+
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | MCQ
+        |--------------------------------------------------------------------------
+        */
+
+        else {
+
+            $isAttempted =
+                $userAnswer !== null
+                && trim((string) $userAnswer) !== '';
+
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Not Attempted
+        |--------------------------------------------------------------------------
+        */
 
         if (!$isAttempted) {
+
             $notAttempted++;
 
-            // Ensure there's a student_answer record for consistency
+            /*
+            |--------------------------------------------------------------------------
+            | Make sure an answer record exists
+            |--------------------------------------------------------------------------
+            |
+            | This is useful for keeping the response sheet consistent.
+            |
+            */
+
             if (!$studentAnswer) {
+
                 StudentAnswer::create([
                     'attempt_id' => $attemptId,
                     'question_id' => $question->id,
@@ -601,31 +1141,118 @@ public function submitTest($mock_test_id)
                     'is_correct' => false,
                     'marks_awarded' => 0,
                 ]);
+
+            } else {
+
+                $studentAnswer->update([
+                    'is_correct' => false,
+                    'marks_awarded' => 0,
+                ]);
+
             }
 
             continue;
         }
 
-        $isCorrect = $this->checkAnswer($question, $userAnswer);
-        $marks = $isCorrect ? $question->marks : 0;
+        /*
+        |--------------------------------------------------------------------------
+        | Check Answer
+        |--------------------------------------------------------------------------
+        */
+
+        if ($question->question_type === 'table_mcq') {
+
+            \Log::debug('TABLE MCQ CHECK', [
+                'question_id' => $question->id,
+                'user_answer' => $userAnswer,
+                'correct_answers' => $question->correct_answers,
+                'is_array_user' => is_array($userAnswer),
+                'is_array_correct' => is_array($question->correct_answers),
+            ]);
+        }
+
+        $isCorrect = $this->checkAnswer(
+            $question,
+            $userAnswer
+        );
+
+        $marks = $isCorrect
+            ? $question->marks
+            : 0;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Update Student Answer
+        |--------------------------------------------------------------------------
+        */
 
         if ($studentAnswer) {
+
             $studentAnswer->update([
                 'is_correct' => $isCorrect,
                 'marks_awarded' => $marks,
             ]);
+
+        } else {
+
+            /*
+            |--------------------------------------------------------------------------
+            | Safety fallback
+            |--------------------------------------------------------------------------
+            |
+            | Normally saveAnswer() will already have created the record.
+            | This handles the unlikely case where it doesn't exist.
+            |
+            */
+
+            $studentAnswer = StudentAnswer::create([
+                'attempt_id' => $attemptId,
+                'question_id' => $question->id,
+                'selected_option' => is_array($userAnswer)
+                    ? json_encode($userAnswer)
+                    : $userAnswer,
+                'is_correct' => $isCorrect,
+                'marks_awarded' => $marks,
+            ]);
+
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Count Result
+        |--------------------------------------------------------------------------
+        */
+
         if ($isCorrect) {
+
             $correctCount++;
+
         } else {
+
             $wrongCount++;
+
         }
     }
 
-    $totalMarks = StudentAnswer::where('attempt_id', $attemptId)->sum('marks_awarded');
+    /*
+    |--------------------------------------------------------------------------
+    | Total Marks Awarded
+    |--------------------------------------------------------------------------
+    |
+    | This is the student's actual score.
+    |
+    */
 
-    StudentTestAttempt::find($attemptId)->update([
+    $totalMarks = StudentAnswer::where('attempt_id', $attemptId)
+        ->sum('marks_awarded');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Mark Attempt as Completed
+    |--------------------------------------------------------------------------
+    */
+
+    StudentTestAttempt::findOrFail($attemptId)->update([
         'end_time' => now(),
         'correct_count' => $correctCount,
         'wrong_count' => $wrongCount,
@@ -634,10 +1261,34 @@ public function submitTest($mock_test_id)
         'status' => 'completed',
     ]);
 
-    return redirect()->route('student.results', $attemptId);
+    /*
+    |--------------------------------------------------------------------------
+    | Redirect to Results
+    |--------------------------------------------------------------------------
+    */
+
+    return redirect()
+        ->route('student.results', $attemptId);
 }
 
 
+
+    /**
+     * Get top-level test items (Standalone Questions + Scenario Questions)
+     */
+    private function getTestItems(MockTest $mockTest)
+    {
+        return $mockTest->questions()
+            ->whereNull('parent_question_id')
+            ->with([
+                'children',
+                'topic',
+                'subTopic',
+                'children.topic',
+                'children.subTopic'
+            ])
+            ->get();
+    }
 
 public function results($attemptId)
 {
@@ -646,41 +1297,162 @@ public function results($attemptId)
 
     // 1. Redirect if session expired
     if (!$student || !$sessionAttemptId) {
-        return redirect()->route('student.index')->withErrors(['error' => 'Session expired. Please login again.']);
+        return redirect()
+            ->route('student.index')
+            ->withErrors([
+                'error' => 'Session expired. Please login again.'
+            ]);
     }
 
     // 2. Ensure the student can only access their own attempt
     if ($attemptId != $sessionAttemptId) {
-        return redirect()->route('student.results', $sessionAttemptId)->with('warning', 'You are not authorized to view that result.');
+        return redirect()
+            ->route('student.results', $sessionAttemptId)
+            ->with(
+                'warning',
+                'You are not authorized to view that result.'
+            );
     }
 
-    $attempt = StudentTestAttempt::with('mockTest.questions')->findOrFail($attemptId);
-    $mockTest = $attempt->mockTest;
-    $questions = $mockTest->questions;
+    // 3. Get attempt and mock test
+    $attempt = StudentTestAttempt::findOrFail($attemptId);
+
+    $mockTest = MockTest::findOrFail($attempt->mock_test_id);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Student-facing test items
+    |--------------------------------------------------------------------------
+    |
+    | This keeps Scenario questions grouped as one item for display.
+    |
+    */
+
+    $questions = $this->getTestItems($mockTest);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Scorable Questions
+    |--------------------------------------------------------------------------
+    |
+    | A Scenario/paragraph itself is NOT a question for marking.
+    | Its child questions are the actual scorable questions.
+    |
+    | Example:
+    |
+    | Q1          -> 1 question
+    | Scenario
+    |   Q1        -> 1 question
+    |   Q2        -> 1 question
+    |   Q3        -> 1 question
+    |
+    | Total = 4 questions
+    |
+    */
+
+$scorableQuestions = collect();
+
+foreach ($questions as $question) {
+
+    if ($question->question_type === 'paragraph') {
+
+        // Scenario parent is only a container.
+        // Its child questions are the actual scorable questions.
+        foreach ($question->children as $child) {
+            $scorableQuestions->push($child);
+        }
+
+    } else {
+
+        // Normal standalone question.
+        $scorableQuestions->push($question);
+
+    }
+}
+
+    /*
+    |--------------------------------------------------------------------------
+    | Student Answers
+    |--------------------------------------------------------------------------
+    */
 
     $studentAnswers = StudentAnswer::with('question')
         ->where('attempt_id', $attemptId)
         ->get()
         ->keyBy('question_id');
 
+    /*
+    |--------------------------------------------------------------------------
+    | Calculate Result
+    |--------------------------------------------------------------------------
+    */
+
     $correctCount = 0;
     $wrongCount = 0;
     $unattemptedCount = 0;
 
-    foreach ($questions as $question) {
+    foreach ($scorableQuestions as $question) {
+
         $answer = $studentAnswers->get($question->id);
 
-        if (!$answer || is_null($answer->selected_option) || (is_array(json_decode($answer->selected_option, true)) && empty(json_decode($answer->selected_option, true)))) {
+        /*
+        |--------------------------------------------------------------------------
+        | Not Attempted
+        |--------------------------------------------------------------------------
+        */
+
+        if (!$this->isAnswerRecordAnswered($answer)) {
+
             $unattemptedCount++;
-        } elseif ($answer->is_correct) {
+
+            continue;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Correct
+        |--------------------------------------------------------------------------
+        */
+
+        if ($answer->is_correct) {
+
             $correctCount++;
-        } else {
+
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Wrong
+        |--------------------------------------------------------------------------
+        */
+
+        else {
+
             $wrongCount++;
+
         }
     }
 
-    $totalQuestions = $questions->count();
-    $totalMarks = $studentAnswers->sum('marks_awarded');
+    /*
+    |--------------------------------------------------------------------------
+    | Question & Marks Totals
+    |--------------------------------------------------------------------------
+    */
+
+    // Actual student-visible/scorable questions
+    $totalQuestions = $scorableQuestions->count();
+
+    // Total possible marks for all scorable questions
+    $totalMarks = $scorableQuestions->sum('marks');
+
+    // Marks actually awarded to the student
+    $marksAwarded = $studentAnswers->sum('marks_awarded');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Student Information
+    |--------------------------------------------------------------------------
+    */
 
     $studentInfo = [
         'name' => $attempt->student_name,
@@ -689,16 +1461,31 @@ public function results($attemptId)
         'batch_id' => $attempt->batch_id,
     ];
 
+    /*
+    |--------------------------------------------------------------------------
+    | Results View
+    |--------------------------------------------------------------------------
+    */
+
     return view('student.results', [
         'student' => $studentInfo,
         'attempt' => $attempt,
+
+        // All saved answers
         'answers' => $studentAnswers->values(),
+
+        // Result counts
         'correctCount' => $correctCount,
         'wrongCount' => $wrongCount,
         'unattemptedCount' => $unattemptedCount,
+
+        // Student-facing grouped questions
         'questions' => $questions,
+
+        // Scoring totals
         'totalQuestions' => $totalQuestions,
         'totalMarks' => $totalMarks,
+        'marksAwarded' => $marksAwarded,
     ]);
 }
 

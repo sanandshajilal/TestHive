@@ -1,4 +1,6 @@
-@php use Illuminate\Support\Str; @endphp
+@php
+    use Illuminate\Support\Str;
+@endphp
 
 @extends('layouts.student')
 
@@ -26,13 +28,15 @@
             background-size: 24px 24px;
         }
 
-        /* ---------- HEADER ---------- */
+        /* =========================================================
+           HEADER
+           ========================================================= */
 
         .header-box {
             background: #fff;
             border-radius: 1rem;
             padding: 1.25rem 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
         }
 
         .header-box h4 {
@@ -53,7 +57,9 @@
             color: var(--primary-dark);
         }
 
-        /* ---------- SCORE BANNER ---------- */
+        /* =========================================================
+           SCORE BANNER
+           ========================================================= */
 
         .score-banner {
             background: linear-gradient(
@@ -66,7 +72,7 @@
             padding: 1.5rem;
             text-align: center;
             margin-bottom: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,.08);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .08);
         }
 
         .score-value {
@@ -80,13 +86,15 @@
             opacity: .9;
         }
 
-        /* ---------- CARDS ---------- */
+        /* =========================================================
+           CARDS
+           ========================================================= */
 
         .card-style {
             border-radius: 1rem;
             background: #fff;
             padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
         }
 
         .question-card {
@@ -99,10 +107,12 @@
         }
 
         .question-card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,.04);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .04);
         }
 
-        /* ---------- STUDENT INFO ---------- */
+        /* =========================================================
+           STUDENT INFO
+           ========================================================= */
 
         .info-label {
             font-size: .75rem;
@@ -117,11 +127,13 @@
             color: #111827;
         }
 
-        /* ---------- SUMMARY ---------- */
+        /* =========================================================
+           SUMMARY
+           ========================================================= */
 
         .summary-card {
             height: 100%;
-            padding: 1rem 0.75rem;
+            padding: 1rem .75rem;
         }
 
         .summary-total {
@@ -132,7 +144,9 @@
             color: var(--primary);
         }
 
-        /* ---------- QUESTIONS ---------- */
+        /* =========================================================
+           QUESTION NUMBER
+           ========================================================= */
 
         .question-number {
             display: inline-block;
@@ -153,48 +167,46 @@
             margin-bottom: .5rem;
         }
 
+        /* =========================================================
+           QUESTION TABLES
+           ========================================================= */
 
-        /* ---------- QUESTION TABLES ---------- */
-
-        .question-content table{
-            width:100%;
-            border-collapse:collapse;
-            margin:18px 0;
-            font-size:.95rem;
+        .question-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 18px 0;
+            font-size: .95rem;
         }
 
-        .question-content th{
-            background:var(--primary-light);
-            color:var(--primary-dark);
-            font-weight:600;
-            border:1px solid #d9d9d9;
-            padding:10px 12px;
+        .question-content th {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: 600;
+            border: 1px solid #d9d9d9;
+            padding: 10px 12px;
         }
 
-        .question-content td{
-            border:1px solid #e3e3e3;
-            padding:10px 12px;
+        .question-content td {
+            border: 1px solid #e3e3e3;
+            padding: 10px 12px;
         }
 
-        .question-content tr:nth-child(even){
-            background:#fafafa;
+        .question-content tr:nth-child(even) {
+            background: #fafafa;
         }
 
-        /* First column slightly emphasized */
-
-        .question-content td:first-child{
-            font-weight:600;
+        .question-content td:first-child {
+            font-weight: 600;
         }
-
-        /* Better alignment for numerical data */
 
         .question-content th:not(:first-child),
-        .question-content td:not(:first-child){
-            text-align:right;
+        .question-content td:not(:first-child) {
+            text-align: right;
         }
-        
 
-        /* ---------- BADGES ---------- */
+        /* =========================================================
+           BADGES
+           ========================================================= */
 
         .badge-correct {
             background: #e8f7ee;
@@ -220,7 +232,9 @@
             font-weight: 600;
         }
 
-        /* ---------- TABLES ---------- */
+        /* =========================================================
+           TABLES
+           ========================================================= */
 
         .table {
             margin-bottom: 0;
@@ -244,15 +258,122 @@
             background: var(--primary-light) !important;
         }
 
-        /* ---------- OPTION LIST ---------- */
+        /* =========================================================
+           OPTION LIST
+           ========================================================= */
 
         .list-group-item {
             border-color: #edf0f2;
         }
 
-     
+        /* =========================================================
+           RESULTS PAGE - SCENARIO
+           ========================================================= */
 
-        /* ---------- RESPONSE SHEET TITLE ---------- */
+        .results-scenario {
+            background: #fffaf7;
+            border: 1px solid #ead9cf;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-top: 30px;
+        }
+
+        .results-scenario-header {
+            padding: 13px 18px;
+            background: #f8eee8;
+            border-bottom: 1px solid #ead9cf;
+        }
+
+        .results-scenario-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+
+            background: #ffffff;
+            color: #832b00;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            margin-right: 12px;
+
+            border: 1px solid #ead9cf;
+        }
+
+        .results-scenario-title {
+            font-weight: 600;
+            color: #832b00;
+            font-size: 1rem;
+        }
+
+        .results-scenario-subtitle {
+            font-size: .78rem;
+            color: #7b6f68;
+            margin-top: 1px;
+        }
+
+        .results-scenario-content {
+            padding: 20px 22px;
+            color: #292522;
+            font-size: .96rem;
+            line-height: 1.7;
+        }
+
+        .results-scenario-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .results-scenario-content table {
+            max-width: 100%;
+        }
+
+        .results-scenario-content img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* =========================================================
+           SCENARIO CHILD QUESTIONS
+           ========================================================= */
+
+        .scenario-questions {
+            margin-bottom: 2rem;
+        }
+
+        .scenario-question-label {
+            color: var(--primary-dark);
+            font-size: .82rem;
+            font-weight: 600;
+
+            padding: 8px 4px 10px;
+
+            border-bottom: 1px solid #ead9cf;
+            margin-bottom: 4px;
+        }
+
+        .scenario-child-question {
+            padding: 1rem 0;
+            border-bottom: 1px solid #edf0f2;
+        }
+
+        .scenario-child-question:last-child {
+            border-bottom: none;
+        }
+
+        /* =========================================================
+           STANDALONE QUESTIONS
+           ========================================================= */
+
+        .standalone-question {
+            border-top: 2px solid #e5e7eb;
+            padding-top: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        /* =========================================================
+           RESPONSE SHEET TITLE
+           ========================================================= */
 
         .response-title {
             color: var(--primary-dark);
@@ -262,15 +383,20 @@
             margin-bottom: 1.5rem;
         }
 
-        /* ---------- RESPONSIVE ---------- */
+        /* =========================================================
+           RESPONSIVE
+           ========================================================= */
 
         @media (min-width: 768px) {
+
             .min-w-md-0 {
                 min-width: 0 !important;
             }
+
         }
 
         @media (max-width: 767.98px) {
+
             .back-label {
                 display: none !important;
             }
@@ -282,414 +408,437 @@
             .question-card {
                 padding: 1rem;
             }
+
+            .results-scenario-content {
+                padding: 16px 18px;
+            }
+
         }
     </style>
 @endsection
 
+
 @section('content')
 
 @if(session('info'))
-    <div id="infoAlert" class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+
+    <div
+        id="infoAlert"
+        class="alert alert-success alert-dismissible fade show mt-3"
+        role="alert"
+    >
         {{ session('info') }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+
+        <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+        ></button>
     </div>
 
     <script>
         setTimeout(() => {
+
             const alertEl = document.getElementById('infoAlert');
+
             if (alertEl) {
+
                 alertEl.classList.remove('show');
                 alertEl.classList.add('fade');
-                // Optionally remove it from DOM after fade
-                setTimeout(() => alertEl.remove(), 150, alertEl);
+
+                setTimeout(() => alertEl.remove(), 150);
+
             }
+
         }, 5000);
     </script>
+
 @endif
 
+
 <div class="container py-4">
-    <!-- Heading -->
+
+    {{-- ========================================================= --}}
+    {{-- Page Header --}}
+    {{-- ========================================================= --}}
+
     <div class="header-box mb-4 d-flex justify-content-between align-items-center">
+
         <h4 class="fw-bold mb-0">
+
             <i class="bi bi-award me-2"></i>
+
             Test Results
+
         </h4>
-        <a href="{{ route('student.index') }}" class="btn btn-back">
-            <i class="bi bi-arrow-left me-1"></i> 
-            <span class="back-label">Back to Home </span>
+
+        <a
+            href="{{ route('student.index') }}"
+            class="btn btn-back"
+        >
+
+            <i class="bi bi-arrow-left me-1"></i>
+
+            <span class="back-label">
+                Back to Home
+            </span>
+
         </a>
 
-</div>
+    </div>
 
 
     @php
-        $questions = $attempt->mockTest->questions ?? collect();
         $studentAnswers = $answers->keyBy('question_id');
-
-        $correctCount = 0;
-        $wrongCount = 0;
-        $unattemptedCount = 0;
-        $totalMarks = 0;
-
-        foreach ($questions as $q) {
-            $a = $studentAnswers->get($q->id);
-            $selected = json_decode($a->selected_option ?? '', true);
-
-            if (!$a || is_null($a->selected_option) || (is_array($selected) && empty($selected))) {
-                $unattemptedCount++;
-            } elseif ($a->is_correct) {
-                $correctCount++;
-            } else {
-                $wrongCount++;
-            }
-
-            $totalMarks += $a->marks_awarded ?? 0;
-        }
-
-        $totalQuestions = $questions->count();
-        $totalPossible = $questions->sum('marks') ?: ($totalQuestions * 2);
     @endphp
 
-    <!-- Student & Test Info -->
+
+    {{-- ========================================================= --}}
+    {{-- Student & Test Information --}}
+    {{-- ========================================================= --}}
+
     <div class="card shadow-sm border-0 rounded-4 mb-4">
+
         <div class="card-body">
+
             <div class="row gy-3">
-                <div class="col-md-4"><strong>Student:</strong><br>{{ $attempt->student_name }}</div>
-                <div class="col-md-4"><strong>Email:</strong><br>{{ $attempt->email }}</div>
-                <div class="col-md-4"><strong>Institute:</strong><br>{{ $attempt->institute->name ?? '-' }}</div>
-                <div class="col-md-4"><strong>Batch:</strong><br>{{ $attempt->batch->name ?? '-' }}</div>
-                <div class="col-md-4"><strong>Test:</strong><br>{{ $attempt->mockTest->title ?? 'N/A' }}</div>
-                <div class="col-md-4"><strong>Duration:</strong><br>{{ $attempt->mockTest->duration_minutes ?? '-' }} mins</div>
+
+                <div class="col-md-4">
+
+                    <strong>Student:</strong><br>
+
+                    {{ $attempt->student_name }}
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <strong>Email:</strong><br>
+
+                    {{ $attempt->email }}
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <strong>Institute:</strong><br>
+
+                    {{ $attempt->institute->name ?? '-' }}
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <strong>Batch:</strong><br>
+
+                    {{ $attempt->batch->name ?? '-' }}
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <strong>Test:</strong><br>
+
+                    {{ $attempt->mockTest->title ?? 'N/A' }}
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <strong>Duration:</strong><br>
+
+                    {{ $attempt->mockTest->duration_minutes ?? '-' }} mins
+
+                </div>
+
             </div>
+
         </div>
+
     </div>
 
 
-<!-- Summary Bar Card -->
-<div class="card shadow-sm border-0 rounded-4 mb-4">
-    <div class="card-body d-flex justify-content-around flex-wrap text-center gap-3">
-       @foreach([
-            ['label' => 'Total', 'value' => $totalQuestions, 'icon' => 'list-check', 'class' => 'summary-total'],
-            ['label' => 'Correct', 'value' => $correctCount, 'icon' => 'check-circle', 'class' => 'text-success'],
-            ['label' => 'Wrong', 'value' => $wrongCount, 'icon' => 'x-circle', 'class' => 'text-danger'],
-            ['label' => 'Not Attempted', 'value' => $unattemptedCount, 'icon' => 'dash-circle', 'class' => 'text-secondary'],
-            ['label' => 'Marks', 'value' => "$totalMarks / $totalPossible", 'icon' => 'award', 'class' => 'summary-marks'],
-        ] as $stat)
+    {{-- ========================================================= --}}
+    {{-- Result Summary --}}
+    {{-- ========================================================= --}}
 
-            <div class="px-3 py-2 flex-fill text-center" style="min-width: 120px;">
-                <i class="bi bi-{{ $stat['icon'] }} {{ $stat['class'] }} fs-5"></i>
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
 
-                <div class="small text-muted mt-1">
-                    {{ $stat['label'] }}
+        <div class="card-body d-flex justify-content-around flex-wrap text-center gap-3">
+
+            @foreach([
+
+                [
+                    'label' => 'Total',
+                    'value' => $totalQuestions,
+                    'icon' => 'list-check',
+                    'class' => 'summary-total'
+                ],
+
+                [
+                    'label' => 'Correct',
+                    'value' => $correctCount,
+                    'icon' => 'check-circle',
+                    'class' => 'text-success'
+                ],
+
+                [
+                    'label' => 'Wrong',
+                    'value' => $wrongCount,
+                    'icon' => 'x-circle',
+                    'class' => 'text-danger'
+                ],
+
+                [
+                    'label' => 'Not Attempted',
+                    'value' => $unattemptedCount,
+                    'icon' => 'dash-circle',
+                    'class' => 'text-secondary'
+                ],
+
+                [
+                    'label' => 'Marks',
+                    'value' => "$marksAwarded / $totalMarks",
+                    'icon' => 'award',
+                    'class' => 'summary-marks'
+                ],
+
+            ] as $stat)
+
+                <div
+                    class="px-3 py-2 flex-fill text-center"
+                    style="min-width: 120px;"
+                >
+
+                    <i
+                        class="bi bi-{{ $stat['icon'] }} {{ $stat['class'] }} fs-5"
+                    ></i>
+
+                    <div class="small text-muted mt-1">
+                        {{ $stat['label'] }}
+                    </div>
+
+                    <div class="fw-bold {{ $stat['class'] }}">
+                        {{ $stat['value'] }}
+                    </div>
+
                 </div>
 
-                <div class="fw-bold {{ $stat['class'] }}">
-                    {{ $stat['value'] }}
-                </div>
-            </div>
+            @endforeach
 
-        @endforeach
+        </div>
+
     </div>
-</div>
 
 
-     <!-- Questions with Student Response -->
+    {{-- ========================================================= --}}
+    {{-- Response Sheet - Opening --}}
+    {{-- ========================================================= --}}
+
     <div class="card-style">
+
         <h5 class="response-title">
+
             <i class="bi bi-journal-check me-2"></i>
+
             Response Sheet
+
         </h5>
 
-        @forelse ($questions as $index => $question)
-           @php
-                
+                {{-- ========================================================= --}}
+        {{-- Questions --}}
+        {{-- ========================================================= --}}
 
-                $answer = $studentAnswers->get($question->id);
-                $raw = $answer->selected_option ?? '';
+        @php
+            $displayQuestionNumber = 1;
+        @endphp
 
-                // Decode student answer
-                $studentAns = (Str::startsWith($raw, '[') || Str::startsWith($raw, '{'))
-                    ? json_decode($raw, true)
-                    : $raw;
+        @forelse ($questions as $question)
 
-                // Display student answer safely
-                if (is_array($studentAns)) {
-                    $studentAnsDisplay = collect($studentAns)
-                        ->map(function ($val, $key) {
-                            return is_numeric($key)
-                                ? $val
-                                : "{$key} → {$val}";
-                        })->implode(', ');
-                } else {
-                    $studentAnsDisplay = $studentAns ?: '-';
-                }
+            @if($question->question_type === 'paragraph')
 
-                // Decode correct answers
-                $correctAns = $question->correct_answers;
-                $correctArray = is_array($correctAns)
-                    ? $correctAns
-                    : (json_decode($correctAns, true) ?: [$correctAns]);
+                {{-- ================================================= --}}
+                {{-- Scenario Reference --}}
+                {{-- ================================================= --}}
 
-                $correctAnsDisplay = collect($correctArray)
-                    ->map(function ($val, $key) {
-                        return is_numeric($key)
-                            ? $val
-                            : "{$key} → {$val}";
-                    })->implode(', ');
+                <div class="results-scenario mb-3">
 
-                $isCorrect = $answer && $answer->is_correct;
-                $isNotAttempted = !$answer || is_null($answer->selected_option) ||
-                    (is_array($studentAns) && empty(array_filter($studentAns, fn($v) => !is_null($v) && $v !== '')));
-            @endphp
+                    <div class="results-scenario-header">
 
+                        <div class="d-flex align-items-center">
 
-            <div class="question-card">
-                <h6 class="fw-semibold text-dark mb-2">Q{{ $index + 1 }}:</h6>
-                @php
-                    $displayQuestion = $question->question_text;
+                            <div class="results-scenario-icon">
 
-                    if ($question->question_type === 'dropdown') {
-                        $displayQuestion = preg_replace('/\[blank\]/i', '<u class="text-muted">__________</u>', $question->question_text);
-                    }
-                @endphp
-                <div class="question-content mb-2">{!! $displayQuestion !!}</div>
+                                <i class="bi bi-file-earmark-text"></i>
 
-                @if(in_array($question->question_type, ['mcq', 'multiple_select']) && is_array($question->options))
-                    <ul class="list-group mb-2">
-                        @foreach($question->options as $key => $option)
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span>{{ $key }}. {{ $option }}</span>
-                                <span>
-                                    @if(in_array($key, (array) $question->correct_answers))
-                                        <span class="badge bg-success">Correct</span>
-                                    @endif
-                                    @if(in_array($key, (array) $studentAns))
-                                        <span class="badge ms-1 border"
-                                            style="background:#fdf6f2;
-                                                    color:#832b00;
-                                                    border-color:#e5d2c8 !important;">
-                                            Selected
-                                        </span>
-                                    @endif
-                                </span>
-                            </li>
-                        @endforeach
-                    </ul>
-                @elseif($question->question_type === 'one_word')
-                    <div class="mb-2"><strong>Your Answer:</strong> {{ $studentAnsDisplay ?: '—' }}</div>
-                    <div class="mb-2"><strong>Correct Answer:</strong> {{ $correctAnsDisplay }}</div>
-                @elseif($question->question_type === 'table_mcq')
+                            </div>
 
-                    @php
-                        $labels = array_map(
-                            'trim',
-                            explode(',', $question->table_mcq_labels ?? 'True,False')
-                        );
+                            <div>
 
-                        $correctAnswers = is_array($question->correct_answers)
-                            ? $question->correct_answers
-                            : json_decode($question->correct_answers, true);
+                                <div class="results-scenario-title">
+                                    Scenario
+                                </div>
 
-                 $tableStudentAnswers = is_array($studentAns)
-                    ? $studentAns
-                    : [];
-                    @endphp
+                                <div class="results-scenario-subtitle">
+                                    Reference information for the questions below
+                                </div>
 
-                    <div class="table-responsive mb-2">
-                        <table class="table table-bordered align-middle">
-                            <thead class="table-light">
-                                <tr>
-                                    <th width="50">#</th>
-                                    <th>Statement</th>
-                                    <th>Your Answer</th>
-                                    <th>Correct Answer</th>
-                                    <th width="90">Result</th>
-                                </tr>
-                            </thead>
+                            </div>
 
-                            <tbody>
-                                @foreach($question->options as $i => $stmt)
+                        </div>
 
-                                    @php
-                                        $studentValue = $tableStudentAnswers[$i] ?? null;
-                                        $correctValue = $correctAnswers[$i] ?? null;
-
-                                        $rowCorrect =
-                                            !is_null($studentValue)
-                                            && strtolower((string)$studentValue) === strtolower((string)$correctValue);
-                                    @endphp
-
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-
-                                        <td>
-                                            {{ $stmt }}
-                                        </td>
-
-                                        <td>
-                                            @if($studentValue)
-                                                {{ ucfirst((string)$studentValue) }}
-                                            @else
-                                                <span class="text-muted">—</span>
-                                            @endif
-                                        </td>
-
-                                        <td>
-                                            {{ ucfirst((string)$correctValue) }}
-                                        </td>
-
-                                        <td class="text-center">
-
-                                            @if(!$studentValue)
-
-                                                <span class="badge bg-secondary">
-                                                    —
-                                                </span>
-
-                                            @elseif($rowCorrect)
-
-                                                <span class="badge bg-success">
-                                                    ✓
-                                                </span>
-
-                                            @else
-
-                                                <span class="badge bg-danger">
-                                                    ✕
-                                                </span>
-
-                                            @endif
-
-                                        </td>
-                                    </tr>
-
-                                @endforeach
-                            </tbody>
-                        </table>
                     </div>
-                    @elseif($question->question_type === 'drag_and_drop')
-                    @php
-                        $options = $question->options ?? [];
-                        $aLabel = $options['column_a_label'] ?? 'Column A';
-                        $bLabel = $options['column_b_label'] ?? 'Column B';
-                        $colA = $options['column_a'] ?? [];
-                        $colB = $options['column_b'] ?? [];
-                        $correct = json_decode($question->correct_answers, true) ?? [];
-                    @endphp
 
-                    <div class="table-responsive mb-2">
-                        <table class="table table-bordered table-sm">
-                            <thead>
-                                <tr>
-                                    <th>{{ $aLabel }}</th>
-                                    <th>Your Match</th>
-                                    <th>Correct Match</th>
-                                </tr>
-                            </thead>
-                        <tbody>
-                            @foreach($colA as $i => $item)
-                                @php
-                                    $studentMatchIndex = $studentAns[$i] ?? null;
-                                    $correctMatchIndex = $correct[$i] ?? null;
-                                @endphp
-                                <tr>
-                                    <td>{{ $item }}</td>
-                                    <td>
-                                        {{ $colB[$studentMatchIndex] ?? '—' }}
-                                        @if($studentMatchIndex === $correctMatchIndex)
-                                            <span class="badge bg-success text-white ms-1">
-                                                <i class="bi bi-check-circle-fill"></i>
-                                            </span>
-                                        @elseif($studentMatchIndex !== null)
-                                            <span class="badge bg-danger text-white ms-1">
-                                                <i class="bi bi-x-circle-fill"></i>
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td>{{ $colB[$correctMatchIndex] ?? '—' }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
+                    <div class="results-scenario-content">
 
-                        </table>
+                        {!! $question->question_text !!}
+
                     </div>
-             @elseif($question->question_type === 'dropdown')
-                    @php
-                        $correct = is_array($question->correct_answers)
-                            ? $question->correct_answers
-                            : (json_decode($question->correct_answers, true) ?: []);
 
-                        $dropdownOptionsRaw = $question->options ?? '[]'; // <-- FIXED HERE
-
-                        $dropdownOptions = is_array($dropdownOptionsRaw)
-                            ? $dropdownOptionsRaw
-                            : json_decode($dropdownOptionsRaw, true);
-
-                        // Ensure it's a valid array after decoding
-                        if (!is_array($dropdownOptions)) {
-                            $dropdownOptions = [];
-                        }
-                    @endphp
-
-                    <!-- Dropdown Options Table -->
-                    <div class="table-responsive mt-3">
-                        <table class="table table-bordered table-sm">
-                            <thead>
-                                <tr>
-                                    <th>Dropdown #</th>
-                                    <th>Options Given</th>
-                                    <th>Correct Answer</th>
-                                    <th>Your Answer</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($correct as $i => $corr)
-                                    <tr>
-                                        <td>{{ $i + 1 }}</td>
-                                        <td>
-                                            @if(isset($dropdownOptions[$i]['options']) && is_array($dropdownOptions[$i]['options']))
-                                                {{ implode(', ', $dropdownOptions[$i]['options']) }}
-                                            @else
-                                                —
-                                            @endif
-                                        </td>
-                                        <td>{{ $corr }}</td>
-                                        <td>
-                                            @php $selected = $studentAns[$i] ?? null; @endphp
-                                            @if($selected === $corr)
-                                                <span class="text-success fw-semibold">{{ $selected }} <i class="bi bi-check-circle-fill"></i></span>
-                                            @else
-                                                <span class="text-danger">{{ $selected ?? '—' }}</span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                @endif
-
-
-
-
-                <!-- Result Badge -->
-                <div class="mt-2">
-                    <span class="badge rounded-pill 
-                        @if($isNotAttempted) bg-secondary 
-                        @elseif($isCorrect) bg-success 
-                        @else bg-danger 
-                        @endif">
-                        @if($isNotAttempted) Not Attempted
-                        @elseif($isCorrect) Correct
-                        @else Wrong
-                        @endif
-                    </span>
-                    <span class="ms-2">Marks Awarded: {{ $answer->marks_awarded ?? 0 }}</span>
                 </div>
-            </div>
+
+
+                {{-- ================================================= --}}
+                {{-- Scenario Child Questions --}}
+                {{-- ================================================= --}}
+
+                <div class="scenario-questions">
+
+                    <div class="scenario-question-label">
+
+                        <i class="bi bi-link-45deg me-1"></i>
+
+                        {{ $question->children->count() }}
+                        {{ Str::plural('question', $question->children->count()) }}
+                        based on this scenario
+
+                    </div>
+
+                    @foreach($question->children as $child)
+
+                        <div class="scenario-child-question">
+
+                            {{-- Question Number --}}
+
+                            <div class="question-number">
+
+                                Question {{ $displayQuestionNumber }}
+
+                            </div>
+
+
+                            {{-- Question Text --}}
+
+                            <div class="question-content mb-3">
+
+                                {!! $child->question_text !!}
+
+                            </div>
+
+
+                            {{-- Answer / Correct Answer / Selected Answer --}}
+
+                            @php
+                                $answer = $studentAnswers->get($question->id);
+                            @endphp
+
+                            @include(
+                                'student.partials.results_question_renderer',
+                                [
+                                    'question' => $child,
+                                    'answer' => $studentAnswers->get($child->id)
+                                ]
+                            )
+
+                        </div>
+
+
+                        @php
+                            $displayQuestionNumber++;
+                        @endphp
+
+                    @endforeach
+
+                </div>
+
+
+            @else
+
+                {{-- ================================================= --}}
+                {{-- Standalone Question --}}
+                {{-- ================================================= --}}
+
+                <div class="standalone-question">
+
+                    {{-- Question Number --}}
+
+                    <div class="question-number">
+
+                        Question {{ $displayQuestionNumber }}
+
+                    </div>
+
+
+                    @php
+
+                        $displayQuestion = $question->question_text;
+
+                        if ($question->question_type === 'dropdown') {
+
+                            $displayQuestion = preg_replace(
+                                '/\[blank\]/i',
+                                '<u class="text-muted">__________</u>',
+                                $question->question_text
+                            );
+
+                        }
+
+                    @endphp
+
+
+                    {{-- Question Text --}}
+
+                    <div class="question-content mb-3">
+
+                        {!! $displayQuestion !!}
+
+                    </div>
+
+
+                    {{-- Answer / Correct Answer / Selected Answer --}}
+
+                    @php
+                        $answer = $studentAnswers->get($question->id);
+                    @endphp
+
+                    @include(
+                        'student.partials.results_question_renderer',
+                        [
+                            'question' => $question,
+                            'answer' => $answer
+                        ]
+                    )
+
+                </div>
+
+
+                @php
+                    $displayQuestionNumber++;
+                @endphp
+
+            @endif
+
+
         @empty
-            <p>No questions found.</p>
+
+            <p class="text-muted">
+                No questions found.
+            </p>
+
         @endforelse
+
     </div>
+
 </div>
+
 @endsection

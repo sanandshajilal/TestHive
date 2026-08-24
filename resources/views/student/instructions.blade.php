@@ -2,6 +2,48 @@
 
 @section('content')
 
+@php
+    /*
+    |--------------------------------------------------------------------------
+    | Calculate Student-Facing Question Count & Total Marks
+    |--------------------------------------------------------------------------
+    |
+    | Standalone question:
+    |     Counts as 1 question
+    |
+    | Scenario / Paragraph:
+    |     Parent is only a container
+    |     Child questions are counted individually
+    |
+    */
+
+    $mockTest->loadMissing('questions.children');
+
+    $totalQuestions = 0;
+    $totalMarks = 0;
+
+    foreach ($mockTest->questions as $question) {
+
+        if ($question->question_type === 'paragraph') {
+
+            // Scenario itself is not a question
+            $totalQuestions += $question->children->count();
+
+            // Add marks of each child question
+            $totalMarks += $question->children->sum(function ($child) {
+                return $child->marks ?? 0;
+            });
+
+        } else {
+
+            // Normal standalone question
+            $totalQuestions++;
+
+            $totalMarks += $question->marks ?? 0;
+        }
+    }
+@endphp
+
 <style>
     body {
         background-color: #f8f9fc;
@@ -39,7 +81,7 @@
         margin: 10px 0 20px;
     }
 
-   .step-indicator {
+    .step-indicator {
         text-align: center;
         font-weight: 500;
         color: #832b00;
@@ -95,31 +137,31 @@
     }
 
     /* Brand Buttons */
-   .btn-primary {
-            background-color: #b46e4c;
-            border-color: #b46e4c;
-            transition: all 0.2s ease;
-        }
+    .btn-primary {
+        background-color: #b46e4c;
+        border-color: #b46e4c;
+        transition: all 0.2s ease;
+    }
 
-        .btn-primary:hover {
-            background-color: #832b00;
-            border-color: #832b00;
-        }
+    .btn-primary:hover {
+        background-color: #832b00;
+        border-color: #832b00;
+    }
 
-        .btn-primary:focus,
-        .btn-primary:focus-visible {
-            background-color: #b46e4c !important;
-            border-color: #b46e4c !important;
-            box-shadow: none !important;
-        }
+    .btn-primary:focus,
+    .btn-primary:focus-visible {
+        background-color: #b46e4c !important;
+        border-color: #b46e4c !important;
+        box-shadow: none !important;
+    }
 
-        .btn-primary:active,
-        .btn-primary.active,
-        .btn-primary:not(:disabled):not(.disabled):active {
-            background-color: #832b00 !important;
-            border-color: #832b00 !important;
-            box-shadow: none !important;
-        }
+    .btn-primary:active,
+    .btn-primary.active,
+    .btn-primary:not(:disabled):not(.disabled):active {
+        background-color: #832b00 !important;
+        border-color: #832b00 !important;
+        box-shadow: none !important;
+    }
 
     .btn-primary:not(:disabled):not(.disabled):active {
         background-color: #832b00 !important;
@@ -131,127 +173,353 @@
     }
 
     .btn-outline-secondary {
-            border-color: #e5d2c8;
-            color: #832b00;
-        }
+        border-color: #e5d2c8;
+        color: #832b00;
+    }
 
-        .btn-outline-secondary:hover {
-            background: #f7e3d8;
-            border-color: #b46e4c;
-            color: #832b00;
-        }
-
+    .btn-outline-secondary:hover {
+        background: #f7e3d8;
+        border-color: #b46e4c;
+        color: #832b00;
+    }
 </style>
 
+
 <div class="instruction-wrapper">
+
+    {{-- ===================================================== --}}
+    {{-- Header --}}
+    {{-- ===================================================== --}}
+
     <div class="brand-header">
-        <h4 class="text-uppercase">{{ $mockTest->title }}</h4>
+
+        <h4 class="text-uppercase">
+            {{ $mockTest->title }}
+        </h4>
+
         <div>
             <small style="color:#832b00;font-weight:500;">
                 Practice Test
             </small>
         </div>
+
     </div>
+
 
     <div class="divider"></div>
 
+
+    {{-- ===================================================== --}}
+    {{-- Step Indicator --}}
+    {{-- ===================================================== --}}
+
     <div class="step-indicator">
-        Instructions <span id="step-num">1</span> of 4
+
+        Instructions
+        <span id="step-num">1</span>
+        of 4
+
     </div>
 
+
+    {{-- ===================================================== --}}
     {{-- Slide 1: Overview --}}
-    <div class="slide active" id="slide-1">
-        <div class="section-title">Test Overview</div>
-        <ul>
-            <li><strong>Total Questions:</strong> {{ $mockTest->questions_count }}</li>
-            <li><strong>Total Marks:</strong> {{ $mockTest->questions->sum('marks') }}</li>
-            <li><strong>Time Allowed:</strong> {{ $mockTest->duration }} minutes</li>
-            <li><strong>Start:</strong> Timer begins when you click <em>Start Test</em></li>
-            <li><strong>Scoring:</strong> Each question carries 2 marks. No negative marking.</li>
-        </ul>
-    </div>
+    {{-- ===================================================== --}}
 
-    {{-- Slide 2: Navigation --}}
-    <div class="slide" id="slide-2">
-        <div class="section-title">Navigation & Controls</div>
+    <div class="slide active" id="slide-1">
+
+        <div class="section-title">
+            Test Overview
+        </div>
+
         <ul>
-            <li>Use <strong>Previous</strong> and <strong>Save & Next</strong> buttons to navigate questions.</li>
-            <li><strong>Save & Next</strong> saves your answer and goes to the next question.</li>
-            <li>Click <i class="bi bi-flag-fill text-danger"></i> to flag a question. Click again to unflag.</li>
+
             <li>
-                Use the 
-                <span style="color: #832b00; font-weight: 600;">
-                    <i class="bi bi-bar-chart-fill me-1"></i>Progress
-                </span>
-                dropdown to jump to any question.
+                <strong>Total Questions:</strong>
+                {{ $totalQuestions }}
+            </li>
+
+            <li>
+                <strong>Total Marks:</strong>
+                {{ $totalMarks }}
+            </li>
+
+            <li>
+                <strong>Time Allowed:</strong>
+                {{ $mockTest->duration }} minutes
+            </li>
+
+            <li>
+                <strong>Start:</strong>
+                Timer begins when you click
+                <em>Start Test</em>
+            </li>
+
+            <li>
+                <strong>Scoring:</strong>
+                Marks are awarded according to the marks assigned
+                to each question. There is no negative marking.
             </li>
 
         </ul>
+
     </div>
 
-    {{-- Slide 3: Status Indicators --}}
-    <div class="slide" id="slide-3">
-        <div class="section-title">Answer Status Indicators</div>
+
+    {{-- ===================================================== --}}
+    {{-- Slide 2: Navigation --}}
+    {{-- ===================================================== --}}
+
+    <div class="slide" id="slide-2">
+
+        <div class="section-title">
+            Navigation & Controls
+        </div>
+
         <ul>
-            <li><span class="badge bg-success">●</span> Answered</li>
-            <li><span class="badge bg-secondary">●</span> Not Answered</li>
+
             <li>
-                <span class="badge" style="background:#b46e4c;">
+                Use <strong>Previous</strong> and
+                <strong>Save & Next</strong> buttons to navigate
+                through the questions.
+            </li>
+
+            <li>
+                <strong>Save & Next</strong> saves your answer
+                and moves to the next question.
+            </li>
+
+            <li>
+                Click
+                <i class="bi bi-flag-fill text-danger"></i>
+                to flag a question for review.
+                Click again to unflag it.
+            </li>
+
+            <li>
+
+                Use the
+                <span style="color:#832b00;font-weight:600;">
+
+                    <i class="bi bi-bar-chart-fill me-1"></i>
+
+                    Progress
+
+                </span>
+
+                dropdown to jump to any question.
+
+            </li>
+
+        </ul>
+
+    </div>
+
+
+    {{-- ===================================================== --}}
+    {{-- Slide 3: Status Indicators --}}
+    {{-- ===================================================== --}}
+
+    <div class="slide" id="slide-3">
+
+        <div class="section-title">
+            Answer Status Indicators
+        </div>
+
+        <ul>
+
+            <li>
+                <span class="badge bg-success">●</span>
+                Answered
+            </li>
+
+            <li>
+                <span class="badge bg-secondary">●</span>
+                Not Answered
+            </li>
+
+            <li>
+
+                <span
+                    class="badge"
+                    style="background:#b46e4c;">
                     ●
                 </span>
+
                 Current Question
+
             </li>
-            <li><i class="bi bi-flag-fill text-danger"></i> Flagged for Review</li>
-            <li><strong>Note:</strong> Unanswered or flagged questions will be shown in the summary before submission.</li>
+
+            <li>
+                <i class="bi bi-flag-fill text-danger"></i>
+                Flagged for Review
+            </li>
+
+            <li>
+
+                <strong>Note:</strong>
+
+                Unanswered or flagged questions will be shown
+                in the summary before submission.
+
+            </li>
+
         </ul>
+
     </div>
 
+
+    {{-- ===================================================== --}}
     {{-- Slide 4: Final Submission & Rules --}}
+    {{-- ===================================================== --}}
+
     <div class="slide" id="slide-4">
-        <div class="section-title">Submission & Rules</div>
+
+        <div class="section-title">
+            Submission & Rules
+        </div>
+
         <ul>
-            <li>Test auto-submits when timer ends.</li>
-            <li>You can submit manually at any time via the <strong>Submit</strong> button after the last question.</li>
-            <li>You will be warned if questions are left unanswered or flagged before submission.</li>
-            <li>Do not refresh or close the browser during the test.</li>
+
+            <li>
+                The test will be automatically submitted
+                when the timer reaches zero.
+            </li>
+
+            <li>
+                You can submit manually at any time via the
+                <strong>Submit</strong> button after reaching
+                the last question.
+            </li>
+
+            <li>
+                You will be warned if questions are left
+                unanswered or flagged before submission.
+            </li>
+
+            <li>
+                Do not refresh or close the browser during
+                the test.
+            </li>
+
         </ul>
-        <form method="POST" action="{{ route('student.startTest') }}">
+
+
+        {{-- ================================================= --}}
+        {{-- Start Test --}}
+        {{-- ================================================= --}}
+
+        <form
+            method="POST"
+            action="{{ route('student.startTest') }}">
+
             @csrf
-            <button type="submit" class="btn btn-primary btn-start mt-4">Start Test</button>
+
+            <button
+                type="submit"
+                class="btn btn-primary btn-start mt-4">
+
+                Start Test
+
+            </button>
+
         </form>
+
     </div>
+
+
+    {{-- ===================================================== --}}
+    {{-- Navigation Buttons --}}
+    {{-- ===================================================== --}}
 
     <div class="btn-group-nav">
-        <button id="prevBtn" class="btn btn-outline-secondary btn-nav" disabled>Previous</button>
-        <button id="nextBtn" class="btn btn-primary btn-nav">Next</button>
+
+        <button
+            id="prevBtn"
+            class="btn btn-outline-secondary btn-nav"
+            disabled>
+
+            Previous
+
+        </button>
+
+
+        <button
+            id="nextBtn"
+            class="btn btn-primary btn-nav">
+
+            Next
+
+        </button>
+
     </div>
+
 </div>
 
+
 <script>
+
     let current = 1;
+
     const total = 4;
 
+
     const showSlide = (n) => {
+
         document.querySelectorAll('.slide').forEach((el, i) => {
-            el.classList.toggle('active', i === n - 1);
+
+            el.classList.toggle(
+                'active',
+                i === n - 1
+            );
+
         });
 
+
         document.getElementById('step-num').textContent = n;
-        document.getElementById('prevBtn').disabled = (n === 1);
-        document.getElementById('nextBtn').style.display = (n === total) ? 'none' : 'inline-block';
+
+
+        document.getElementById('prevBtn').disabled =
+            (n === 1);
+
+
+        document.getElementById('nextBtn').style.display =
+            (n === total)
+                ? 'none'
+                : 'inline-block';
+
     };
+
 
     document.getElementById('nextBtn').onclick = () => {
-        if (current < total) current++;
+
+        if (current < total) {
+
+            current++;
+
+        }
+
         showSlide(current);
+
         document.getElementById('nextBtn').blur();
+
     };
 
+
     document.getElementById('prevBtn').onclick = () => {
-        if (current > 1) current--;
+
+        if (current > 1) {
+
+            current--;
+
+        }
+
         showSlide(current);
+
         document.getElementById('prevBtn').blur();
+
     };
+
 </script>
 
 @endsection

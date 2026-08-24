@@ -355,6 +355,84 @@
             background-color: var(--primary) !important;
         }
 
+        /* =========================================================
+   Scenario / Reference Passage
+   ========================================================= */
+
+.scenario-card {
+    background: #fffaf7;
+    border: 1px solid #ead9cf;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.scenario-header {
+    padding: 14px 18px;
+    background: #f8eee8;
+    border-bottom: 1px solid #ead9cf;
+}
+
+.scenario-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #832b00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    border: 1px solid #ead9cf;
+}
+
+.scenario-title {
+    font-weight: 700;
+    color: #832b00;
+    font-size: 1rem;
+}
+
+.scenario-subtitle {
+    font-size: 0.78rem;
+    color: #7b6f68;
+
+}
+
+.scenario-content {
+    padding: 20px 22px;
+    color: #292522;
+    font-size: 0.98rem;
+    line-height: 1.7;
+}
+
+/* Preserve readable spacing inside TinyMCE content */
+
+.scenario-content p:last-child {
+    margin-bottom: 0;
+}
+
+.scenario-content table {
+    max-width: 100%;
+}
+
+.scenario-content img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media (min-width: 992px) {
+
+    .scenario-card {
+        position: sticky;
+        top: 85px;
+        z-index: 20;
+
+        /* Cover anything scrolling behind the top edge */
+        box-shadow:
+            0 -12px 0 12px #ffffff,
+            0 6px 16px rgba(0, 0, 0, 0.04);
+    }
+
+}
         /* ---------- MOBILE ---------- */
 
         @media (max-width: 767.98px) {
@@ -554,7 +632,18 @@
         <div class="test-container">
             <div class="topbar">
                 <div class="question-count">
-                    Question {{ $questionNumber }} of {{ $totalQuestions }}
+
+                    @if($displayQuestionStart == $displayQuestionEnd)
+
+                        Question {{ $displayQuestionStart }} of {{ $totalQuestions }}
+
+                    @else
+
+                        Questions {{ $displayQuestionStart }}–{{ $displayQuestionEnd }}
+                        of {{ $totalQuestions }}
+
+                    @endif
+
                 </div>
              @php
                 $isFlagged = $isFlagged ?? false;
@@ -574,354 +663,91 @@
 
             </div>
 
-            <div class="question-header">
-                @if(!in_array($question->question_type, ['dropdown']))
-                    <div class="question-text">{!! $question->question_text !!}</div>
-                @endif
-
-            </div>
+            @if($item->question_type === 'paragraph')
 
             <form id="questionForm">
+
                 @csrf
-                <input type="hidden" name="question_id" value="{{ $question->id }}">
-                <input type="hidden" name="next_question_number" value="{{ $questionNumber + 1 }}">
-                <input type="hidden" name="is_last_question" value="{{ $questionNumber == $totalQuestions ? '1' : '0' }}">
 
-                {{-- MCQ --}}
-                @if($question->question_type == 'mcq')
-                    @php
-                        $options = is_array($question->options) ? $question->options : json_decode($question->options, true);
-                    @endphp
-                    @foreach($options as $key => $text)
-                        <div class="option @if($selectedOption == $key) selected-option @endif"
-                            style="cursor: pointer;" 
-                            onclick="selectRadioOption('{{ $key }}')">
-                            <input 
-                                type="radio" 
-                                name="answer" 
-                                value="{{ $key }}" 
-                                id="opt{{ $key }}" 
-                                @if($selectedOption == $key) checked @endif
-                            >
-                            <label for="opt{{ $key }}" class="mb-0">{{ $text }}</label>
-                        </div>
-                    @endforeach
+                <input type="hidden"
+                    name="question_id"
+                    value="{{ $item->id }}">
 
-                {{-- Multiple Select --}}
-                @elseif($question->question_type == 'multiple_select')
-                    @php
-                        $options = is_array($question->options) ? $question->options : json_decode($question->options, true);
-                    @endphp
-                    @foreach($options as $key => $text)
-                        <label class="option w-100">
-                            <input
-                                type="checkbox"
-                                name="answer[]"
-                                value="{{ $key }}"
-                                id="chk{{ $key }}"
-                                @if(is_array($selectedOption) && in_array($key, $selectedOption)) checked @endif
-                            >
+                <input type="hidden"
+                    name="next_question_number"
+                    value="{{ $questionNumber + 1 }}">
 
-                            <span>{{ $text }}</span>
-                        </label>
-                    @endforeach
+                <input type="hidden"
+                    name="is_last_question"
+                    value="{{ $questionNumber == $totalItems ? '1' : '0' }}">
 
-                {{-- One Word --}}
-                @elseif($question->question_type == 'one_word')
-                    <div class="mb-3">
-                        <label for="oneWordAnswer" class="form-label fw-semibold">Type your answer:</label>
-                        <input 
-                            type="text" 
-                            name="answer" 
-                            id="oneWordAnswer" 
-                            class="form-control" 
-                            value="{{ $selectedOption ?? '' }}" 
-                            autocomplete="off"
-                        >
-                    </div>
+              {{-- ============================================== --}}
+                {{-- Scenario / Reference Passage --}}
+                {{-- ============================================== --}}
 
-                {{-- Table MCQ with dynamic labels --}}
-                @elseif($question->question_type === 'table_mcq' && is_array($statements) && is_array($labels))
-                    <div class="table-mcq-container">
-                        <div class="table-mcq-scroll">
-                            <table class="table table-bordered table-mcq-table align-middle mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th class="sticky-col">Statement</th>
-                                        @foreach($labels as $label)
-                                            <th class="text-center">{{ ucfirst($label) }}</th>
-                                        @endforeach
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($statements as $index => $statement)
-                                        <tr>
-                                            <td class="sticky-col">{{ $statement }}</td>
-                                            @foreach($labels as $label)
-                                                <td class="text-center">
-                                                    <input
-                                                        type="radio"
-                                                        name="answer[{{ $index }}]"
-                                                        value="{{ strtolower($label) }}"
-                                                        class="small-radio"
-                                                        @if(isset($selectedOption[$index]) && $selectedOption[$index] === strtolower($label)) checked @endif
-                                                    >
-                                                </td>
-                                            @endforeach
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                <div class="scenario-card mb-4">
 
+                    <div class="scenario-header">
 
-                   {{-- DRAG AND DROP Question --}}
-                    @elseif($question->question_type === 'drag_and_drop')
-                    @php
-                        $colA = $question->options['column_a'] ?? [];
-                        $colB = $question->options['column_b'] ?? [];
-                        $aLabel = $question->options['column_a_label'] ?? 'Column A';
-                        $bLabel = $question->options['column_b_label'] ?? 'Column B';
+                        <div class="d-flex align-items-center">
 
-                        // Previously selected option: [aIndex => bIndex]
-                        $selectedMap = is_array($selectedOption)
-                        ? $selectedOption
-                        : [];
-
-                        // Invert to [bIndex => aIndex] for rendering
-                        $bToA = [];
-                        foreach ($selectedMap as $a => $b) {
-                            $bToA[$b] = $a;
-                        }
-                    @endphp
-
-                    <div class="mb-4">
-                        <div class="table-responsive">
-                            <table class="table table-bordered align-middle text-center">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>{{ $bLabel }}</th>
-                                        <th>{{ $aLabel }} (Drop Here)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($colB as $bIndex => $target)
-                                        <tr>
-                                            <td class="fw-medium">{{ $target }}</td>
-                                            <td>
-                                                <div class="dropzone border rounded p-2 text-muted"
-                                                    ondrop="drop(event, {{ $bIndex }})"
-                                                    ondragover="allowDrop(event)"
-                                                    id="drop-{{ $bIndex }}">
-                                                    @if(isset($bToA[$bIndex]))
-                                                        @php $aIdx = $bToA[$bIndex]; @endphp
-                                                        <div class="draggable draggable-item text-white rounded px-3 py-2"
-                                                            draggable="true"
-                                                            ondragstart="drag(event)"
-                                                            id="drag-{{ $aIdx }}"
-                                                            data-value="{{ $aIdx }}">
-                                                            {{ $colA[$aIdx] ?? '' }}
-                                                        </div>
-                                                    @else
-                                                        Drop here
-                                                    @endif
-                                                </div>
-                                                <input type="hidden" name="student_answer[{{ $bIndex }}]" id="drop-input-{{ $bIndex }}" value="{{ $bToA[$bIndex] ?? '' }}">
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-
-                  @php
-                    $availableOptions = [];
-
-                    foreach ($colA as $index => $item) {
-                        if (!in_array($index, $bToA)) {
-                            $availableOptions[] = [
-                                'index' => $index,
-                                'text' => $item,
-                            ];
-                        }
-                    }
-
-                    shuffle($availableOptions);
-                @endphp
-
-                <div class="mt-4">
-                    <h6 class="mb-2">Draggable Options ({{ $aLabel }})</h6>
-
-                    <div class="d-flex flex-wrap gap-2 border rounded p-3 bg-light"
-                        id="drag-options"
-                        ondrop="dropToBank(event)"
-                        ondragover="allowDrop(event)">
-
-                        @foreach($availableOptions as $option)
-
-                            <div class="draggable draggable-item text-white rounded px-3 py-2"
-                                draggable="true"
-                                ondragstart="drag(event)"
-                                id="drag-{{ $option['index'] }}"
-                                data-value="{{ $option['index'] }}">
-
-                                {{ $option['text'] }}
-
+                            <div class="scenario-icon">
+                                <i class="bi bi-file-earmark-text"></i>
                             </div>
 
-                        @endforeach
+                            <div>
+                                <div class="scenario-title">
+                                    Scenario
+                                </div>
+
+                                <div class="scenario-subtitle">
+                                    Read the scenario carefully and answer the questions below.
+                                </div>
+                            </div>
+
+                        </div>
 
                     </div>
+
+                    <div class="scenario-content">
+
+                        {!! $item->question_text !!}
+
+                    </div>
+
                 </div>
-                                    </div>
 
-                    <script>
-                        function allowDrop(ev) {
-                            ev.preventDefault();
-                        }
+                {{-- ============================================== --}}
+                {{-- Child Questions --}}
+                {{-- ============================================== --}}
 
-                        function drag(ev) {
-                            ev.dataTransfer.setData("text", ev.target.id);
-                        }
+                @foreach($item->children as $index => $child)
 
-                     function drop(ev, dropIndex) {
+                    <div class="card shadow-sm mb-4">
 
-                            ev.preventDefault();
+                        <div class="card-header">
 
-                            const draggedId =
-                                ev.dataTransfer.getData("text");
+                            <strong>
+                               Question {{ $index + 1 }}
+                            </strong>
 
-                            const draggedEl =
-                                document.getElementById(draggedId);
+                        </div>
 
-                            const dropZone =
-                                document.getElementById("drop-" + dropIndex);
-
-                            const inputField =
-                                document.getElementById("drop-input-" + dropIndex);
-
-                            const dragBank =
-                                document.getElementById("drag-options");
-
-                            // If target already contains an item,
-                            // move it back to options bank
-
-                            const existingItem =
-                                dropZone.querySelector('.draggable');
-
-                            if (existingItem && existingItem !== draggedEl) {
-
-                                dragBank.appendChild(existingItem);
-
-                                const zoneIndex =
-                                    dropZone.id.split('-')[1];
-
-                                document.getElementById(
-                                    'drop-input-' + zoneIndex
-                                ).value = '';
-                            }
-
-                            // Remove dragged item from previous dropzone
-
-                            document.querySelectorAll('.dropzone').forEach(zone => {
-
-                                if (zone.contains(draggedEl)) {
-
-                                    const zoneIndex =
-                                        zone.id.split('-')[1];
-
-                                    zone.innerHTML = 'Drop here';
-
-                                    document.getElementById(
-                                        "drop-input-" + zoneIndex
-                                    ).value = '';
-                                }
-                            });
-
-                            // Place item in new dropzone
-
-                            dropZone.innerHTML = '';
-
-                            dropZone.appendChild(draggedEl);
-
-                            inputField.value =
-                                draggedEl.dataset.value;
-                        }
-
-                        function dropToBank(ev) {
-
-                            ev.preventDefault();
-
-                            const draggedId =
-                                ev.dataTransfer.getData("text");
-
-                            const draggedEl =
-                                document.getElementById(draggedId);
-
-                            const dragBank =
-                                document.getElementById("drag-options");
-
-                            // Clear hidden answer if item came from dropzone
-
-                            document.querySelectorAll('.dropzone').forEach(zone => {
-
-                                if(zone.contains(draggedEl)) {
-
-                                    const zoneIndex =
-                                        zone.id.split('-')[1];
-
-                                    zone.innerHTML = 'Drop here';
-
-                                    document.getElementById(
-                                        'drop-input-' + zoneIndex
-                                    ).value = '';
-                                }
-
-                            });
-
-                            dragBank.appendChild(draggedEl);
-                        }
-                    </script>
+                        <div class="card-body">
 
 
-                    @elseif($question->question_type == 'dropdown')
-                    @php
-                        $sentence = $question->question_text; // e.g., "Captain of [blank] is MS Dhoni in [blank]."
-                        $dropdowns = is_array($question->options) ? $question->options : json_decode($question->options, true);
-                        $selected = is_array($selectedOption)
-                        ? $selectedOption
-                        : json_decode($selectedOption, true);
-                    @endphp
+                            @include(
+                                'student.partials.scenario_child_renderer',
+                                [
+                                    'item' => $child
+                                ]
+                            )
 
-                    <p><strong>Fill in the blanks:</strong></p>
+                        </div>
 
-                    <div class="mb-3">
-                        @php
-                            $parts = explode('[blank]', $sentence);
-                        @endphp
-
-                        @for ($i = 0; $i < count($parts); $i++)
-                            {!! $parts[$i] !!}
-
-                            @if(isset($dropdowns[$i]) && is_array($dropdowns[$i]['options']))
-                                <select name="dropdown_answers[{{ $i }}]" class="form-select d-inline w-auto mx-1">
-                                    <option value="">-- {{ $dropdowns[$i]['label'] ?? 'Select' }} --</option>
-                                    @foreach($dropdowns[$i]['options'] as $opt)
-                                        <option value="{{ $opt }}" @if(isset($selected[$i]) && $selected[$i] == $opt) selected @endif>{{ $opt }}</option>
-                                    @endforeach
-                                </select>
-                            @endif
-                        @endfor
                     </div>
 
-
-
-                {{-- Fallback --}}
-                @else
-                    <p class="text-muted fst-italic">This question type is currently not supported.</p>
-                @endif
-
+                @endforeach
                 {{-- Navigation Buttons --}}
                 <div class="d-flex justify-content-between mt-4">
                     {{-- Previous Button --}}
@@ -933,7 +759,7 @@
                     </a>
 
                     {{-- Save & Next / Submit Button --}}
-                    @if($questionNumber < $totalQuestions)
+                    @if($questionNumber < $totalItems)
                         <button type="submit" class="btn btn-primary btn-nav">
                             Save & Next
                         </button>
@@ -944,6 +770,15 @@
                     @endif
                 </div>
             </form>
+           
+
+            @else
+
+                @include('student.partials.question_renderer')
+
+            @endif
+
+
 
 {{-- Status Message --}}
 <div id="saveStatus" class="mt-3"></div>
@@ -953,137 +788,436 @@
 
     
         <!-- Help Modal -->
-        <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content border-0 shadow" style="max-height: 80vh; border-radius: 1rem; overflow: hidden;">
 
-                    <div class="modal-header">
-                        <h5 class="modal-title fw-semibold" id="helpModalLabel">
-                            <i class="bi bi-question-circle me-2" style="color: var(--primary-dark);"></i>
-                            Help & Instructions
-                        </h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
+        @php
+    /*
+    |--------------------------------------------------------------------------
+    | Student-Facing Test Totals
+    |--------------------------------------------------------------------------
+    |
+    | Standalone question = 1 question
+    | Scenario parent = container only
+    | Scenario children = individual questions
+    |
+    */
 
-                    <div class="modal-body overflow-auto">
+    $mockTest->loadMissing('questions.children');
 
-                        <div class="mb-4">
-                            <h6 class="fw-semibold">
-                                <i class="bi bi-clock me-2" style="color: var(--primary);"></i>
-                                Timer
-                            </h6>
-                            <p class="mb-0">
-                                Your remaining time is shown at the top
-                                (<strong style="color: var(--primary-dark);">MM:SS</strong>).
-                                The test will be automatically submitted when the timer reaches zero.
-                            </p>
-                        </div>
+    $totalQuestions = 0;
+    $totalMarks = 0;
 
-                        <div class="mb-4">
-                            <h6 class="fw-semibold">
-                                <i class="bi bi-box-arrow-right me-2" style="color: var(--primary);"></i>
-                                Navigation
-                            </h6>
-                            <ul class="mb-0">
-                                <li>
-                                    <strong>Previous</strong> – Move to the previous question without saving new changes.
-                                </li>
-                                <li>
-                                    <strong>Save & Next</strong> – Save your answer and move to the next question.
-                                </li>
-                                <li>
-                                    Only answers saved using <strong>Save & Next</strong> are considered for evaluation.
-                                </li>
-                            </ul>
-                        </div>
+    foreach ($mockTest->questions as $question) {
 
-                        <div class="mb-4">
-                            <h6 class="fw-semibold">
-                                <i class="bi bi-flag me-2 text-danger"></i>
-                                Flag Questions
-                            </h6>
-                            <p class="mb-0">
-                                Use the flag button to mark a question for review.
-                                Flagged questions remain highlighted in the Progress panel until reviewed or unflagged.
-                            </p>
-                        </div>
+        if ($question->question_type === 'paragraph') {
 
-                        <div class="mb-4">
-                            <h6 class="fw-semibold">
-                                <i class="bi bi-bar-chart-fill me-2" style="color: var(--primary);"></i>
-                                Progress Panel
-                            </h6>
+            $totalQuestions += $question->children->count();
 
-                            <p>The Progress dropdown shows the status of every question.</p>
+            $totalMarks += $question->children->sum(function ($child) {
+                return $child->marks ?? 0;
+            });
 
-                            <ul class="mb-0">
-                                <li><span class="badge bg-success">●</span> Answered</li>
-                                <li><span class="badge bg-secondary">●</span> Not Answered</li>
-                                <li>
-                                    <span class="badge"
-                                        style="background: var(--primary); color: white;">
-                                        ●
-                                    </span>
-                                    Current Question
-                                </li>
-                                <li><i class="bi bi-flag-fill text-danger"></i> Flagged for Review</li>
-                            </ul>
-                        </div>
+        } else {
 
-                        <div class="mb-4">
-                            <h6 class="fw-semibold">
-                                <i class="bi bi-check2-square me-2 text-success"></i>
-                                Final Submission
-                            </h6>
-                            <p class="mb-0">
-                                Before submitting, you will see a summary showing answered,
-                                unanswered, and flagged questions.
-                                Once submitted, answers cannot be changed.
-                            </p>
-                        </div>
+            $totalQuestions++;
 
-                        <div class="mb-4">
-                            <h6 class="fw-semibold">
-                                <i class="bi bi-journal-text me-2" style="color: var(--primary);"></i>
-                                Supported Question Types
-                            </h6>
+            $totalMarks += $question->marks ?? 0;
+        }
+    }
+@endphp
 
-                            <ul class="mb-0">
-                                <li><strong>MCQ</strong> – Select one correct option.</li>
-                                <li><strong>Multiple Select</strong> – Select all correct options.</li>
-                                <li><strong>One Word</strong> – Enter a word, number, or short answer.</li>
-                                <li><strong>Table MCQ</strong> – Choose the correct option for each row.</li>
-                                <li><strong>Drag & Drop</strong> – Match items by dragging them into the correct positions.</li>
-                                <li><strong>Dropdown</strong> – Complete the blanks using dropdown selections.</li>
-                            </ul>
-                        </div>
+<div class="modal fade"
+     id="helpModal"
+     tabindex="-1"
+     aria-labelledby="helpModalLabel"
+     aria-hidden="true">
 
-                        <div class="mb-4">
-                            <h6 class="fw-semibold">
-                                <i class="bi bi-info-circle me-2 text-secondary"></i>
-                                Test Overview
-                            </h6>
+    <div class="modal-dialog modal-dialog-centered modal-lg">
 
-                            <ul class="mb-0">
-                                <li><strong>Total Questions:</strong> {{ $mockTest->questions->count() }}</li>
-                                <li><strong>Total Marks:</strong> {{ $mockTest->questions->sum('marks') }}</li>
-                                <li><strong>Duration:</strong> {{ $mockTest->duration_minutes }} minutes</li>
-                            </ul>
-                        </div>
+        <div class="modal-content border-0 shadow"
+             style="max-height: 80vh; border-radius: 1rem; overflow: hidden;">
 
-                        <div class="alert border-0 mb-0"
-                            style="background: var(--primary-light); color: var(--primary-dark);">
-                            <i class="bi bi-info-circle-fill me-2"></i>
-                            <strong>Important:</strong>
-                            Answers are saved only when you click
-                            <strong>Save & Next</strong>.
-                        </div>
 
-                    </div>
-                </div>
+            {{-- ===================================================== --}}
+            {{-- Header --}}
+            {{-- ===================================================== --}}
+
+            <div class="modal-header">
+
+                <h5 class="modal-title fw-semibold"
+                    id="helpModalLabel">
+
+                    <i class="bi bi-question-circle me-2"
+                       style="color: var(--primary-dark);"></i>
+
+                    Help & Instructions
+
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal">
+                </button>
+
             </div>
+
+
+            {{-- ===================================================== --}}
+            {{-- Body --}}
+            {{-- ===================================================== --}}
+
+            <div class="modal-body overflow-auto">
+
+
+                {{-- ================================================= --}}
+                {{-- Timer --}}
+                {{-- ================================================= --}}
+
+                <div class="mb-4">
+
+                    <h6 class="fw-semibold">
+
+                        <i class="bi bi-clock me-2"
+                           style="color: var(--primary);"></i>
+
+                        Timer
+
+                    </h6>
+
+                    <p class="mb-0">
+
+                        Your remaining time is shown at the top
+                        (<strong style="color: var(--primary-dark);">MM:SS</strong>).
+
+                        The test will be automatically submitted
+                        when the timer reaches zero.
+
+                    </p>
+
+                </div>
+
+
+                {{-- ================================================= --}}
+                {{-- Navigation --}}
+                {{-- ================================================= --}}
+
+                <div class="mb-4">
+
+                    <h6 class="fw-semibold">
+
+                        <i class="bi bi-box-arrow-right me-2"
+                           style="color: var(--primary);"></i>
+
+                        Navigation
+
+                    </h6>
+
+                    <ul class="mb-0">
+
+                        <li>
+                            <strong>Previous</strong> –
+                            Move to the previous question without
+                            saving new changes.
+                        </li>
+
+                        <li>
+                            <strong>Save & Next</strong> –
+                            Save your answer and move to the next
+                            question.
+                        </li>
+
+                        <li>
+                            Only answers saved using
+                            <strong>Save & Next</strong> are considered
+                            for evaluation.
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                {{-- ================================================= --}}
+                {{-- Scenario Questions --}}
+                {{-- ================================================= --}}
+
+                <div class="mb-4">
+
+                    <h6 class="fw-semibold">
+
+                        <i class="bi bi-file-earmark-richtext me-2"
+                           style="color: var(--primary);"></i>
+
+                        Scenario Questions
+
+                    </h6>
+
+                    <p class="mb-2">
+
+                        Some questions may be based on a common
+                        scenario or case study.
+
+                    </p>
+
+                    <ul class="mb-0">
+
+                        <li>
+                            The scenario is presented together with
+                            the questions based on it.
+                        </li>
+
+                        <li>
+                            Each question under the scenario is
+                            treated as a separate question for
+                            answering and scoring.
+                        </li>
+
+                        <li>
+                            The scenario itself is not counted as an
+                            additional question.
+                        </li>
+
+                        <li>
+                            The <strong>Progress</strong> panel treats
+                            the scenario and its related questions as
+                            one navigation section.
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                {{-- ================================================= --}}
+                {{-- Flag Questions --}}
+                {{-- ================================================= --}}
+
+                <div class="mb-4">
+
+                    <h6 class="fw-semibold">
+
+                        <i class="bi bi-flag me-2 text-danger"></i>
+
+                        Flag Questions
+
+                    </h6>
+
+                    <p class="mb-0">
+
+                        Use the flag button to mark a question for
+                        review.
+
+                        Flagged questions remain highlighted in the
+                        Progress panel until reviewed or unflagged.
+
+                        For a Scenario, the flag applies to the
+                        Scenario section as a whole.
+
+                    </p>
+
+                </div>
+
+
+                {{-- ================================================= --}}
+                {{-- Progress Panel --}}
+                {{-- ================================================= --}}
+
+                <div class="mb-4">
+
+                    <h6 class="fw-semibold">
+
+                        <i class="bi bi-bar-chart-fill me-2"
+                           style="color: var(--primary);"></i>
+
+                        Progress Panel
+
+                    </h6>
+
+                    <p>
+                        The Progress dropdown shows the status of
+                        every question.
+                    </p>
+
+                    <ul class="mb-0">
+
+                        <li>
+                            <span class="badge bg-success">●</span>
+                            Answered
+                        </li>
+
+                        <li>
+                            <span class="badge bg-secondary">●</span>
+                            Not Answered
+                        </li>
+
+                        <li>
+
+                            <span class="badge"
+                                  style="background: var(--primary); color: white;">
+                                ●
+                            </span>
+
+                            Current Question
+
+                        </li>
+
+                        <li>
+                            <i class="bi bi-flag-fill text-danger"></i>
+                            Flagged for Review
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                {{-- ================================================= --}}
+                {{-- Final Submission --}}
+                {{-- ================================================= --}}
+
+                <div class="mb-4">
+
+                    <h6 class="fw-semibold">
+
+                        <i class="bi bi-check2-square me-2 text-success"></i>
+
+                        Final Submission
+
+                    </h6>
+
+                    <p class="mb-0">
+
+                        Before submitting, you will see a summary
+                        showing answered, unanswered, and flagged
+                        questions.
+
+                        Once submitted, answers cannot be changed.
+
+                    </p>
+
+                </div>
+
+
+                {{-- ================================================= --}}
+                {{-- Supported Question Types --}}
+                {{-- ================================================= --}}
+
+                <div class="mb-4">
+
+                    <h6 class="fw-semibold">
+
+                        <i class="bi bi-journal-text me-2"
+                           style="color: var(--primary);"></i>
+
+                        Supported Question Types
+
+                    </h6>
+
+                    <ul class="mb-0">
+
+                        <li>
+                            <strong>MCQ</strong> –
+                            Select one correct option.
+                        </li>
+
+                        <li>
+                            <strong>Multiple Select</strong> –
+                            Select all correct options.
+                        </li>
+
+                        <li>
+                            <strong>One Word</strong> –
+                            Enter a word, number, or short answer.
+                        </li>
+
+                        <li>
+                            <strong>Table MCQ</strong> –
+                            Choose the correct option for each row.
+                        </li>
+
+                        <li>
+                            <strong>Drag & Drop</strong> –
+                            Match items by dragging them into the
+                            correct positions.
+                        </li>
+
+                        <li>
+                            <strong>Dropdown</strong> –
+                            Complete the blanks using dropdown
+                            selections.
+                        </li>
+
+                        <li>
+                            <strong>Scenario Questions</strong> –
+                            Answer multiple questions based on a
+                            common scenario or case study.
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                {{-- ================================================= --}}
+                {{-- Test Overview --}}
+                {{-- ================================================= --}}
+
+                <div class="mb-4">
+
+                    <h6 class="fw-semibold">
+
+                        <i class="bi bi-info-circle me-2 text-secondary"></i>
+
+                        Test Overview
+
+                    </h6>
+
+                    <ul class="mb-0">
+
+                        <li>
+                            <strong>Total Questions:</strong>
+                            {{ $totalQuestions }}
+                        </li>
+
+                        <li>
+                            <strong>Total Marks:</strong>
+                            {{ $totalMarks }}
+                        </li>
+
+                        <li>
+                            <strong>Duration:</strong>
+                            {{ $mockTest->duration_minutes }} minutes
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                {{-- ================================================= --}}
+                {{-- Important Notice --}}
+                {{-- ================================================= --}}
+
+                <div class="alert border-0 mb-0"
+                     style="background: var(--primary-light);
+                            color: var(--primary-dark);">
+
+                    <i class="bi bi-info-circle-fill me-2"></i>
+
+                    <strong>Important:</strong>
+
+                    Answers are saved only when you click
+                    <strong>Save & Next</strong>.
+
+                </div>
+
+
+            </div>
+
         </div>
 
+    </div>
+
+</div>
 
 
         <!-- Final Submission Modal -->
@@ -1411,7 +1545,7 @@
 const flagButton = document.getElementById('flagButton');
 
 flagButton.addEventListener('click', async function () {
-    const questionId = '{{ $question->id }}';
+    const questionId = '{{ $item->id }}';
     const icon = flagButton.querySelector('i');
     const text = flagButton.querySelector('.flag-text');
 

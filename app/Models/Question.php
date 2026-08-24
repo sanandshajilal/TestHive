@@ -49,4 +49,15 @@ class Question extends Model
     {
         return $this->belongsToMany(MockTest::class, 'mock_test_question');
     }
+
+    public function parent()
+    {
+        return $this->belongsTo(Question::class, 'parent_question_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Question::class, 'parent_question_id')
+            ->orderBy('id');
+    }
 }

@@ -105,7 +105,9 @@ class MockTestController extends Controller
 
         $topics = Topic::all();
 
-        $allQuestions = Question::where('paper_id', $mockTest->paper_id)->get();
+        $allQuestions = Question::where('paper_id', $mockTest->paper_id)
+            ->whereNull('parent_question_id')
+            ->get();
 
         $selectedQuestionIds = $mockTest->questions->pluck('id')->toArray();
 
@@ -167,7 +169,7 @@ public function update(Request $request, MockTest $mockTest)
      */
     public function getQuestionsByPaper(Request $request)
 {
-    $query = Question::query();
+    $query = Question::whereNull('parent_question_id');
 
     if ($request->paper_id) {
         $query->where('paper_id', $request->paper_id);
@@ -217,6 +219,7 @@ public function update(Request $request, MockTest $mockTest)
             $mockTest = MockTest::with([
                 'paper',
                 'batches',
+                'questions.children',
                 'questions.topic',
                 'questions.subTopic'
             ])->findOrFail($id);
@@ -224,54 +227,282 @@ public function update(Request $request, MockTest $mockTest)
             return view('admin.mock_tests.preview', compact('mockTest'));
         }
 
-        public function results($id)
-            {
-                $mockTest = \App\Models\MockTest::with('paper')->findOrFail($id);
+public function results($id)
+{
+    $mockTest = \App\Models\MockTest::with([
+        'paper',
+        'questions' => function ($query) {
+            $query->whereNull('parent_question_id')
+                  ->with('children');
+        }
+    ])->findOrFail($id);
 
-                $attempts = \App\Models\StudentTestAttempt::with(['institute', 'batch'])
-                    ->where('mock_test_id', $id)
-                    ->get();
 
-                    $batch = $mockTest->batches->first();
+    /*
+    |--------------------------------------------------------------------------
+    | Build Scorable Questions
+    |--------------------------------------------------------------------------
+    |
+    | Standalone question = 1 question
+    |
+    | Scenario = container only
+    | Scenario children = individual questions
+    |
+    */
 
-                    $totalStudents = $batch
-                        ? $batch->students()->where('is_active', true)->count()
-                        : 0;
+    $scorableQuestions = collect();
 
-                    $completedStudents = StudentTestAttempt::where('mock_test_id', $mockTest->id)
-                        ->where('status', 'completed')
-                        ->count();
+    foreach ($mockTest->questions as $question) {
 
-                    $completionPercentage = $totalStudents > 0
-                        ? round(($completedStudents / $totalStudents) * 100)
-                        : 0;
+        if ($question->question_type === 'paragraph') {
 
-                    $totalPossibleMarks = $mockTest->questions->sum('marks');
+            foreach ($question->children as $child) {
 
-                    $averageScore = StudentTestAttempt::where('mock_test_id', $mockTest->id)
-                        ->where('status', 'completed')
-                        ->get()
-                        ->avg(function ($attempt) use ($totalPossibleMarks) {
+                $scorableQuestions->push($child);
 
-                            return $totalPossibleMarks > 0
-                                ? ($attempt->total_marks / $totalPossibleMarks) * 100
-                                : 0;
-
-                        });
-
-                    $averageScore = round($averageScore ?? 0, 1);
-                        return view(
-                            'admin.mock_tests.results',
-                            compact(
-                                'mockTest',
-                                'attempts',
-                                'totalStudents',
-                                'completedStudents',
-                                'completionPercentage',
-                                'averageScore'
-                            )
-                        );
             }
+
+        } else {
+
+            $scorableQuestions->push($question);
+
+        }
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Attempts
+    |--------------------------------------------------------------------------
+    */
+
+    $attempts = \App\Models\StudentTestAttempt::with([
+        'institute',
+        'batch',
+        'answers'
+    ])
+    ->where('mock_test_id', $id)
+    ->get();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Total Students
+    |--------------------------------------------------------------------------
+    */
+
+    $batch = $mockTest->batches->first();
+
+    $totalStudents = $batch
+        ? $batch->students()
+            ->where('is_active', true)
+            ->count()
+        : 0;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Completed Students
+    |--------------------------------------------------------------------------
+    */
+
+    $completedStudents = \App\Models\StudentTestAttempt::where(
+        'mock_test_id',
+        $mockTest->id
+    )
+    ->where('status', 'completed')
+    ->count();
+
+
+    $completionPercentage = $totalStudents > 0
+        ? round(($completedStudents / $totalStudents) * 100)
+        : 0;
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Total Questions
+    |--------------------------------------------------------------------------
+    */
+
+    $totalQuestions = $scorableQuestions->count();
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Total Possible Marks
+    |--------------------------------------------------------------------------
+    */
+
+    $totalPossibleMarks = $scorableQuestions->sum(function ($question) {
+
+        return $question->marks ?? 0;
+
+    });
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Recalculate Each Student's Result
+    |--------------------------------------------------------------------------
+    */
+
+    foreach ($attempts as $attempt) {
+
+        $answers = $attempt->answers->keyBy('question_id');
+
+
+        $correctCount = 0;
+        $wrongCount = 0;
+        $notAttempted = 0;
+        $totalMarks = 0;
+
+
+        foreach ($scorableQuestions as $question) {
+
+            $answer = $answers->get($question->id);
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Determine Whether Answered
+            |--------------------------------------------------------------------------
+            */
+
+            $isAnswered = false;
+
+
+            if ($answer) {
+
+                $value = $answer->selected_option;
+
+
+                if (!is_null($value)) {
+
+                    $decoded = json_decode($value, true);
+
+
+                    if (
+                        json_last_error() === JSON_ERROR_NONE
+                        &&
+                        is_array($decoded)
+                    ) {
+
+                        $isAnswered = count($decoded) > 0;
+
+                    } else {
+
+                        $isAnswered = trim((string) $value) !== '';
+
+                    }
+                }
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Not Attempted
+            |--------------------------------------------------------------------------
+            */
+
+            if (!$isAnswered) {
+
+                $notAttempted++;
+
+                continue;
+
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Correct / Wrong
+            |--------------------------------------------------------------------------
+            */
+
+            if ($answer->is_correct) {
+
+                $correctCount++;
+
+            } else {
+
+                $wrongCount++;
+
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | Marks Awarded
+            |--------------------------------------------------------------------------
+            */
+
+            $totalMarks += $answer->marks_awarded ?? 0;
+
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Attach Fresh Values to Attempt
+        |--------------------------------------------------------------------------
+        |
+        | These are temporary values for this page.
+        | We are NOT updating the database here.
+        |
+        */
+
+        $attempt->correct_count = $correctCount;
+
+        $attempt->wrong_count = $wrongCount;
+
+        $attempt->not_attempted = $notAttempted;
+
+        $attempt->total_marks = $totalMarks;
+
+    }
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Average Score
+    |--------------------------------------------------------------------------
+    */
+
+    $averageScore = $attempts
+        ->where('status', 'completed')
+        ->avg(function ($attempt) use ($totalPossibleMarks) {
+
+            return $totalPossibleMarks > 0
+                ? ($attempt->total_marks / $totalPossibleMarks) * 100
+                : 0;
+
+        });
+
+
+    $averageScore = round($averageScore ?? 0, 1);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Return View
+    |--------------------------------------------------------------------------
+    */
+
+    return view(
+        'admin.mock_tests.results',
+        compact(
+            'mockTest',
+            'attempts',
+            'totalStudents',
+            'completedStudents',
+            'completionPercentage',
+            'averageScore',
+            'totalQuestions',
+            'totalPossibleMarks'
+        )
+    );
+}
 
 
         public function duplicate(MockTest $mockTest)

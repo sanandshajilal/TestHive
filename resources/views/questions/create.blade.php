@@ -128,6 +128,16 @@
     h6 i {
         color: #832b00;
     }
+
+    .child-toggle{
+            transition: transform .25s ease;
+        }
+
+        .child-toggle.collapsed{
+            transform: rotate(-90deg);
+        }
+
+
 </style>
 @endsection
 
@@ -237,18 +247,23 @@
                         <option value="table_mcq" {{ old('question_type') == 'table_mcq' ? 'selected' : '' }}>Table MCQ</option>
                         <option value="drag_and_drop" {{ old('question_type') == 'drag_and_drop' ? 'selected' : '' }}>Drag and Drop</option>
                         <option value="dropdown" {{ old('question_type') == 'dropdown' ? 'selected' : '' }}>Drop Down List</option>
+                            <option value="paragraph" {{ old('question_type') == 'paragraph' ? 'selected' : '' }}>
+                                Scenario Based Questions
+                            </option>
                     </select>
                 </div>
             </div>
 
             <div class="border-bottom pb-2 mb-3 mt-4">
-                <h6 class="fw-semibold mb-1">
+                <h6 class="fw-semibold mb-1" id="contentHeading">
                     <i class="bi bi-pencil-square me-2" style="color:#832b00;"></i>
                     Question Content
                 </h6>
             </div>
             <div class="mb-3">
-                <label class="form-label">Question</label>
+                <label class="form-label" id="questionLabel">
+                    Question
+                </label>
                 <textarea class="form-control" name="question_text" id="question" required>{{ old('question_text') }}</textarea>
             </div>
 
@@ -259,6 +274,9 @@
             @include('questions.partials.table_mcq')
             @include('questions.partials.drag_and_drop')
             @include('questions.partials.dropdown')
+            @include('questions.partials.paragraph_builder')
+
+           <div id="scoring-section">
 
             <div class="border-bottom pb-2 mb-3 mt-4">
                 <h6 class="fw-semibold mb-1">
@@ -266,12 +284,22 @@
                     Scoring
                 </h6>
             </div>
+
             <div class="mb-3">
                 <label class="form-label">Marks</label>
-                <input type="number" name="marks" class="form-control" value="{{ old('marks', 2) }}" min="1" required>
+                <input
+                    type="number"
+                    name="marks"
+                    class="form-control"
+                    value="{{ old('marks', 2) }}"
+                    min="1"
+                    required
+                >
             </div>
+
+        </div>
             <div class="text-end">
-            <button type="submit" class="btn btn-success">Save Question</button>
+            <button type="submit" class="btn btn-success shadow-sm">Save Question</button>
             </div>
         </form>
     </div>
@@ -280,54 +308,5 @@
 
 @section('scripts')
 <script src="{{ asset('tinymce/tinymce.min.js') }}"></script>
-<script>
-    tinymce.init({
-        selector: 'textarea[name=question_text]',
-        plugins: 'lists paste image table',
-        toolbar: 'undo redo | bold italic underline | bullist numlist | image table',
-        menubar: 'insert table format',
-        paste_data_images: true,   // Enables image paste directly into editor
-        paste_as_text: false,      // Keep formatting (important for table classes)
-        table_class_list: [
-            { title: 'Bootstrap Table', value: 'table table-bordered table-sm' }
-        ],
-        table_default_attributes: {
-            border: '0'
-        },
-        table_default_styles: {
-            width: '100%',
-            borderCollapse: 'collapse'
-        },
-        setup: function (editor) {
-            // Add Bootstrap table classes on insert
-            editor.on('ExecCommand', function (e) {
-                if (e.command === 'mceInsertTable') {
-                    setTimeout(() => {
-                        editor.dom.addClass(editor.dom.select('table'), 'table table-bordered table-sm');
-                    }, 10);
-                }
-            });
-
-            // Make pasted images responsive
-            editor.on('PastePostProcess', function (e) {
-                const imgs = e.node.querySelectorAll('img');
-                imgs.forEach(img => {
-                    img.removeAttribute('width');
-                    img.removeAttribute('height');
-                    img.style.maxWidth = '100%';
-                    img.style.height = 'auto';
-                });
-            });
-
-            editor.on('change', function () {
-                tinymce.triggerSave();
-            });
-        }
-    });
-</script>
-
-
-
-
 <script src="{{ asset('js/question_form.js') }}"></script>
 @endsection
