@@ -463,10 +463,20 @@ $child->options = array_map(
 $child->correct_answers =
     $childData['correct_options'] ?? [];
 
-dd('MCQ DATA ASSIGNED', [
-    'options' => $child->options,
-    'correct_answers' => $child->correct_answers,
-]);
+try {
+
+    $child->save();
+
+    dd('CHILD SAVED', $child->id);
+
+} catch (\Throwable $e) {
+
+    dd([
+        'message' => $e->getMessage(),
+        'file' => $e->getFile(),
+        'line' => $e->getLine(),
+    ]);
+}
 }
 
         foreach ($request->input('child_questions', []) as $childData) {
