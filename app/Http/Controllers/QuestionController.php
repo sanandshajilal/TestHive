@@ -83,7 +83,7 @@ class QuestionController extends Controller
                 ]);
 
                 
-                dd('SCENARIO VALIDATION PASSED');
+                
                 return $this->storeScenario($request);
             }
 
@@ -428,6 +428,7 @@ class QuestionController extends Controller
 
 private function storeScenario(Request $request)
 {
+    dd('STORE SCENARIO REACHED');
     try {
 
         \Log::info('SCENARIO CREATION STARTED', [
