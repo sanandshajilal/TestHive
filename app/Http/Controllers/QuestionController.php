@@ -427,77 +427,77 @@ private function storeScenario(Request $request)
 {
     try {
 
-        $scenario = new Question();
+        DB::transaction(function () use ($request) {
 
-        $scenario->paper_id = $request->paper_id;
-        $scenario->topic_id = $request->topic_id;
-        $scenario->sub_topic_id = $request->sub_topic_id;
+            $scenario = new Question();
 
-        $scenario->question_type = 'paragraph';
-        $scenario->question_text = $request->question_text;
-        $scenario->marks = 0;
+            $scenario->paper_id = $request->paper_id;
+            $scenario->topic_id = $request->topic_id;
+            $scenario->sub_topic_id = $request->sub_topic_id;
+            $scenario->question_type = 'paragraph';
+            $scenario->question_text = $request->question_text;
+            $scenario->marks = 0;
 
-        $scenario->save();
+            $scenario->save();
 
-        foreach ($request->input('child_questions', []) as $childData) {
+            foreach ($request->input('child_questions', []) as $childData) {
 
-            $child = new Question();
+                $child = new Question();
 
-            $child->paper_id = $scenario->paper_id;
-            $child->topic_id = $scenario->topic_id;
-            $child->sub_topic_id = $scenario->sub_topic_id;
+                $child->paper_id = $scenario->paper_id;
+                $child->topic_id = $scenario->topic_id;
+                $child->sub_topic_id = $scenario->sub_topic_id;
+                $child->parent_question_id = $scenario->id;
+                $child->question_type = $childData['question_type'];
+                $child->question_text = $childData['question'];
+                $child->marks = $childData['marks'] ?? 2;
 
-            $child->parent_question_id = $scenario->id;
+                switch ($childData['question_type']) {
 
-            $child->question_type = $childData['question_type'];
-            $child->question_text = $childData['question'];
-            $child->marks = $childData['marks'] ?? 2;
+                    case 'mcq':
 
-            switch ($childData['question_type']) {
+                        $this->validateMcq($childData);
 
-                case 'mcq':
+                        $child->options = array_map(
+                            'trim',
+                            $childData['options'] ?? []
+                        );
 
-                    $this->validateMcq($childData);
+                        $child->correct_answers =
+                            $childData['correct_options'] ?? [];
 
-                    $child->options = array_map(
-                        'trim',
-                        $childData['options'] ?? []
-                    );
+                        break;
 
-                    $child->correct_answers =
-                        $childData['correct_options'] ?? [];
+                    case 'multiple_select':
 
-                    break;
+                        $this->validateMultipleSelect($childData);
 
-                case 'multiple_select':
+                        $child->options = array_map(
+                            'trim',
+                            $childData['options'] ?? []
+                        );
 
-                    $this->validateMultipleSelect($childData);
+                        $child->correct_answers =
+                            $childData['correct_options'] ?? [];
 
-                    $child->options = array_map(
-                        'trim',
-                        $childData['options'] ?? []
-                    );
+                        break;
 
-                    $child->correct_answers =
-                        $childData['correct_options'] ?? [];
+                    case 'one_word':
 
-                    break;
+                        $this->validateOneWord($childData);
 
-                case 'one_word':
+                        $child->options = null;
 
-                    $this->validateOneWord($childData);
+                        $child->correct_answers = [
+                            trim($childData['answer'] ?? '')
+                        ];
 
-                    $child->options = null;
+                        break;
+                }
 
-                    $child->correct_answers = [
-                        trim($childData['answer'] ?? '')
-                    ];
-
-                    break;
+                $child->save();
             }
-
-            $child->save();
-        }
+        });
 
         return redirect()
             ->route('questions.create')
@@ -509,6 +509,9 @@ private function storeScenario(Request $request)
             'message' => $e->getMessage(),
             'file' => $e->getFile(),
             'line' => $e->getLine(),
+            'previous' => $e->getPrevious()
+                ? $e->getPrevious()->getMessage()
+                : null,
         ]);
     }
 }
