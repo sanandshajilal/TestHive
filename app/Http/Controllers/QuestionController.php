@@ -453,12 +453,20 @@ foreach ($request->input('child_questions', []) as $index => $childData) {
     $child->question_text = $childData['question'];
     $child->marks = $childData['marks'] ?? 2;
 
-    dd('CHILD DATA ASSIGNED', [
-        'parent_question_id' => $child->parent_question_id,
-        'question_type' => $child->question_type,
-        'question_text' => $child->question_text,
-        'marks' => $child->marks,
-    ]);
+$this->validateMcq($childData);
+
+$child->options = array_map(
+    'trim',
+    $childData['options'] ?? []
+);
+
+$child->correct_answers =
+    $childData['correct_options'] ?? [];
+
+dd('MCQ DATA ASSIGNED', [
+    'options' => $child->options,
+    'correct_answers' => $child->correct_answers,
+]);
 }
 
         foreach ($request->input('child_questions', []) as $childData) {
