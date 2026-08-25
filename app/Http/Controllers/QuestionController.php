@@ -41,10 +41,6 @@ class QuestionController extends Controller
 
     public function store(Request $request)
     {
-            \Log::info('QUESTION STORE HIT', [
-                'question_type' => $request->input('question_type'),
-                'all' => $request->all(),
-            ]);
 
         $request->validate([
             'paper_id' => 'required|exists:papers,id',
@@ -428,159 +424,84 @@ class QuestionController extends Controller
 
 private function storeScenario(Request $request)
 {
-    
-    try {
+    DB::transaction(function () use ($request) {
 
-        \Log::info('SCENARIO CREATION STARTED', [
-            'question_type' => $request->input('question_type'),
-            'paper_id' => $request->input('paper_id'),
-            'topic_id' => $request->input('topic_id'),
-            'sub_topic_id' => $request->input('sub_topic_id'),
-            'child_count' => count($request->input('child_questions', [])),
-            'child_questions' => $request->input('child_questions', []),
-        ]);
+        $scenario = new Question();
 
-        DB::transaction(function () use ($request) {
+        $scenario->paper_id = $request->paper_id;
+        $scenario->topic_id = $request->topic_id;
+        $scenario->sub_topic_id = $request->sub_topic_id;
 
-            /*
-            |--------------------------------------------------------------------------
-            | Parent Scenario
-            |--------------------------------------------------------------------------
-            */
+        $scenario->question_type = 'paragraph';
+        $scenario->question_text = $request->question_text;
+        $scenario->marks = 0;
 
-            $scenario = new Question();
+        $scenario->save();
 
-            $scenario->paper_id = $request->paper_id;
-            $scenario->topic_id = $request->topic_id;
-            $scenario->sub_topic_id = $request->sub_topic_id;
+        foreach ($request->input('child_questions', []) as $childData) {
 
-            $scenario->question_type = 'paragraph';
-            $scenario->question_text = $request->question_text;
-            $scenario->marks = 0;
+            $child = new Question();
 
+            $child->paper_id = $scenario->paper_id;
+            $child->topic_id = $scenario->topic_id;
+            $child->sub_topic_id = $scenario->sub_topic_id;
 
-try {
+            $child->parent_question_id = $scenario->id;
 
-    $scenario->save();
+            $child->question_type = $childData['question_type'];
+            $child->question_text = $childData['question'];
+            $child->marks = $childData['marks'] ?? 2;
 
-    dd('PARENT SAVED', $scenario->id);
+            switch ($childData['question_type']) {
 
-} catch (\Throwable $e) {
+                case 'mcq':
 
-    dd([
-        'message' => $e->getMessage(),
-        'file' => $e->getFile(),
-        'line' => $e->getLine(),
-        'previous' => $e->getPrevious()
-            ? $e->getPrevious()->getMessage()
-            : null,
-    ]);
-}
+                    $this->validateMcq($childData);
 
-            \Log::info('SCENARIO PARENT SAVED', [
-                'scenario_id' => $scenario->id,
-            ]);
+                    $child->options = array_map(
+                        'trim',
+                        $childData['options'] ?? []
+                    );
 
+                    $child->correct_answers =
+                        $childData['correct_options'] ?? [];
 
-            /*
-            |--------------------------------------------------------------------------
-            | Child Questions
-            |--------------------------------------------------------------------------
-            */
+                    break;
 
-            foreach ($request->input('child_questions', []) as $index => $childData) {
+                case 'multiple_select':
 
-                \Log::info('SAVING SCENARIO CHILD', [
-                    'index' => $index,
-                    'data' => $childData,
-                ]);
+                    $this->validateMultipleSelect($childData);
 
-                $child = new Question();
+                    $child->options = array_map(
+                        'trim',
+                        $childData['options'] ?? []
+                    );
 
-                $child->paper_id = $scenario->paper_id;
-                $child->topic_id = $scenario->topic_id;
-                $child->sub_topic_id = $scenario->sub_topic_id;
+                    $child->correct_answers =
+                        $childData['correct_options'] ?? [];
 
-                $child->parent_question_id = $scenario->id;
+                    break;
 
-                $child->question_type = $childData['question_type'];
-                $child->question_text = $childData['question'];
-                $child->marks = $childData['marks'] ?? 2;
+                case 'one_word':
 
+                    $this->validateOneWord($childData);
 
-                switch ($childData['question_type']) {
+                    $child->options = null;
 
-                    case 'mcq':
+                    $child->correct_answers = [
+                        trim($childData['answer'] ?? '')
+                    ];
 
-                        $this->validateMcq($childData);
-
-                        $child->options = array_map(
-                            'trim',
-                            $childData['options'] ?? []
-                        );
-
-                        $child->correct_answers =
-                            $childData['correct_options'] ?? [];
-
-                        break;
-
-
-                    case 'multiple_select':
-
-                        $this->validateMultipleSelect($childData);
-
-                        $child->options = array_map(
-                            'trim',
-                            $childData['options'] ?? []
-                        );
-
-                        $child->correct_answers =
-                            $childData['correct_options'] ?? [];
-
-                        break;
-
-
-                    case 'one_word':
-
-                        $this->validateOneWord($childData);
-
-                        $child->options = null;
-
-                        $child->correct_answers = [
-                            trim($childData['answer'] ?? '')
-                        ];
-
-                        break;
-                }
-
-
-                $child->save();
-
-                \Log::info('SCENARIO CHILD SAVED', [
-                    'child_id' => $child->id,
-                    'parent_id' => $scenario->id,
-                ]);
+                    break;
             }
 
-        });
+            $child->save();
+        }
+    });
 
-        \Log::info('SCENARIO CREATION COMPLETED');
-
-        return redirect()
-            ->route('questions.create')
-            ->with('success', 'Scenario created successfully.');
-
-    } catch (\Throwable $e) {
-
-        \Log::error('SCENARIO CREATION FAILED', [
-            'message' => $e->getMessage(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-            'trace' => $e->getTraceAsString(),
-        ]);
-
-        throw $e;
-    }
+    return redirect()
+        ->route('questions.create')
+        ->with('success', 'Scenario created successfully.');
 }
 
 
