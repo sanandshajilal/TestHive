@@ -428,7 +428,7 @@ class QuestionController extends Controller
 
 private function storeScenario(Request $request)
 {
-    dd('STORE SCENARIO REACHED');
+    
     try {
 
         \Log::info('SCENARIO CREATION STARTED', [
@@ -457,6 +457,8 @@ private function storeScenario(Request $request)
             $scenario->question_type = 'paragraph';
             $scenario->question_text = $request->question_text;
             $scenario->marks = 0;
+
+            dd('PARENT DATA ASSIGNED');
 
             $scenario->save();
 
