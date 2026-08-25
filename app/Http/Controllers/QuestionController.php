@@ -83,7 +83,7 @@ class QuestionController extends Controller
                 ]);
 
                 
-
+                dd('SCENARIO VALIDATION PASSED');
                 return $this->storeScenario($request);
             }
 
@@ -458,8 +458,6 @@ private function storeScenario(Request $request)
             $scenario->marks = 0;
 
             $scenario->save();
-
-            dd('PARENT SAVED', $scenario->id);
 
             \Log::info('SCENARIO PARENT SAVED', [
                 'scenario_id' => $scenario->id,
