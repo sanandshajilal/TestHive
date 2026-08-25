@@ -460,7 +460,6 @@ foreach ($request->input('child_questions', []) as $index => $childData) {
         'marks' => $child->marks,
     ]);
 }
-}
 
         foreach ($request->input('child_questions', []) as $childData) {
 
