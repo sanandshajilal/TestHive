@@ -82,7 +82,7 @@ class QuestionController extends Controller
                         => 'required|integer|min:1',
                 ]);
 
-                dd('BEFORE STORE SCENARIO', $request->all());
+                
 
                 return $this->storeScenario($request);
             }
@@ -425,7 +425,7 @@ class QuestionController extends Controller
             ]);
         }
     }
-
+dd('ENTERING STORE SCENARIO');
 private function storeScenario(Request $request)
 {
     try {
