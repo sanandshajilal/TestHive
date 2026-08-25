@@ -425,7 +425,7 @@ class QuestionController extends Controller
             ]);
         }
     }
-dd('ENTERING STORE SCENARIO');
+
 private function storeScenario(Request $request)
 {
     try {
