@@ -307,6 +307,8 @@ class QuestionController extends Controller
 
       $question->save();
 
+      dd('PARENT SAVED', $scenario->id);
+
         return redirect()
             ->route('questions.create')
             ->with('success', 'Question created successfully.')
