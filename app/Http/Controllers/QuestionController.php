@@ -439,9 +439,27 @@ private function storeScenario(Request $request)
 
         $scenario->save();
         
-        foreach ($request->input('child_questions', []) as $index => $childData) {
+foreach ($request->input('child_questions', []) as $index => $childData) {
 
-    dd('CHILD LOOP REACHED', $index, $childData);
+    $child = new Question();
+
+    $child->paper_id = $scenario->paper_id;
+    $child->topic_id = $scenario->topic_id;
+    $child->sub_topic_id = $scenario->sub_topic_id;
+
+    $child->parent_question_id = $scenario->id;
+
+    $child->question_type = $childData['question_type'];
+    $child->question_text = $childData['question'];
+    $child->marks = $childData['marks'] ?? 2;
+
+    dd('CHILD DATA ASSIGNED', [
+        'parent_question_id' => $child->parent_question_id,
+        'question_type' => $child->question_type,
+        'question_text' => $child->question_text,
+        'marks' => $child->marks,
+    ]);
+}
 }
 
         foreach ($request->input('child_questions', []) as $childData) {
