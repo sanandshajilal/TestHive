@@ -249,15 +249,22 @@ document.addEventListener('DOMContentLoaded', function () {
         bindPasteHandlers();
     });
 
-    document.addEventListener('change', function(e){
+    document.addEventListener('change', function(e) {
 
-        if(e.target.type === 'radio'){
+        if (!e.target.matches('#table-mcq-rows input[type="radio"]')) {
+            return;
+        }
 
-            const row =
-                e.target.closest('.table-mcq-row');
+        const row = e.target.closest('.table-mcq-row');
 
-            row.querySelector('.hidden-answer').value =
-                e.target.value;
+        if (!row) {
+            return;
+        }
+
+        const hiddenAnswer = row.querySelector('.hidden-answer');
+
+        if (hiddenAnswer) {
+            hiddenAnswer.value = e.target.value;
         }
     });
 
