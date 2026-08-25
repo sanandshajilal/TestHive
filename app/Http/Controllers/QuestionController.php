@@ -458,9 +458,9 @@ private function storeScenario(Request $request)
             $scenario->question_text = $request->question_text;
             $scenario->marks = 0;
 
-            dd('PARENT DATA ASSIGNED');
 
             $scenario->save();
+            dd('PARENT SAVED', $scenario->id);
 
             \Log::info('SCENARIO PARENT SAVED', [
                 'scenario_id' => $scenario->id,
