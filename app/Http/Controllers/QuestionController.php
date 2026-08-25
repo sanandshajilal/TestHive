@@ -41,8 +41,6 @@ class QuestionController extends Controller
 
     public function store(Request $request)
     {
-
-        dd('STORE REACHED');
             \Log::info('QUESTION STORE HIT', [
                 'question_type' => $request->input('question_type'),
                 'all' => $request->all(),
@@ -83,6 +81,8 @@ class QuestionController extends Controller
                     'child_questions.*.marks'
                         => 'required|integer|min:1',
                 ]);
+
+                dd('BEFORE STORE SCENARIO', $request->all());
 
                 return $this->storeScenario($request);
             }
