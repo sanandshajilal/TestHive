@@ -307,7 +307,6 @@ class QuestionController extends Controller
 
       $question->save();
 
-      dd('PARENT SAVED', $scenario->id);
 
         return redirect()
             ->route('questions.create')
@@ -902,6 +901,7 @@ private function storeScenario(Request $request)
                 $scenario->marks = 0;
 
                 $scenario->save();
+                dd('PARENT SAVED', $scenario->id);
 
 
                 /*
