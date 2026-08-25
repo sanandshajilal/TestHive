@@ -41,6 +41,8 @@ class QuestionController extends Controller
 
     public function store(Request $request)
     {
+
+        dd('STORE REACHED');
             \Log::info('QUESTION STORE HIT', [
                 'question_type' => $request->input('question_type'),
                 'all' => $request->all(),
