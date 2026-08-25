@@ -425,27 +425,92 @@ class QuestionController extends Controller
 
 private function storeScenario(Request $request)
 {
-    $scenario = new Question();
+    try {
 
-    $scenario->paper_id = $request->paper_id;
-    $scenario->topic_id = $request->topic_id;
-    $scenario->sub_topic_id = $request->sub_topic_id;
-    $scenario->question_type = 'paragraph';
-    $scenario->question_text = $request->question_text;
-    $scenario->marks = 0;
+        $scenario = new Question();
 
-    $scenario->save();
+        $scenario->paper_id = $request->paper_id;
+        $scenario->topic_id = $request->topic_id;
+        $scenario->sub_topic_id = $request->sub_topic_id;
 
-    foreach ($request->input('child_questions', []) as $childData) {
+        $scenario->question_type = 'paragraph';
+        $scenario->question_text = $request->question_text;
+        $scenario->marks = 0;
 
-        // existing child creation code
+        $scenario->save();
 
-        $child->save();
+        foreach ($request->input('child_questions', []) as $childData) {
+
+            $child = new Question();
+
+            $child->paper_id = $scenario->paper_id;
+            $child->topic_id = $scenario->topic_id;
+            $child->sub_topic_id = $scenario->sub_topic_id;
+
+            $child->parent_question_id = $scenario->id;
+
+            $child->question_type = $childData['question_type'];
+            $child->question_text = $childData['question'];
+            $child->marks = $childData['marks'] ?? 2;
+
+            switch ($childData['question_type']) {
+
+                case 'mcq':
+
+                    $this->validateMcq($childData);
+
+                    $child->options = array_map(
+                        'trim',
+                        $childData['options'] ?? []
+                    );
+
+                    $child->correct_answers =
+                        $childData['correct_options'] ?? [];
+
+                    break;
+
+                case 'multiple_select':
+
+                    $this->validateMultipleSelect($childData);
+
+                    $child->options = array_map(
+                        'trim',
+                        $childData['options'] ?? []
+                    );
+
+                    $child->correct_answers =
+                        $childData['correct_options'] ?? [];
+
+                    break;
+
+                case 'one_word':
+
+                    $this->validateOneWord($childData);
+
+                    $child->options = null;
+
+                    $child->correct_answers = [
+                        trim($childData['answer'] ?? '')
+                    ];
+
+                    break;
+            }
+
+            $child->save();
+        }
+
+        return redirect()
+            ->route('questions.create')
+            ->with('success', 'Scenario created successfully.');
+
+    } catch (\Throwable $e) {
+
+        dd([
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+        ]);
     }
-
-    return redirect()
-        ->route('questions.create')
-        ->with('success', 'Scenario created successfully.');
 }
 
 
