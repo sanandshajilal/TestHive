@@ -425,124 +425,95 @@ class QuestionController extends Controller
 
 private function storeScenario(Request $request)
 {
-    DB::transaction(function () use ($request) {
+    try {
 
-        $scenario = new Question();
+        DB::transaction(function () use ($request) {
 
-        $scenario->paper_id = $request->paper_id;
-        $scenario->topic_id = $request->topic_id;
-        $scenario->sub_topic_id = $request->sub_topic_id;
+            $scenario = new Question();
 
-        $scenario->question_type = 'paragraph';
-        $scenario->question_text = $request->question_text;
-        $scenario->marks = 0;
+            $scenario->paper_id = $request->paper_id;
+            $scenario->topic_id = $request->topic_id;
+            $scenario->sub_topic_id = $request->sub_topic_id;
 
-        $scenario->save();
-        
-foreach ($request->input('child_questions', []) as $index => $childData) {
+            $scenario->question_type = 'paragraph';
+            $scenario->question_text = $request->question_text;
+            $scenario->marks = 0;
 
-    $child = new Question();
+            $scenario->save();
 
-    $child->paper_id = $scenario->paper_id;
-    $child->topic_id = $scenario->topic_id;
-    $child->sub_topic_id = $scenario->sub_topic_id;
+            foreach ($request->input('child_questions', []) as $childData) {
 
-    $child->parent_question_id = $scenario->id;
+                $child = new Question();
 
-    $child->question_type = $childData['question_type'];
-    $child->question_text = $childData['question'];
-    $child->marks = $childData['marks'] ?? 2;
+                $child->paper_id = $scenario->paper_id;
+                $child->topic_id = $scenario->topic_id;
+                $child->sub_topic_id = $scenario->sub_topic_id;
 
-$this->validateMcq($childData);
+                $child->parent_question_id = $scenario->id;
 
-$child->options = array_map(
-    'trim',
-    $childData['options'] ?? []
-);
+                $child->question_type = $childData['question_type'];
+                $child->question_text = $childData['question'];
+                $child->marks = $childData['marks'] ?? 2;
 
-$child->correct_answers =
-    $childData['correct_options'] ?? [];
+                switch ($childData['question_type']) {
 
-try {
+                    case 'mcq':
 
-    $child->save();
+                        $this->validateMcq($childData);
 
-    dd('CHILD SAVED', $child->id);
+                        $child->options = array_map(
+                            'trim',
+                            $childData['options'] ?? []
+                        );
 
-} catch (\Throwable $e) {
+                        $child->correct_answers =
+                            $childData['correct_options'] ?? [];
 
-    dd([
-        'message' => $e->getMessage(),
-        'file' => $e->getFile(),
-        'line' => $e->getLine(),
-    ]);
-}
-}
+                        break;
 
-        foreach ($request->input('child_questions', []) as $childData) {
+                    case 'multiple_select':
 
-            $child = new Question();
+                        $this->validateMultipleSelect($childData);
 
-            $child->paper_id = $scenario->paper_id;
-            $child->topic_id = $scenario->topic_id;
-            $child->sub_topic_id = $scenario->sub_topic_id;
+                        $child->options = array_map(
+                            'trim',
+                            $childData['options'] ?? []
+                        );
 
-            $child->parent_question_id = $scenario->id;
+                        $child->correct_answers =
+                            $childData['correct_options'] ?? [];
 
-            $child->question_type = $childData['question_type'];
-            $child->question_text = $childData['question'];
-            $child->marks = $childData['marks'] ?? 2;
+                        break;
 
-            switch ($childData['question_type']) {
+                    case 'one_word':
 
-                case 'mcq':
+                        $this->validateOneWord($childData);
 
-                    $this->validateMcq($childData);
+                        $child->options = null;
 
-                    $child->options = array_map(
-                        'trim',
-                        $childData['options'] ?? []
-                    );
+                        $child->correct_answers = [
+                            trim($childData['answer'] ?? '')
+                        ];
 
-                    $child->correct_answers =
-                        $childData['correct_options'] ?? [];
+                        break;
+                }
 
-                    break;
-
-                case 'multiple_select':
-
-                    $this->validateMultipleSelect($childData);
-
-                    $child->options = array_map(
-                        'trim',
-                        $childData['options'] ?? []
-                    );
-
-                    $child->correct_answers =
-                        $childData['correct_options'] ?? [];
-
-                    break;
-
-                case 'one_word':
-
-                    $this->validateOneWord($childData);
-
-                    $child->options = null;
-
-                    $child->correct_answers = [
-                        trim($childData['answer'] ?? '')
-                    ];
-
-                    break;
+                $child->save();
             }
+        });
 
-            $child->save();
-        }
-    });
+        return redirect()
+            ->route('questions.create')
+            ->with('success', 'Scenario created successfully.');
 
-    return redirect()
-        ->route('questions.create')
-        ->with('success', 'Scenario created successfully.');
+    } catch (\Throwable $e) {
+
+        dd([
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+        ]);
+    }
 }
 
 
