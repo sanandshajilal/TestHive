@@ -41,6 +41,11 @@ class QuestionController extends Controller
 
     public function store(Request $request)
     {
+            \Log::info('QUESTION STORE HIT', [
+                'question_type' => $request->input('question_type'),
+                'all' => $request->all(),
+            ]);
+
         $request->validate([
             'paper_id' => 'required|exists:papers,id',
             'topic_id' => 'required|exists:topics,id',
