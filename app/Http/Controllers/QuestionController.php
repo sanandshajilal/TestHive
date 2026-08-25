@@ -438,6 +438,7 @@ private function storeScenario(Request $request)
         $scenario->marks = 0;
 
         $scenario->save();
+        dd('PARENT SAVED', $scenario->id);
 
         foreach ($request->input('child_questions', []) as $childData) {
 
@@ -901,7 +902,7 @@ private function storeScenario(Request $request)
                 $scenario->marks = 0;
 
                 $scenario->save();
-                dd('PARENT SAVED', $scenario->id);
+                
 
 
                 /*
