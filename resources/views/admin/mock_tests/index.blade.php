@@ -660,9 +660,9 @@ body {
                                     </div>
 
                                     <div class="small text-muted">
-                                        {{ $mockTest->questions->count() }} Questions
+                                        {{ $mockTest->total_questions }} Questions
                                         &nbsp;•&nbsp;
-                                        {{ $mockTest->questions->sum('marks') }} Marks
+                                        {{ $mockTest->total_marks }} Marks
                                     </div>
 
                                      <div class="paper-meta">

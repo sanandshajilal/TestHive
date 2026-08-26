@@ -60,30 +60,101 @@ class MockTestController extends Controller
 
 
     public function index()
-    {
-        $mockTests = MockTest::with(['paper', 'questions'])
-            ->orderBy('start_time', 'desc')
-            ->get()
-            ->map(function ($test) {
+{
+    $mockTests = MockTest::with([
+        'paper',
+        'questions.children'
+    ])
+    ->orderBy('start_time', 'desc')
+    ->get()
+    ->map(function ($test) {
 
-                $now = Carbon::now();
+        $now = Carbon::now();
 
-                $start = Carbon::parse($test->start_time);
-                $end   = Carbon::parse($test->end_time);
+        $start = Carbon::parse($test->start_time);
+        $end   = Carbon::parse($test->end_time);
 
-                if ($now->lt($start)) {
-                    $test->status = 'Upcoming';
-                } elseif ($now->between($start, $end)) {
-                    $test->status = 'Active';
-                } else {
-                    $test->status = 'Expired';
-                }
+        if ($now->lt($start)) {
+            $test->status = 'Upcoming';
+        } elseif ($now->between($start, $end)) {
+            $test->status = 'Active';
+        } else {
+            $test->status = 'Expired';
+        }
 
-                return $test;
-            });
 
-        return view('admin.mock_tests.index', compact('mockTests'));
-    }
+        /*
+        |--------------------------------------------------------------------------
+        | Student-Facing Question Count
+        |--------------------------------------------------------------------------
+        |
+        | Normal question = 1
+        |
+        | Scenario = container only
+        | Scenario children = individual questions
+        |
+        */
+
+        $totalQuestions = 0;
+
+        foreach ($test->questions as $question) {
+
+            if ($question->question_type === 'paragraph') {
+
+                $totalQuestions += $question->children->count();
+
+            } else {
+
+                $totalQuestions++;
+            }
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Total Possible Marks
+        |--------------------------------------------------------------------------
+        |
+        | Normal question = its own marks
+        |
+        | Scenario = sum of child marks
+        |
+        */
+
+        $totalMarks = 0;
+
+        foreach ($test->questions as $question) {
+
+            if ($question->question_type === 'paragraph') {
+
+                $totalMarks += $question->children->sum('marks');
+
+            } else {
+
+                $totalMarks += $question->marks ?? 0;
+            }
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | Temporary Values for Index View
+        |--------------------------------------------------------------------------
+        */
+
+        $test->total_questions = $totalQuestions;
+
+        $test->total_marks = $totalMarks;
+
+
+        return $test;
+    });
+
+    return view(
+        'admin.mock_tests.index',
+        compact('mockTests')
+    );
+}
 
     public function view(MockTest $mockTest)
     {

@@ -74,19 +74,64 @@ document.addEventListener('DOMContentLoaded', function () {
 
             });
 
-            editor.on('PastePostProcess', function (e) {
+                editor.on('PastePostProcess', function (e) {
 
-                e.node.querySelectorAll('img').forEach(img => {
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Remove pasted font family and font size
+                    |--------------------------------------------------------------------------
+                    |
+                    | This keeps formatting such as:
+                    | - Bold
+                    | - Italic
+                    | - Underline
+                    | - Lists
+                    | - Tables
+                    | - Images
+                    |
+                    | But removes arbitrary font-family and font-size
+                    | brought in from Word, websites, etc.
+                    |
+                    */
 
-                    img.removeAttribute('width');
-                    img.removeAttribute('height');
+                    e.node.querySelectorAll('*').forEach(element => {
 
-                    img.style.maxWidth = '100%';
-                    img.style.height = 'auto';
+                        // Remove font-related HTML attributes
+                        element.removeAttribute('face');
+                        element.removeAttribute('size');
+
+                        // Remove font family / size from inline styles
+                        if (element.hasAttribute('style')) {
+
+                            element.style.removeProperty('font-family');
+                            element.style.removeProperty('font-size');
+
+                            // If style is now empty, remove it completely
+                            if (!element.getAttribute('style').trim()) {
+                                element.removeAttribute('style');
+                            }
+                        }
+
+                    });
+
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Normalize pasted images
+                    |--------------------------------------------------------------------------
+                    */
+
+                    e.node.querySelectorAll('img').forEach(img => {
+
+                        img.removeAttribute('width');
+                        img.removeAttribute('height');
+
+                        img.style.maxWidth = '100%';
+                        img.style.height = 'auto';
+
+                    });
 
                 });
-
-            });
 
             editor.on('change', function () {
 

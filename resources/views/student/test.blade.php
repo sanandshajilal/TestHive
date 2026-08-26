@@ -355,7 +355,7 @@
             background-color: var(--primary) !important;
         }
 
-        /* =========================================================
+       /* =========================================================
    Scenario / Reference Passage
    ========================================================= */
 
@@ -394,14 +394,43 @@
 .scenario-subtitle {
     font-size: 0.78rem;
     color: #7b6f68;
-
 }
 
+/* Scenario reading area */
 .scenario-content {
     padding: 20px 22px;
     color: #292522;
+
     font-size: 0.98rem;
     line-height: 1.7;
+
+    /*
+     * Long scenarios scroll inside this area
+     * instead of expanding the entire card.
+     */
+    max-height: 420px;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Scenario scrollbar */
+.scenario-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scenario-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scenario-content::-webkit-scrollbar-thumb {
+    background: #d8c1b5;
+    border-radius: 10px;
+}
+
+.scenario-content::-webkit-scrollbar-thumb:hover {
+    background: #b46e4c;
 }
 
 /* Preserve readable spacing inside TinyMCE content */
@@ -419,6 +448,7 @@
     height: auto;
 }
 
+/* Desktop */
 @media (min-width: 992px) {
 
     .scenario-card {
@@ -426,12 +456,18 @@
         top: 85px;
         z-index: 20;
 
-        /* Cover anything scrolling behind the top edge */
         box-shadow:
             0 -12px 0 12px #ffffff,
             0 6px 16px rgba(0, 0, 0, 0.04);
     }
+}
 
+/* Mobile / tablet */
+@media (max-width: 991.98px) {
+
+    .scenario-content {
+        max-height: 360px;
+    }
 }
         /* ---------- MOBILE ---------- */
 
