@@ -245,7 +245,7 @@ class DashboardController extends Controller
 
             'paperCount' => Paper::count(),
 
-            'questionCount' => Question::count(),
+            'questionCount' => Question::where('question_type', '!=', 'paragraph')->count(),
 
             'mockTestCount' => MockTest::count(),
 

@@ -210,11 +210,48 @@
     }
 
 
-    .question-content {
+.question-content {
+    word-break: break-word;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    color: #1f2937;
+}
 
-        line-height: 1.7;
+/*
+ * Normalize font family and font size from
+ * pasted TinyMCE content.
+ *
+ * Formatting such as bold, italic, underline,
+ * lists, tables and images is preserved.
+ */
+.question-content * {
+    font-family: 'Segoe UI', sans-serif !important;
+    font-size: 16px !important;
+}
 
-    }
+/* Preserve text formatting */
+
+.question-content strong,
+.question-content b {
+    font-weight: 700;
+}
+
+.question-content em,
+.question-content i {
+    font-style: italic;
+}
+
+.question-content u {
+    text-decoration: underline;
+}
+
+/* Images */
+
+.question-content img {
+    max-width: 100%;
+    height: auto;
+}
 
 
     .question-content p {
@@ -453,17 +490,32 @@
     }
 
 
-    .results-scenario-content {
+.results-scenario-content {
+    padding: 20px 22px;
+    color: #292522;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+}
 
-        padding: 20px 22px;
+.results-scenario-content * {
+    font-family: 'Segoe UI', sans-serif !important;
+    font-size: 16px !important;
+}
 
-        color: #292522;
+.results-scenario-content strong,
+.results-scenario-content b {
+    font-weight: 700;
+}
 
-        font-size: .96rem;
+.results-scenario-content em,
+.results-scenario-content i {
+    font-style: italic;
+}
 
-        line-height: 1.7;
-
-    }
+.results-scenario-content u {
+    text-decoration: underline;
+}
 
 
     .results-scenario-content p:last-child {

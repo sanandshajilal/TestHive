@@ -86,10 +86,45 @@
 
     /* Question */
 
-    .question-content {
-        word-break: break-word;
-        line-height: 1.7;
-        color: #1f2937;
+.question-content {
+    word-break: break-word;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+    color: #1f2937;
+}
+
+/*
+ * Normalize pasted font family and font size.
+ * Bold, italic, underline, lists, tables, etc.
+ * are preserved.
+ */
+    .question-content * {
+        font-family: 'Segoe UI', sans-serif !important;
+        font-size: 16px !important;
+    }
+
+    .question-content strong,
+    .question-content b {
+        font-weight: 700;
+    }
+
+    .question-content em,
+    .question-content i {
+        font-style: italic;
+    }
+
+    .question-content u {
+        text-decoration: underline;
+    }
+
+    .question-content img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .question-content table {
+        max-width: 100%;
     }
 
     /* Meta */

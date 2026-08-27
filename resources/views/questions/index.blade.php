@@ -618,6 +618,65 @@ td.question-col {
 }
 
 /* ===================================
+   QUESTION CONTENT TYPOGRAPHY
+=================================== */
+
+.question-content,
+#questionPreviewContent {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #374151;
+}
+
+/*
+ * Normalize pasted font family and size.
+ * Bold, italic, underline, lists, tables etc.
+ * are preserved.
+ */
+.question-content *,
+#questionPreviewContent * {
+    font-family: 'Segoe UI', sans-serif !important;
+    font-size: 16px !important;
+}
+
+/* Preserve text formatting */
+
+.question-content strong,
+.question-content b,
+#questionPreviewContent strong,
+#questionPreviewContent b {
+    font-weight: 700;
+}
+
+.question-content em,
+.question-content i,
+#questionPreviewContent em,
+#questionPreviewContent i {
+    font-style: italic;
+}
+
+.question-content u,
+#questionPreviewContent u {
+    text-decoration: underline;
+}
+
+/* Images */
+
+.question-content img,
+#questionPreviewContent img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Tables */
+
+.question-content table,
+#questionPreviewContent table {
+    max-width: 100%;
+}
+
+/* ===================================
    MOBILE
 =================================== */
 
@@ -678,7 +737,7 @@ td.question-col {
             <div class="col-md-3">
                 <div class="summary-card">
                     <div class="summary-label">Total Questions</div>
-                    <div class="summary-value">{{ $questions->count() }}</div>
+                    <div class="summary-value">{{ $totalQuestions }}</div>
                 </div>
             </div>
 
@@ -809,7 +868,9 @@ td.question-col {
 
                                     @endif
 
-                                    {!! str_replace('[blank]', '__________', $question->question_text) !!}
+                                    <div class="question-content">
+                                        {!! str_replace('[blank]', '__________', $question->question_text) !!}
+                                    </div>
 
                                     @if($question->question_type == 'paragraph')
 
@@ -839,12 +900,11 @@ td.question-col {
                                                             </span>
 
                                                         </div>
+                                                            <div class="mt-2 question-content">
 
-                                                        <div class="mt-2">
+                                                                {!! $child->question_text !!}
 
-                                                            {!! $child->question_text !!}
-
-                                                        </div>
+                                                            </div>
 
                                                     </div>
 

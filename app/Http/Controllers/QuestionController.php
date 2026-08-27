@@ -12,23 +12,51 @@ use Illuminate\Validation\ValidationException;
 
 class QuestionController extends Controller
 {
-    public function index()
-    {
-        return view('questions.index', [
-            'questions' => Question::with([
-            'paper',
-            'topic',
-            'subTopic',
-            'children'
-        ])
-        ->whereNull('parent_question_id')
-        ->latest()
-        ->get(),
-            'papers' => Paper::all(),
-            'topics' => Topic::all(),
-            'subtopics' => SubTopic::all(),
-        ]);
+public function index()
+{
+    $questions = Question::with([
+        'paper',
+        'topic',
+        'subTopic',
+        'children'
+    ])
+    ->whereNull('parent_question_id')
+    ->latest()
+    ->get();
+
+    /*
+    |--------------------------------------------------------------------------
+    | Total Student-Facing Questions
+    |--------------------------------------------------------------------------
+    |
+    | Normal question = 1
+    | Scenario parent = not counted
+    | Scenario children = counted individually
+    |
+    */
+
+    $totalQuestions = 0;
+
+    foreach ($questions as $question) {
+
+        if ($question->question_type === 'paragraph') {
+
+            $totalQuestions += $question->children->count();
+
+        } else {
+
+            $totalQuestions++;
+        }
     }
+
+    return view('questions.index', [
+        'questions' => $questions,
+        'papers' => Paper::all(),
+        'topics' => Topic::all(),
+        'subtopics' => SubTopic::all(),
+        'totalQuestions' => $totalQuestions,
+    ]);
+}
 
     public function create()
     {
