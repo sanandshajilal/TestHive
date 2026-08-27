@@ -182,35 +182,63 @@
             padding-bottom: 10px;
         }
 
-        .question-text {
-            font-size: 1.1rem;
-            font-weight: 500;
-            margin-bottom: 25px;
-        }
+/* ---------- QUESTION CONTENT ---------- */
 
-        .question-text table{
-            width:100%;
-            border-collapse:collapse;
-            margin:18px 0;
-            font-size:.95rem;
-        }
+.question-text {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    color: #1f2937;
+}
 
-        .question-text th{
-            background:#fcf7f3;
-            color:#832b00;
-            font-weight:600;
-            border:1px solid #d9d9d9;
-            padding:10px 12px;
-        }
+/*
+ * Normalize font family and font size from pasted content.
+ *
+ * Bold, italic, underline, lists, tables etc.
+ * remain intact.
+ */
+.question-text * {
+    font-family: 'Segoe UI', sans-serif !important;
+    font-size: 16px !important;
+}
 
-        .question-text td{
-            border:1px solid #e3e3e3;
-            padding:10px 12px;
-        }
+/* Preserve text formatting */
 
-        .question-text tr:nth-child(even){
-            background:#fafafa;
-        }
+.question-text strong,
+.question-text b {
+    font-weight: 700;
+}
+
+.question-text em,
+.question-text i {
+    font-style: italic;
+}
+
+.question-text u {
+    text-decoration: underline;
+}
+
+/* Images */
+
+.question-text img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Tables */
+
+.question-text table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+}
+
+.question-text th,
+.question-text td {
+    font-size: 16px !important;
+}
 
         
 
@@ -396,23 +424,45 @@
     color: #7b6f68;
 }
 
-/* Scenario reading area */
+/* ---------- SCENARIO CONTENT ---------- */
+
 .scenario-content {
     padding: 20px 22px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.7;
+
     color: #292522;
 
-    font-size: 0.98rem;
-    line-height: 1.7;
 
     /*
      * Long scenarios scroll inside this area
      * instead of expanding the entire card.
      */
-    max-height: 420px;
+    max-height: 330px;
     overflow-y: auto;
     overflow-x: hidden;
 
     -webkit-overflow-scrolling: touch;
+}
+
+.scenario-content * {
+    font-family: 'Segoe UI', sans-serif !important;
+    font-size: 16px !important;
+}
+
+.scenario-content strong,
+.scenario-content b {
+    font-weight: 700;
+}
+
+.scenario-content em,
+.scenario-content i {
+    font-style: italic;
+}
+
+.scenario-content u {
+    text-decoration: underline;
 }
 
 /* Scenario scrollbar */
