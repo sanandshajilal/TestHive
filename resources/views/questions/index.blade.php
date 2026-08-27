@@ -676,6 +676,15 @@ td.question-col {
     max-width: 100%;
 }
 
+/* Preview modal - compact badges */
+
+#questionPreviewContent .badge,
+#questionPreviewContent .badge-correct {
+    font-size: .72rem !important;
+    padding: .2rem .45rem !important;
+    line-height: 1.2 !important;
+}
+
 /* ===================================
    MOBILE
 =================================== */
