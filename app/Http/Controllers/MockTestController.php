@@ -591,20 +591,20 @@ public function duplicate(MockTest $mockTest)
             ->pluck('questions.id')
             ->toArray();
 
-        dd('BEFORE SYNC', [
+        $newTest->questions()->sync($questionIds);
+
+        dd('SYNC SUCCESS', [
             'new_test_id' => $newTest->id,
             'question_ids' => $questionIds,
         ]);
-
-        $newTest->questions()->sync($questionIds);
-
-        dd('SYNC SUCCESS');
 
     } catch (\Throwable $e) {
 
         dd([
             'message' => $e->getMessage(),
             'code' => $e->getCode(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
             'previous' => $e->getPrevious()?->getMessage(),
         ]);
     }
