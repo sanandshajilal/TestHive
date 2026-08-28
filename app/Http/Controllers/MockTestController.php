@@ -591,11 +591,14 @@ public function duplicate(MockTest $mockTest)
             ->pluck('questions.id')
             ->toArray();
 
-        $newTest->questions()->sync($questionIds);
+        DB::table('mock_test_question')->insert([
+            'mock_test_id' => $newTest->id,
+            'question_id' => $questionIds[0],
+        ]);
 
-        dd('SYNC SUCCESS', [
-            'new_test_id' => $newTest->id,
-            'question_ids' => $questionIds,
+        dd('DIRECT INSERT SUCCESS', [
+            'test' => $newTest->id,
+            'question' => $questionIds[0],
         ]);
 
     } catch (\Throwable $e) {
@@ -603,8 +606,6 @@ public function duplicate(MockTest $mockTest)
         dd([
             'message' => $e->getMessage(),
             'code' => $e->getCode(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
             'previous' => $e->getPrevious()?->getMessage(),
         ]);
     }
