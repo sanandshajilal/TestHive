@@ -578,37 +578,33 @@ public function results($id)
 
 public function duplicate(MockTest $mockTest)
 {
-    try {
+    $newTest = $mockTest->replicate();
 
-        $newTest = $mockTest->replicate();
+    $newTest->title = $mockTest->title . ' - Copy';
+    $newTest->access_code = strtoupper(Str::random(6));
 
-        $newTest->title = $mockTest->title . ' - Copy';
-        $newTest->access_code = strtoupper(Str::random(6));
+    $newTest->save();
 
-        $newTest->save();
+    $questionIds = $mockTest->questions()
+        ->pluck('questions.id')
+        ->toArray();
 
-        $questionIds = $mockTest->questions()
-            ->pluck('questions.id')
-            ->toArray();
+    $pivotRows = [];
 
-        DB::table('mock_test_question')->insert([
+    foreach ($questionIds as $questionId) {
+        $pivotRows[] = [
             'mock_test_id' => $newTest->id,
-            'question_id' => $questionIds[0],
-        ]);
-
-        dd('DIRECT INSERT SUCCESS', [
-            'test' => $newTest->id,
-            'question' => $questionIds[0],
-        ]);
-
-    } catch (\Throwable $e) {
-
-        dd([
-            'message' => $e->getMessage(),
-            'code' => $e->getCode(),
-            'previous' => $e->getPrevious()?->getMessage(),
-        ]);
+            'question_id' => $questionId,
+        ];
     }
+
+    if (!empty($pivotRows)) {
+        DB::table('mock_test_question')->insert($pivotRows);
+    }
+
+    return redirect()
+        ->route('mock-tests.edit', $newTest)
+        ->with('success', 'Mock Test duplicated successfully.');
 }
 
 }
