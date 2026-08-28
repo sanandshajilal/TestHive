@@ -137,6 +137,31 @@
         padding: 0;
     }
 
+    /* Tables inside Question Content */
+
+    .question-content table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 18px 0;
+    }
+
+    .question-content th,
+    .question-content td {
+        border: 1px solid #d9d9d9;
+        padding: 10px 12px;
+        font-size: 16px !important;
+    }
+
+    .question-content th {
+        background: #f7e3d8;
+        color: #832b00;
+        font-weight: 600;
+    }
+
+    .question-content tr:nth-child(even) {
+        background: #fafafa;
+    }
+
     /* Question Preview Modal */
 
     #questionPreviewContent {
@@ -177,6 +202,31 @@
         font-size: .72rem !important;
         padding: .2rem .45rem !important;
         line-height: 1.2 !important;
+    }
+
+    /* Tables inside Question Preview */
+
+    #questionPreviewContent table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 18px 0;
+    }
+
+    #questionPreviewContent th,
+    #questionPreviewContent td {
+        border: 1px solid #d9d9d9;
+        padding: 10px 12px;
+        font-size: 16px !important;
+    }
+
+    #questionPreviewContent th {
+        background: #f7e3d8;
+        color: #832b00;
+        font-weight: 600;
+    }
+
+    #questionPreviewContent tr:nth-child(even) {
+        background: #fafafa;
     }
 
     /* Preview Button */
