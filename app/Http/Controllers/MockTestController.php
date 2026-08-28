@@ -580,11 +580,25 @@ public function duplicate(MockTest $mockTest)
 {
     try {
 
+        $newTest = $mockTest->replicate();
+
+        $newTest->title = $mockTest->title . ' - Copy';
+        $newTest->access_code = strtoupper(Str::random(6));
+
+        $newTest->save();
+
         $questionIds = $mockTest->questions()
             ->pluck('questions.id')
             ->toArray();
 
-        dd('QUESTIONS LOADED', $questionIds);
+        dd('BEFORE SYNC', [
+            'new_test_id' => $newTest->id,
+            'question_ids' => $questionIds,
+        ]);
+
+        $newTest->questions()->sync($questionIds);
+
+        dd('SYNC SUCCESS');
 
     } catch (\Throwable $e) {
 
