@@ -580,25 +580,11 @@ public function duplicate(MockTest $mockTest)
 {
     try {
 
-        DB::transaction(function () use ($mockTest, &$newTest) {
+        $questionIds = $mockTest->questions()
+            ->pluck('questions.id')
+            ->toArray();
 
-            $newTest = $mockTest->replicate();
-
-            $newTest->title = $mockTest->title . ' - Copy';
-            $newTest->access_code = strtoupper(Str::random(6));
-
-            $newTest->save();
-
-            dd(
-                'BEFORE QUESTION SYNC',
-                $newTest->id,
-                $mockTest->questions->pluck('id')->toArray()
-            );
-
-            $newTest->questions()->sync(
-                $mockTest->questions->pluck('id')->toArray()
-            );
-        });
+        dd('QUESTIONS LOADED', $questionIds);
 
     } catch (\Throwable $e) {
 
@@ -606,7 +592,6 @@ public function duplicate(MockTest $mockTest)
             'message' => $e->getMessage(),
             'code' => $e->getCode(),
             'previous' => $e->getPrevious()?->getMessage(),
-            'previous_code' => $e->getPrevious()?->getCode(),
         ]);
     }
 }
