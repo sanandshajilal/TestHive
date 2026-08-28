@@ -96,9 +96,38 @@
     /* Question Content */
 
     .question-content {
+        font-family: 'Segoe UI', sans-serif;
+        font-size: 16px;
+        font-weight: 400;
         line-height: 1.5;
         word-break: break-word;
         white-space: normal;
+    }
+
+    .question-content * {
+        font-family: 'Segoe UI', sans-serif !important;
+        font-size: 16px !important;
+    }
+
+    /* Preserve formatting */
+
+    .question-content strong,
+    .question-content b {
+        font-weight: 700;
+    }
+
+    .question-content em,
+    .question-content i {
+        font-style: italic;
+    }
+
+    .question-content u {
+        text-decoration: underline;
+    }
+
+    .question-content img {
+        max-width: 100%;
+        height: auto;
     }
 
     .question-content p,
@@ -106,6 +135,48 @@
     .question-content ol {
         margin: 0;
         padding: 0;
+    }
+
+    /* Question Preview Modal */
+
+    #questionPreviewContent {
+        font-family: 'Segoe UI', sans-serif;
+        font-size: 16px;
+        font-weight: 400;
+        line-height: 1.6;
+        word-break: break-word;
+    }
+
+    #questionPreviewContent * {
+        font-family: 'Segoe UI', sans-serif !important;
+        font-size: 16px !important;
+    }
+
+    #questionPreviewContent strong,
+    #questionPreviewContent b {
+        font-weight: 700;
+    }
+
+    #questionPreviewContent em,
+    #questionPreviewContent i {
+        font-style: italic;
+    }
+
+    #questionPreviewContent u {
+        text-decoration: underline;
+    }
+
+    #questionPreviewContent img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Compact badges inside Question Preview */
+
+    #questionPreviewContent .badge {
+        font-size: .72rem !important;
+        padding: .2rem .45rem !important;
+        line-height: 1.2 !important;
     }
 
     /* Preview Button */
