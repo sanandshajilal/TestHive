@@ -589,21 +589,19 @@ public function duplicate(MockTest $mockTest)
 
             $newTest->save();
 
-            $newTest->questions()->sync(
-                $mockTest->questions->pluck('id')->toArray()
-            );
+            dd('NEW TEST SAVED', $newTest->id);
 
+            $questionIds = $mockTest->questions->pluck('id')->toArray();
+
+            $newTest->questions()->sync($questionIds);
         });
-
-        dd('DUPLICATE SUCCESS', $newTest->id);
 
     } catch (\Throwable $e) {
 
         dd([
             'message' => $e->getMessage(),
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
             'previous' => $e->getPrevious()?->getMessage(),
+            'previous_previous' => $e->getPrevious()?->getPrevious()?->getMessage(),
         ]);
     }
 }
