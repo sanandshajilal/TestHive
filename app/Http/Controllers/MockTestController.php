@@ -576,27 +576,36 @@ public function results($id)
 }
 
 
-        public function duplicate(MockTest $mockTest)
-        {
-            DB::transaction(function () use ($mockTest, &$newTest) {
+public function duplicate(MockTest $mockTest)
+{
+    try {
 
-                $newTest = $mockTest->replicate();
+        DB::transaction(function () use ($mockTest, &$newTest) {
 
-                $newTest->title = $mockTest->title . ' - Copy';
-                $newTest->access_code = strtoupper(Str::random(6));
+            $newTest = $mockTest->replicate();
 
-                $newTest->save();
-                
-                $newTest->questions()->sync(
-                    $mockTest->questions->pluck('id')->toArray()
-                );
-    
+            $newTest->title = $mockTest->title . ' - Copy';
+            $newTest->access_code = strtoupper(Str::random(6));
 
-            });
+            $newTest->save();
 
-            return redirect()
-                ->route('mock-tests.edit', $newTest)
-                ->with('success', 'Mock Test duplicated successfully.');
-        }
+            $newTest->questions()->sync(
+                $mockTest->questions->pluck('id')->toArray()
+            );
+
+        });
+
+        dd('DUPLICATE SUCCESS', $newTest->id);
+
+    } catch (\Throwable $e) {
+
+        dd([
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'previous' => $e->getPrevious()?->getMessage(),
+        ]);
+    }
+}
 
 }
