@@ -267,6 +267,29 @@
             transition: all 0.2s ease;
         }
 
+        /* ---------- SCENARIO CHILD OPTIONS ---------- */
+
+        .option > label {
+            display: flex;
+            align-items: flex-start;
+            width: 100%;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .option > label > input[type="radio"],
+        .option > label > input[type="checkbox"] {
+            flex: 0 0 auto;
+            margin-top: 4px;
+            margin-right: 10px;
+        }
+
+        .option > label > span {
+            flex: 1;
+            min-width: 0;
+            line-height: 1.5;
+        }
+
         .option:hover {
             background-color: var(--primary-light);
         }
@@ -613,6 +636,8 @@
         .option {
                 cursor: pointer;
             }
+
+            
 
             .option label,
             .option span {
