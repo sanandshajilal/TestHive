@@ -37,6 +37,7 @@
             border-radius: 1rem;
             padding: 1.25rem 1.5rem;
             box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+            border-top: 4px solid var(--primary);
         }
 
         .header-box h4 {
@@ -87,6 +88,122 @@
         }
 
         /* =========================================================
+        RESULT SUMMARY
+        ========================================================= */
+
+        .result-summary-card {
+            background: #fff;
+            border-radius: 1rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .05);
+            overflow: hidden;
+        }
+
+
+        /* ---------- Main Result ---------- */
+
+        .result-main {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            align-items: stretch;
+            min-height: 105px;
+        }
+
+
+        /* Percentage + Marks */
+
+        .result-highlight {
+            grid-column: span 1;
+            text-align: center;
+            padding: 1.25rem 1rem;
+            border-right: 1px solid #edf0f2;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .result-score {
+            font-size: 2.35rem;
+            line-height: 1.1;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .result-highlight-label {
+            margin-top: .35rem;
+            font-size: .75rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+
+        /* ---------- Feedback ---------- */
+
+        .result-feedback-box {
+            grid-column: span 2;
+            padding: 1.25rem 1.5rem;
+            text-align: center;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .result-feedback-label {
+            font-size: .75rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            margin-bottom: .4rem;
+        }
+
+        .result-feedback {
+            font-size: .95rem;
+            font-weight: 600;
+            line-height: 1.45;
+            color: var(--primary-dark);
+        }
+
+
+        /* ---------- Detailed Breakdown ---------- */
+
+        .result-breakdown {
+            display: flex;
+            align-items: stretch;
+            justify-content: center;
+            border-top: 1px solid #edf0f2;
+        }
+
+        .result-stat {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 1rem;
+            min-width: 140px;
+            border-right: 1px solid #edf0f2;
+        }
+
+        .result-stat:last-child {
+            border-right: none;
+        }
+
+        .result-stat-label {
+            font-size: .75rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+        }
+
+        .result-stat-value {
+            margin-top: 2px;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        /* =========================================================
            CARDS
            ========================================================= */
 
@@ -127,6 +244,70 @@
             color: #111827;
         }
 
+        .student-info-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .student-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 1.8rem;
+            flex-shrink: 0;
+            border: 1px solid #ead9cf;
+        }
+
+        .student-info-layout {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .student-main-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 250px;
+        }
+
+        .student-info-divider {
+            width: 1px;
+            height: 58px;
+            background: #e5e7eb;
+            flex-shrink: 0;
+        }
+
+        .student-test-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            flex: 1;
+        }
+
+        .student-detail {
+            min-width: 0;
+        }
+
+        .student-detail .info-label {
+            margin-bottom: .25rem;
+        }
+
+        .student-detail .info-value {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
         /* =========================================================
            SUMMARY
            ========================================================= */
@@ -159,37 +340,37 @@
             margin-bottom: .75rem;
         }
 
-.question-content {
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 1.7;
-    color: #1f2937;
-}
+        .question-content {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.7;
+            color: #1f2937;
+        }
 
-.question-content * {
-    font-family: 'Segoe UI', sans-serif !important;
-    font-size: 16px !important;
-}
+        .question-content * {
+            font-family: 'Segoe UI', sans-serif !important;
+            font-size: 16px !important;
+        }
 
-.question-content strong,
-.question-content b {
-    font-weight: 700;
-}
+        .question-content strong,
+        .question-content b {
+            font-weight: 700;
+        }
 
-.question-content em,
-.question-content i {
-    font-style: italic;
-}
+        .question-content em,
+        .question-content i {
+            font-style: italic;
+        }
 
-.question-content u {
-    text-decoration: underline;
-}
+        .question-content u {
+            text-decoration: underline;
+        }
 
-.question-content img {
-    max-width: 100%;
-    height: auto;
-}
+        .question-content img {
+            max-width: 100%;
+            height: auto;
+        }
 
         .question-content p {
             margin-bottom: .5rem;
@@ -341,37 +522,37 @@
             margin-top: 1px;
         }
 
-.results-scenario-content {
-    padding: 20px 22px;
-    color: #292522;
-    font-family: 'Segoe UI', sans-serif;
-    font-size: 16px;
-    line-height: 1.7;
-}
+        .results-scenario-content {
+            padding: 20px 22px;
+            color: #292522;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+        }
 
-.results-scenario-content * {
-    font-family: 'Segoe UI', sans-serif !important;
-    font-size: 16px !important;
-}
+        .results-scenario-content * {
+            font-family: 'Segoe UI', sans-serif !important;
+            font-size: 16px !important;
+        }
 
-.results-scenario-content strong,
-.results-scenario-content b {
-    font-weight: 700;
-}
+        .results-scenario-content strong,
+        .results-scenario-content b {
+            font-weight: 700;
+        }
 
-.results-scenario-content em,
-.results-scenario-content i {
-    font-style: italic;
-}
+        .results-scenario-content em,
+        .results-scenario-content i {
+            font-style: italic;
+        }
 
-.results-scenario-content u {
-    text-decoration: underline;
-}
+        .results-scenario-content u {
+            text-decoration: underline;
+        }
 
-.results-scenario-content img {
-    max-width: 100%;
-    height: auto;
-}
+        .results-scenario-content img {
+            max-width: 100%;
+            height: auto;
+        }
 
         .results-scenario-content p:last-child {
             margin-bottom: 0;
@@ -436,6 +617,14 @@
             margin-bottom: 1.5rem;
         }
 
+        .response-title + .standalone-question {
+            border-top: none;
+            padding-top: 0;
+            margin-top: 0;
+        }
+
+
+
         /* =========================================================
            RESPONSIVE
            ========================================================= */
@@ -464,6 +653,71 @@
 
             .results-scenario-content {
                 padding: 16px 18px;
+            }
+
+        }
+
+        @media (max-width: 767.98px) {
+
+            .student-info-layout {
+                display: block;
+            }
+
+            .student-main-info {
+                margin-bottom: 1.25rem;
+            }
+
+            .student-info-divider {
+                width: 100%;
+                height: 1px;
+                margin-bottom: 1.25rem;
+            }
+
+            .student-test-info {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+
+        }
+
+        @media (max-width: 767.98px) {
+
+            .result-main {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .result-highlight {
+                padding: 1rem .75rem;
+            }
+
+            .result-score {
+                font-size: 1.9rem;
+            }
+
+            .result-feedback-box {
+                grid-column: 1 / -1;
+                border-top: 1px solid #edf0f2;
+                padding: 1rem;
+            }
+
+            .result-breakdown {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .result-stat {
+                min-width: 0;
+                border-right: 1px solid #edf0f2;
+                border-bottom: 1px solid #edf0f2;
+            }
+
+            .result-stat:nth-child(2n) {
+                border-right: none;
+            }
+
+            .result-stat:nth-last-child(-n+2) {
+                border-bottom: none;
             }
 
         }
@@ -550,57 +804,91 @@
     {{-- Student & Test Information --}}
     {{-- ========================================================= --}}
 
-    <div class="card shadow-sm border-0 rounded-4 mb-4">
+ <div class="card shadow-sm border-0 rounded-4 mb-4">
 
-        <div class="card-body">
+    <div class="card-body">
 
-            <div class="row gy-3">
+        <div class="student-info-layout">
 
-                <div class="col-md-4">
+            {{-- Student --}}
 
-                    <strong>Student:</strong><br>
+            <div class="student-main-info">
 
-                    {{ $attempt->student_name }}
+                <div class="student-avatar">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+
+                <div>
+
+                    <div class="fs-5 fw-semibold">
+                        {{ $attempt->student_name }}
+                    </div>
+
+                    <div class="text-muted small">
+                        {{ $attempt->email }}
+                    </div>
+                </div>
+
+            </div>
+
+
+            {{-- Divider --}}
+
+            <div class="student-info-divider"></div>
+
+
+            {{-- Test Information --}}
+
+            <div class="student-test-info">
+
+                <div class="student-detail">
+
+                    <div class="info-label">
+                        Institute
+                    </div>
+
+                    <div class="info-value">
+                        {{ $attempt->institute->name ?? '-' }}
+                    </div>
 
                 </div>
 
-                <div class="col-md-4">
 
-                    <strong>Email:</strong><br>
+                <div class="student-detail">
 
-                    {{ $attempt->email }}
+                    <div class="info-label">
+                        Batch
+                    </div>
 
-                </div>
-
-                <div class="col-md-4">
-
-                    <strong>Institute:</strong><br>
-
-                    {{ $attempt->institute->name ?? '-' }}
+                    <div class="info-value">
+                        {{ $attempt->batch->name ?? '-' }}
+                    </div>
 
                 </div>
 
-                <div class="col-md-4">
 
-                    <strong>Batch:</strong><br>
+                <div class="student-detail">
 
-                    {{ $attempt->batch->name ?? '-' }}
+                    <div class="info-label">
+                        Test
+                    </div>
 
-                </div>
-
-                <div class="col-md-4">
-
-                    <strong>Test:</strong><br>
-
-                    {{ $attempt->mockTest->title ?? 'N/A' }}
+                    <div class="info-value">
+                        {{ $attempt->mockTest->title ?? 'N/A' }}
+                    </div>
 
                 </div>
 
-                <div class="col-md-4">
 
-                    <strong>Duration:</strong><br>
+                <div class="student-detail">
 
-                    {{ $attempt->mockTest->duration_minutes ?? '-' }} mins
+                    <div class="info-label">
+                        Duration
+                    </div>
+
+                    <div class="info-value">
+                        {{ $attempt->mockTest->duration_minutes ?? '-' }} mins
+                    </div>
 
                 </div>
 
@@ -610,78 +898,156 @@
 
     </div>
 
+</div>
+
 
     {{-- ========================================================= --}}
     {{-- Result Summary --}}
     {{-- ========================================================= --}}
 
-    <div class="card shadow-sm border-0 rounded-4 mb-4">
+    @php
+        $percentage = $totalMarks > 0
+            ? ($marksAwarded / $totalMarks) * 100
+            : 0;
 
-        <div class="card-body d-flex justify-content-around flex-wrap text-center gap-3">
+        if ($percentage >= 80) {
 
-            @foreach([
+            $feedback = 'Excellent! Keep up the good work.';
 
-                [
-                    'label' => 'Total',
-                    'value' => $totalQuestions,
-                    'icon' => 'list-check',
-                    'class' => 'summary-total'
-                ],
+        } elseif ($percentage >= 60) {
 
-                [
-                    'label' => 'Correct',
-                    'value' => $correctCount,
-                    'icon' => 'check-circle',
-                    'class' => 'text-success'
-                ],
+            $feedback = 'Good work! Keep up the consistency and aim for an even higher score.';
 
-                [
-                    'label' => 'Wrong',
-                    'value' => $wrongCount,
-                    'icon' => 'x-circle',
-                    'class' => 'text-danger'
-                ],
+        } elseif ($percentage >= 50) {
 
-                [
-                    'label' => 'Not Attempted',
-                    'value' => $unattemptedCount,
-                    'icon' => 'dash-circle',
-                    'class' => 'text-secondary'
-                ],
+            $feedback = 'Barely satisfactory. If you do not work harder, you will fail.';
 
-                [
-                    'label' => 'Marks',
-                    'value' => "$marksAwarded / $totalMarks",
-                    'icon' => 'award',
-                    'class' => 'summary-marks'
-                ],
+        } elseif ($percentage >= 40) {
 
-            ] as $stat)
+            $feedback = 'More practice is required. Focus on strengthening your concepts and solving as many questions as possible. You need to improve significantly to pass.';
 
-                <div
-                    class="px-3 py-2 flex-fill text-center"
-                    style="min-width: 120px;"
-                >
+        } else {
 
-                    <i
-                        class="bi bi-{{ $stat['icon'] }} {{ $stat['class'] }} fs-5"
-                    ></i>
+            $feedback = 'Immediate and serious improvement is required. Without a major change in your preparation, you will definitely fail.';
 
-                    <div class="small text-muted mt-1">
-                        {{ $stat['label'] }}
-                    </div>
+        }
+    @endphp
 
-                    <div class="fw-bold {{ $stat['class'] }}">
-                        {{ $stat['value'] }}
-                    </div>
+    <div class="result-summary-card mb-4">
 
-                </div>
+    {{-- Main Result --}}
 
-            @endforeach
+    <div class="result-main">
+
+        {{-- Percentage --}}
+
+        <div class="result-highlight">
+
+            <div class="result-score">
+                {{ number_format($percentage, 1) }}%
+            </div>
+
+            <div class="result-highlight-label">
+                Score
+            </div>
+
+        </div>
+
+
+        {{-- Marks --}}
+
+        <div class="result-highlight">
+
+            <div class="result-score">
+                {{ $marksAwarded }} / {{ $totalMarks }}
+            </div>
+
+            <div class="result-highlight-label">
+                Marks
+            </div>
+
+        </div>
+
+
+        {{-- Feedback --}}
+
+        <div class="result-feedback-box">
+
+            <div class="result-feedback">
+                {{ $feedback }}
+            </div>
 
         </div>
 
     </div>
+
+
+    {{-- Detailed Statistics --}}
+
+    <div class="result-breakdown">
+
+        <div class="result-stat">
+
+            <div>
+                <div class="result-stat-label">
+                    Total Questions
+                </div>
+
+                <div class="result-stat-value summary-total">
+                    {{ $totalQuestions }}
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="result-stat">
+
+            <div>
+                <div class="result-stat-label">
+                    Correct Answers
+                </div>
+
+                <div class="result-stat-value text-success">
+                    {{ $correctCount }}
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="result-stat">
+
+            <div>
+                <div class="result-stat-label">
+                    Wrong Answers
+                </div>
+
+                <div class="result-stat-value text-danger">
+                    {{ $wrongCount }}
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="result-stat">
+
+            <div>
+                <div class="result-stat-label">
+                    Not Attempted
+                </div>
+
+                <div class="result-stat-value text-secondary">
+                    {{ $unattemptedCount }}
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 
     {{-- ========================================================= --}}
