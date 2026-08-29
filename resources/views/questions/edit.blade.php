@@ -250,7 +250,7 @@
                         </option>
                         <option value="paragraph"
                             {{ old('question_type', $question->question_type) == 'paragraph' ? 'selected' : '' }}>
-                            Paragraph
+                            Scenario Based Question
                         </option>
                     </select>
                 </div>

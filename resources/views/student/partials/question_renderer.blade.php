@@ -10,7 +10,7 @@
                     @csrf
                     <input type="hidden" name="question_id" value="{{ $item->id }}">
                     <input type="hidden" name="next_question_number" value="{{ $questionNumber + 1 }}">
-                    <input type="hidden" name="is_last_question" value="{{ $questionNumber == $totalQuestions ? '1' : '0' }}">
+                    <input type="hidden" name="is_last_question" value="{{ $questionNumber == $totalItems ? '1' : '0' }}">
 
                     {{-- MCQ --}}
                     @if($item->question_type == 'mcq')
@@ -358,7 +358,7 @@
                     </a>
 
                     {{-- Save & Next / Submit Button --}}
-                    @if($questionNumber < $totalQuestions)
+                    @if($questionNumber < $totalItems)
                         <button type="submit" class="btn btn-primary btn-nav">
                             Save & Next
                         </button>

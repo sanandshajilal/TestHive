@@ -93,20 +93,115 @@
         background: #fffaf7 !important;
     }
 
-    /* Question Content */
+/* Question Content */
 
-    .question-content {
-        line-height: 1.5;
-        word-break: break-word;
-        white-space: normal;
-    }
+.question-content {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    word-break: break-word;
+    white-space: normal;
+}
 
-    .question-content p,
-    .question-content ul,
-    .question-content ol {
-        margin: 0;
-        padding: 0;
-    }
+.question-content * {
+    font-family: 'Segoe UI', sans-serif !important;
+    font-size: 16px !important;
+}
+
+/* Preserve formatting */
+
+.question-content strong,
+.question-content b {
+    font-weight: 700;
+}
+
+.question-content em,
+.question-content i {
+    font-style: italic;
+}
+
+.question-content u {
+    text-decoration: underline;
+}
+
+.question-content img {
+    max-width: 100%;
+    height: auto;
+}
+
+.question-content p,
+.question-content ul,
+.question-content ol {
+    margin: 0;
+    padding: 0;
+}
+
+/* Question Preview Modal */
+
+#questionPreviewContent {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.6;
+    word-break: break-word;
+}
+
+#questionPreviewContent * {
+    font-family: 'Segoe UI', sans-serif !important;
+    font-size: 16px !important;
+}
+
+#questionPreviewContent strong,
+#questionPreviewContent b {
+    font-weight: 700;
+}
+
+#questionPreviewContent em,
+#questionPreviewContent i {
+    font-style: italic;
+}
+
+#questionPreviewContent u {
+    text-decoration: underline;
+}
+
+#questionPreviewContent img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Tables inside Question Content */
+
+.question-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+}
+
+.question-content th,
+.question-content td {
+    border: 1px solid #d9d9d9;
+    padding: 10px 12px;
+}
+
+.question-content th {
+    background: #f7e3d8;
+    color: #832b00;
+    font-weight: 600;
+}
+
+#questionPreviewContent table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+}
+
+#questionPreviewContent th,
+#questionPreviewContent td {
+    border: 1px solid #d9d9d9;
+    padding: 10px 12px;
+}
 
     /* Preview Button */
 

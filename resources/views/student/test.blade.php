@@ -797,7 +797,7 @@
 
                 <input type="hidden"
                     name="is_last_question"
-                    value="{{ $questionNumber == $totalItems ? '1' : '0' }}">
+                    value="{{ $isLastQuestion ? '1' : '0' }}">
 
               {{-- ============================================== --}}
                 {{-- Scenario / Reference Passage --}}
@@ -877,7 +877,7 @@
                     </a>
 
                     {{-- Save & Next / Submit Button --}}
-                    @if($questionNumber < $totalItems)
+                    @if(!$isLastQuestion)
                         <button type="submit" class="btn btn-primary btn-nav">
                             Save & Next
                         </button>

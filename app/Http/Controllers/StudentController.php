@@ -216,6 +216,7 @@ class StudentController extends Controller
         */
 
         $totalItems = $items->count();
+        $isLastQuestion = ($questionNumber == $totalItems);
 
         if ($questionNumber < 1 || $questionNumber > $totalItems) {
             return redirect()->route(
@@ -225,6 +226,8 @@ class StudentController extends Controller
         }
 
         $item = $items[$questionNumber - 1];
+
+
 
         /*
         |--------------------------------------------------------------------------
@@ -358,7 +361,8 @@ class StudentController extends Controller
                 'remainingSeconds',
                 'isFlagged',
                 'statements',
-                'labels'
+                'labels',
+                'isLastQuestion'
             ))
             ->header('Cache-Control','no-cache, no-store, must-revalidate')
             ->header('Pragma','no-cache')

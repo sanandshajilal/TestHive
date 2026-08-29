@@ -339,6 +339,32 @@
         font-weight:600;
     }
 
+    /* Selection Summary - Collapsible */
+
+#summaryContent {
+    max-height: 150px;
+    overflow: hidden;
+    transition: max-height .3s ease;
+}
+
+#summaryContent.expanded {
+    max-height: none;
+    overflow: visible;
+}
+
+.summary-expand-btn {
+    background: transparent;
+    border: none;
+    color: #832b00;
+    font-size: .85rem;
+    font-weight: 600;
+    padding: .4rem 0 0;
+}
+
+.summary-expand-btn:hover {
+    color: #b46e4c;
+}
+
     .topic-icon{
         color:#b46e4c;
     }
@@ -573,6 +599,18 @@
                             </div>
 
                             <div id="summaryContent"></div>
+
+                            <div class="text-center">
+                                <button
+                                    type="button"
+                                    id="summaryExpandBtn"
+                                    class="summary-expand-btn"
+                                    style="display:none;"
+                                    onclick="toggleSummary()">
+                                    Show More
+                                    <i class="bi bi-chevron-down ms-1"></i>
+                                </button>
+                            </div>
 
                         </div>
 
@@ -1048,6 +1086,50 @@ function updateQuestionSummary() {
         });
 
     container.innerHTML = html;
+
+    updateSummaryExpandButton();
+}
+
+function updateSummaryExpandButton() {
+
+    const content = document.getElementById('summaryContent');
+    const button = document.getElementById('summaryExpandBtn');
+
+    if (!content || !button) return;
+
+    // Check whether content exceeds the collapsed height
+    if (content.scrollHeight > content.clientHeight) {
+
+        button.style.display = 'inline-block';
+
+    } else {
+
+        button.style.display = 'none';
+
+    }
+}
+
+
+function toggleSummary() {
+
+    const content = document.getElementById('summaryContent');
+    const button = document.getElementById('summaryExpandBtn');
+
+    if (content.classList.contains('expanded')) {
+
+        content.classList.remove('expanded');
+
+        button.innerHTML =
+            'Show More <i class="bi bi-chevron-down ms-1"></i>';
+
+    } else {
+
+        content.classList.add('expanded');
+
+        button.innerHTML =
+            'Show Less <i class="bi bi-chevron-up ms-1"></i>';
+
+    }
 }
 
 function previewQuestion(id) {
