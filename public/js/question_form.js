@@ -620,6 +620,67 @@ document.querySelectorAll('textarea[name="question_text"]').forEach(textarea => 
 
         });
 
+                // ------------------------------------------
+        // Paste Options into Scenario Child Question
+        // ------------------------------------------
+
+        document.addEventListener('paste', function (e) {
+
+            const input = e.target.closest('.child-option');
+
+            if (!input) return;
+
+            const card = input.closest('.child-question-card');
+
+            if (!card) return;
+
+            const pastedText =
+                (e.clipboardData || window.clipboardData)
+                    .getData('text');
+
+            // Split pasted content into lines
+            const lines = pastedText
+                .split(/\r?\n/)
+                .map(line => line.trim())
+                .filter(line => line !== '')
+                .map(line =>
+                    line
+                        .replace(/^[a-dA-D][\.\)\-:]\s*/, '')
+                        .replace(/^\d+[\.\)\-:]\s*/, '')
+                        .trim()
+                );
+
+            // Normal single-line paste:
+            // allow normal browser behaviour
+            if (lines.length <= 1) return;
+
+            e.preventDefault();
+
+            // Get the four option fields in this child card
+            const optionInputs =
+                card.querySelectorAll('.child-option');
+
+            // Start from the option where paste occurred
+            const startIndex =
+                Array.from(optionInputs).indexOf(input);
+
+            if (startIndex === -1) return;
+
+            // Fill available option fields
+            lines.forEach((line, index) => {
+
+                const optionIndex = startIndex + index;
+
+                if (optionIndex < optionInputs.length) {
+
+                    optionInputs[optionIndex].value = line;
+
+                }
+
+            });
+
+        });
+
 
         // ------------------------------------------
         // Remove Child Question
