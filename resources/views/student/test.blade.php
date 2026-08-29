@@ -553,6 +553,42 @@
     height: auto;
 }
 
+/* ---------- SCENARIO TOGGLE ---------- */
+
+.scenario-toggle-btn {
+    border: 1px solid #ead9cf;
+    background: #ffffff;
+    color: var(--primary-dark);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.scenario-toggle-btn:hover {
+    background: var(--primary-light);
+    border-color: var(--primary);
+}
+
+.scenario-content {
+    transition: max-height 0.3s ease,
+                padding 0.3s ease,
+                opacity 0.2s ease;
+}
+
+/* Minimized state */
+
+.scenario-card.scenario-minimized .scenario-content {
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow: hidden;
+    opacity: 0;
+}
+
 /* Desktop */
 @media (min-width: 992px) {
 
@@ -830,7 +866,9 @@
 
                 <div class="scenario-card mb-4">
 
-                    <div class="scenario-header">
+                <div class="scenario-header">
+
+                    <div class="d-flex align-items-center justify-content-between">
 
                         <div class="d-flex align-items-center">
 
@@ -850,7 +888,20 @@
 
                         </div>
 
+                        <button
+                            type="button"
+                            class="scenario-toggle-btn"
+                            id="scenarioToggleBtn"
+                            onclick="toggleScenario()">
+
+                            <i class="bi bi-chevron-up me-1"></i>
+                            Minimize
+
+                        </button>
+
                     </div>
+
+                </div>
 
                     <div class="scenario-content">
 
@@ -1779,6 +1830,29 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
         });
+
+        function toggleScenario() {
+
+        const scenarioCard = document.querySelector('.scenario-card');
+        const toggleButton = document.getElementById('scenarioToggleBtn');
+
+        if (!scenarioCard || !toggleButton) return;
+
+        const isMinimized =
+            scenarioCard.classList.toggle('scenario-minimized');
+
+        if (isMinimized) {
+
+            toggleButton.innerHTML =
+                '<i class="bi bi-chevron-down me-1"></i> Show Scenario';
+
+        } else {
+
+            toggleButton.innerHTML =
+                '<i class="bi bi-chevron-up me-1"></i> Minimize';
+
+        }
+    }
 
 
 </script>
