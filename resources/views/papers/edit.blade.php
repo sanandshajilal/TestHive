@@ -294,7 +294,7 @@
                             <input type="text"
                                 name="topics[{{ $topicIndex }}][sub_topics][]"
                                 class="form-control"
-                                value="{{ $subTopic->name }}">
+                                value="{{ $subTopic->name }}" required>
 
                             <button type="button"
                                     class="btn btn-outline-danger remove-subtopic">
@@ -410,7 +410,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     <input type="text"
                            name="topics[${topicIndex}][sub_topics][0]"
                            class="form-control"
-                           placeholder="Enter sub-topic name">
+                           placeholder="Enter sub-topic name" required>
 
                     <button type="button"
                             class="btn btn-outline-danger remove-subtopic">
@@ -460,7 +460,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 <input type="text"
                        name="topics[${index}][sub_topics][${count}]"
                        class="form-control"
-                       placeholder="Enter sub-topic name">
+                       placeholder="Enter sub-topic name" required>
 
                 <button type="button"
                         class="btn btn-outline-danger remove-subtopic">
@@ -484,20 +484,12 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }
 
+
         /* Remove Sub Topic */
         if (e.target.closest('.remove-subtopic')) {
 
-            const wrapper =
-                e.target.closest('.sub-topic-container');
+            e.target.closest('.subtopic-row').remove();
 
-            const rows =
-                wrapper.querySelectorAll('.subtopic-row');
-
-            if (rows.length > 1) {
-
-                e.target.closest('.subtopic-row').remove();
-
-            }
         }
 
     });

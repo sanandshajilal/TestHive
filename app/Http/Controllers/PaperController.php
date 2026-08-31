@@ -70,113 +70,215 @@ class PaperController extends Controller
     }
 
 public function update(Request $request, Paper $paper)
-    {
-        $request->validate([
-            'name' => 'required|unique:papers,name,' . $paper->id,
-            'description' => 'nullable',
-        ]);
+{
+    $request->validate([
+        'name' => 'required|unique:papers,name,' . $paper->id,
+        'description' => 'nullable',
 
-        $paper->update([
-            'name' => $request->name,
-            'description' => $request->description,
-        ]);
+        'topics' => 'nullable|array',
+        'topics.*.name' => 'required|string',
 
-                    // Topics removed from the form
-            $submittedTopicIds = collect($request->topics ?? [])
+        'topics.*.sub_topics' => 'nullable|array',
+        'topics.*.sub_topics.*' => 'nullable|string',
+
+        'topics.*.subtopic_ids' => 'nullable|array',
+        'topics.*.subtopic_ids.*' => 'nullable|integer',
+    ]);
+
+    $paper->update([
+        'name' => $request->name,
+        'description' => $request->description,
+    ]);
+
+
+    // =========================================================
+    // Topics removed from the form
+    // =========================================================
+
+    $submittedTopicIds = collect($request->topics ?? [])
+        ->pluck('id')
+        ->filter()
+        ->toArray();
+
+    $deletedTopics = $paper->topics()
+        ->whereNotIn('id', $submittedTopicIds)
+        ->get();
+
+
+    // Check if deleted topics have linked questions
+
+    foreach ($deletedTopics as $topic) {
+
+        $questionCount = Question::where('topic_id', $topic->id)->count();
+
+        if ($questionCount > 0) {
+
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'topic_delete' =>
+                        "Cannot delete topic '{$topic->name}' because questions are linked to it."
+                ]);
+        }
+    }
+
+
+    // Safe deletion of topics
+
+    foreach ($deletedTopics as $topic) {
+
+        $topic->subTopics()->delete();
+        $topic->delete();
+    }
+
+
+    // =========================================================
+    // Process submitted topics
+    // =========================================================
+
+    foreach ($request->topics ?? [] as $topicData) {
+
+
+        // =====================================================
+        // Existing Topic
+        // =====================================================
+
+        if (!empty($topicData['id'])) {
+
+            $topic = Topic::find($topicData['id']);
+
+            if (!$topic) {
+                continue;
+            }
+
+
+            $topic->update([
+                'name' => $topicData['name']
+            ]);
+
+
+            // -------------------------------------------------
+            // Existing sub-topics belonging to this topic
+            // -------------------------------------------------
+
+            $existingSubTopicIds = $topic->subTopics()
                 ->pluck('id')
-                ->filter()
                 ->toArray();
 
-            $deletedTopics = $paper->topics()
-                ->whereNotIn('id', $submittedTopicIds)
-                ->get();
 
-            // Check if deleted topics have linked questions
-            foreach ($deletedTopics as $topic) {
+            // -------------------------------------------------
+            // Sub-topic IDs still present in the form
+            // -------------------------------------------------
 
-                $questionCount = Question::where('topic_id', $topic->id)->count();
+            $submittedSubTopicIds = collect(
+                $topicData['subtopic_ids'] ?? []
+            )
+                ->filter()
+                ->map(fn ($id) => (int) $id)
+                ->toArray();
 
-                if ($questionCount > 0) {
 
-                    return back()
-                        ->withInput()
-                        ->withErrors([
-                            'topic_delete' => "Cannot delete topic '{$topic->name}' because questions are linked to it."
-                        ]);
+            // -------------------------------------------------
+            // Delete sub-topics removed from the form
+            // -------------------------------------------------
+
+            $deletedSubTopicIds = array_diff(
+                $existingSubTopicIds,
+                $submittedSubTopicIds
+            );
+
+
+            if (!empty($deletedSubTopicIds)) {
+
+                SubTopic::whereIn('id', $deletedSubTopicIds)
+                    ->where('topic_id', $topic->id)
+                    ->delete();
+            }
+
+
+            // -------------------------------------------------
+            // Update existing / create new sub-topics
+            // -------------------------------------------------
+
+            foreach ($topicData['sub_topics'] ?? [] as $index => $subName) {
+
+                $subName = trim($subName);
+
+                // Ignore empty sub-topic values
+
+                if ($subName === '') {
+                    continue;
                 }
-            }
 
-            // Safe deletion
-            foreach ($deletedTopics as $topic) {
 
-                $topic->subTopics()->delete();
-                $topic->delete();
-            }
+                $subTopicId =
+                    $topicData['subtopic_ids'][$index] ?? null;
 
-        foreach ($request->topics ?? [] as $topicData) {
 
-            // Existing Topic
-            if (!empty($topicData['id'])) {
+                // Existing sub-topic
 
-                $topic = Topic::find($topicData['id']);
+                if ($subTopicId) {
 
-                if ($topic) {
+                    $subTopic = SubTopic::where('id', $subTopicId)
+                        ->where('topic_id', $topic->id)
+                        ->first();
 
-                    $topic->update([
-                        'name' => $topicData['name']
+                    if ($subTopic) {
+
+                        $subTopic->update([
+                            'name' => $subName
+                        ]);
+                    }
+
+                }
+
+                // New sub-topic
+
+                else {
+
+                    SubTopic::create([
+                        'name' => $subName,
+                        'topic_id' => $topic->id
                     ]);
-
-                    foreach ($topicData['sub_topics'] ?? [] as $index => $subName) {
-
-                        $subTopicId =
-                            $topicData['subtopic_ids'][$index] ?? null;
-
-                        if ($subTopicId) {
-
-                            $subTopic = SubTopic::find($subTopicId);
-
-                            if ($subTopic) {
-                                $subTopic->update([
-                                    'name' => $subName
-                                ]);
-                            }
-
-                        } elseif (trim($subName) !== '') {
-
-                            SubTopic::create([
-                                'name' => $subName,
-                                'topic_id' => $topic->id
-                            ]);
-                        }
-                    }
-                }
-
-            }
-            // New Topic
-            else {
-
-                $topic = Topic::create([
-                    'name' => $topicData['name'],
-                    'paper_id' => $paper->id
-                ]);
-
-                foreach ($topicData['sub_topics'] ?? [] as $subName) {
-
-                    if (trim($subName) !== '') {
-
-                        SubTopic::create([
-                            'name' => $subName,
-                            'topic_id' => $topic->id
-                        ]);
-                    }
                 }
             }
+
         }
 
-        return redirect()
-            ->route('papers.index')
-            ->with('success', 'Paper updated successfully.');
+
+        // =====================================================
+        // New Topic
+        // =====================================================
+
+        else {
+
+            $topic = Topic::create([
+                'name' => $topicData['name'],
+                'paper_id' => $paper->id
+            ]);
+
+
+            foreach ($topicData['sub_topics'] ?? [] as $subName) {
+
+                $subName = trim($subName);
+
+                if ($subName === '') {
+                    continue;
+                }
+
+                SubTopic::create([
+                    'name' => $subName,
+                    'topic_id' => $topic->id
+                ]);
+            }
+        }
     }
+
+
+    return redirect()
+        ->route('papers.index')
+        ->with('success', 'Paper updated successfully.');
+}
 
     public function destroy(Paper $paper)
         {
